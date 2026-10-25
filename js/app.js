@@ -475,6 +475,7 @@
   const closeMenu = () => { if (document.documentElement.classList.contains('menu-open')) { setMenu(false); menuBtn.focus({ preventScroll: true }); } };
   menuBtn.addEventListener('click', () => setMenu(!document.documentElement.classList.contains('menu-open')));
   $('#menuClose').addEventListener('click', closeMenu); shade.addEventListener('click', closeMenu);
+  shade.addEventListener('touchmove', e => e.preventDefault(), { passive: false });   // page behind stays still, without a reflow-heavy scroll lock
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape') { if (closeQV()) return; if (drawerOpen) closeCart(); else { openSearch(false); closeMenu(); } } });
 
@@ -484,7 +485,7 @@
   const measure = () => { step = track.clientWidth + (parseFloat(getComputedStyle(track).columnGap) || 0); };
   const slideW = () => step || (measure(), step);
   /* the whole slider is ONE element moved with translate3d → GPU only, no layout or repaint per frame */
-  const paintTrack = (x, anim) => { track.style.transition = anim ? 'transform .6s cubic-bezier(0.16, 1, 0.3, 1)' : 'none'; track.style.transform = `translate3d(${x}px,0,0)`; };
+  const paintTrack = (x, anim) => { track.style.transition = anim ? 'transform .55s cubic-bezier(.22,1,.36,1)' : 'none'; track.style.transform = `translate3d(${x}px,0,0)`; };
   const go = (i, anim = true) => {
     cur = (i + slides.length) % slides.length;
     measure(); paintTrack(cur * step, anim && !reduce);           // RTL: slide n sits n widths to the left
@@ -1238,44 +1239,59 @@
   {
     let sx = 0, sy = 0, dx = 0, base = 0, x = 0, vel = 0, lastX = 0, lastT = 0, raf = 0, axis = null, down = false, moved = false;
     const frame = () => { raf = 0; paintTrack(x, false); };
-    hero.addEventListener('pointerdown', e => {
-      moved = false;
-      if (e.button !== 0 || e.target.closest('.dot')) return;
-      measure();
-      down = true; moved = false; axis = null; dx = 0; vel = 0;
-      sx = lastX = e.clientX; sy = e.clientY; lastT = e.timeStamp;
+    /* shared by mouse (pointer events) and touch (touch events, so iOS can't take the gesture over mid-swipe) */
+    const start = (cx, cy, t) => {
+      measure(); down = true; moved = false; axis = null; dx = 0; vel = 0;
+      sx = lastX = cx; sy = cy; lastT = t;
       base = new DOMMatrixReadOnly(getComputedStyle(track).transform).m41;   // catch a slide that is still moving
+      track.style.transition = 'none'; paintTrack(base, false);
       clearInterval(timer);
-    });
-    hero.addEventListener('pointermove', e => {
-      if (!down) return;
-      dx = e.clientX - sx;
+    };
+    const move = (cx, cy, t) => {        // returns true while the gesture is a horizontal drag
+      if (!down) return false;
+      dx = cx - sx;
       if (!axis) {
-        const dy = e.clientY - sy;
-        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
-        axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
-        if (axis === 'y') { down = false; play(); return; }          // vertical swipe = normal page scroll
-        moved = true; hero.classList.add('grabbing'); hero.setPointerCapture(e.pointerId); paintTrack(base, false);
+        const dy = cy - sy;
+        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) return false;
+        axis = Math.abs(dx) * 1.2 > Math.abs(dy) ? 'x' : 'y';              // slight bias to sideways: swipes start easily
+        if (axis === 'y') { down = false; play(); return false; }           // vertical swipe = normal page scroll
+        moved = true; hero.classList.add('grabbing');
       }
-      const dt = e.timeStamp - lastT || 16; vel = 0.8 * ((e.clientX - lastX) / dt) + 0.2 * vel; lastX = e.clientX; lastT = e.timeStamp;
+      const dtm = t - lastT || 16; vel = 0.7 * ((cx - lastX) / dtm) + 0.3 * vel; lastX = cx; lastT = t;
       const max = (slides.length - 1) * slideW();
       x = base + dx;
-      if (x < 0) x *= 0.3; else if (x > max) x = max + (x - max) * 0.3;   // soft rubber-band at both ends
+      if (x < 0) x *= 0.35; else if (x > max) x = max + (x - max) * 0.35;   // soft rubber-band at both ends
       if (!raf) raf = requestAnimationFrame(frame);
-    });
+      return true;
+    };
     const end = () => {
       if (!down) return;
       down = false; hero.classList.remove('grabbing');
       if (!moved) { play(); return; }
       cancelAnimationFrame(raf); raf = 0;
-      const w = slideW();
+      const w = slideW(), from = Math.round(base / w);
       let target = Math.round((base + dx) / w);
-      if (Math.abs(vel) > 0.45) target = Math.round(base / w) + (vel > 0 ? 1 : -1);   // flick: right → next, left → previous
+      if (Math.abs(dx) > w * 0.16 || Math.abs(vel) > 0.25) target = from + ((Math.abs(vel) > 0.25 ? vel : dx) > 0 ? 1 : -1);   // a short swipe or a flick is enough
       go(Math.max(0, Math.min(slides.length - 1, target)));
       play();
       setTimeout(() => { moved = false; }, 0);              // the click right after a drag is ignored, the next one works
     };
-    hero.addEventListener('pointerup', end); hero.addEventListener('pointercancel', end); hero.addEventListener('lostpointercapture', end);
+    hero.addEventListener('touchstart', e => { if (e.touches.length > 1 || e.target.closest('.dot')) return; const p = e.touches[0]; start(p.clientX, p.clientY, e.timeStamp); }, { passive: true });
+    hero.addEventListener('touchmove', e => { const p = e.touches[0]; if (move(p.clientX, p.clientY, e.timeStamp)) e.preventDefault(); }, { passive: false });
+    hero.addEventListener('touchend', end); hero.addEventListener('touchcancel', end);
+    hero.addEventListener('pointerdown', e => {
+      moved = false;
+      if (e.pointerType === 'touch' || e.button !== 0 || e.target.closest('.dot')) return;
+      start(e.clientX, e.clientY, e.timeStamp);
+    });
+    hero.addEventListener('pointermove', e => {
+      if (e.pointerType === 'touch' || !down) return;
+      const was = moved;
+      if (move(e.clientX, e.clientY, e.timeStamp) && !was) hero.setPointerCapture(e.pointerId);
+    });
+    hero.addEventListener('pointerup', e => { if (e.pointerType !== 'touch') end(); });
+    hero.addEventListener('pointercancel', e => { if (e.pointerType !== 'touch') end(); });
+    hero.addEventListener('lostpointercapture', e => { if (e.pointerType !== 'touch') end(); });
     hero.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
     hero.addEventListener('dragstart', e => e.preventDefault());
   }

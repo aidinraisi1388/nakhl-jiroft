@@ -66,26 +66,22 @@ body:not([data-view="home"]):not([data-view="catalog"]) #cartBar{display:none}
 .chk{width:18px;height:18px;accent-color:#28622D;cursor:pointer;vertical-align:middle}
 
 /* ── Mobile side menu: one transform + one opacity, GPU only ── */
-.m-drawer{transform:translate3d(-105%,0,0);transition:transform .42s cubic-bezier(.32,.72,0,1);will-change:transform}
-.m-shade{opacity:0;pointer-events:none;transition:opacity .35s ease}
+.m-drawer{transform:translate3d(-104%,0,0);transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s;will-change:transform;border-radius:0 26px 26px 0;overscroll-behavior:contain;box-shadow:none!important}
+html.menu-open .m-drawer{box-shadow:16px 0 48px rgba(15,36,17,.28)!important}
+.m-shade{opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.22,1,.36,1);touch-action:none}
 html.menu-open .m-drawer{transform:none}
 html.menu-open .m-shade{opacity:1;pointer-events:auto}
-html.menu-open,html.menu-open body{overflow:hidden}
 .m-link{display:flex;align-items:center;gap:.75rem;height:3.25rem;padding:0 .85rem;border-radius:1rem;font-family:Peyda,Vazirmatn,Tahoma,sans-serif;font-weight:700;color:#14301A;transition:background-color .2s}
 .m-link:active,.m-link:hover{background:#F0F7F1}
-html.menu-open .m-link{animation:mIn .45s cubic-bezier(.16,1,.3,1) both}
-html.menu-open .m-link:nth-child(2){animation-delay:.04s}html.menu-open .m-link:nth-child(3){animation-delay:.08s}html.menu-open .m-link:nth-child(4){animation-delay:.12s}html.menu-open .m-link:nth-child(5){animation-delay:.16s}
-@keyframes mIn{from{opacity:0;transform:translate3d(-14px,0,0)}}
+html.menu-open .m-link{animation:mIn .6s cubic-bezier(.22,1,.36,1) .08s both}
+html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:nth-child(3){animation-delay:.18s}html.menu-open .m-link:nth-child(4){animation-delay:.23s}html.menu-open .m-link:nth-child(5){animation-delay:.28s}
+@keyframes mIn{from{opacity:0;transform:translate3d(-22px,0,0)}}
 
 /* ── Phones & tablets: lighter painting so scrolling stays smooth ── */
 @media (max-width:1023px){
   #navCapsule{-webkit-backdrop-filter:none;backdrop-filter:none;background:#28622D}   /* a blurred sticky bar repaints every scroll frame on iPhone */
   .rv.rv-in{animation-duration:.5s}
   @keyframes rvIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
-  /* dashboard / admin side menus become one clean scrollable strip */
-  #dashTabs,#admTabs{display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
-  #dashTabs > button,#admTabs > button{flex:0 0 auto;flex-direction:row;height:2.5rem;padding:0 .85rem;font-size:12px;scroll-snap-align:start}
-  #dashTabs > button svg,#admTabs > button svg{width:16px;height:16px}
 }
 
 /* ── Scroll reveal ── */
@@ -294,10 +290,10 @@ body.cart-on #footer{padding-bottom:5.5rem}
 .slide[aria-hidden="true"] .float-y{animation-play-state:paused}   /* only the visible slide floats */
 
 /* navbar search expands inline */
-#navSearch{width:40px;transition:width 0.35s cubic-bezier(0.16, 1, 0.3, 1),background-color .25s}
+#navSearch{width:40px;transition:width .5s cubic-bezier(.22,1,.36,1),background-color .35s ease}
 #navSearch.open{width:min(260px,48vw);background:rgba(255,255,255,.12)}
-#navSearch input{opacity:0;width:0;transition:opacity .2s}
-#navSearch.open input{opacity:1;width:100%}
+#navSearch input{opacity:0;width:0;transform:translate3d(8px,0,0);transition:opacity .25s ease,transform .45s cubic-bezier(.22,1,.36,1)}
+#navSearch.open input{opacity:1;width:100%;transform:none;transition-delay:.12s}
 @media (max-width:639px){ #header.searching .brand-text{display:none} }
 @media (max-width:374px){ #header .brand-text{display:none} }          /* very small phones: logo only, so every button fits */
 
@@ -390,3 +386,14 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
   #cartFoot #promoMsg{min-height:0}
 }
 @media (max-width:639px){ #loginHint{display:none} }
+
+/* ══════ Softer header search: neighbours glide out of the way instead of popping ══════ */
+#searchToggle svg{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+#navSearch.open #searchToggle svg{transform:rotate(90deg) scale(.92)}
+#header .brand-text{display:inline-block;max-width:9rem;overflow:hidden;white-space:nowrap;vertical-align:middle;transition:max-width .5s cubic-bezier(.22,1,.36,1),opacity .3s ease}
+@media (max-width:639px){
+  #header.searching .brand-text{display:inline-block;max-width:0;opacity:0}
+  #header #userBtn{max-width:40px;transition:max-width .5s cubic-bezier(.22,1,.36,1),opacity .3s ease,margin .5s cubic-bezier(.22,1,.36,1)}
+  #header.searching #userBtn{display:inline-flex;max-width:0;opacity:0;margin-inline-start:-6px;pointer-events:none;overflow:hidden;box-shadow:none}
+}
+@media (max-width:374px){ #header .brand-text{display:none} }
