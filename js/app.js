@@ -3,7 +3,7 @@
    orders & receipt · accounts & auth · customer dashboard · admin panel */
 (() => {
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
-  const fa = n => new Intl.NumberFormat('fa-IR').format(n);
+  const fa = n => new Intl.NumberFormat('fa-IR').format(n).replace(/٬/g, ',');   // one thousands separator that looks the same in Peyda and Yekan
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const smooth = reduce ? 'auto' : 'smooth';
 
@@ -105,7 +105,7 @@
         </div>
         <span class="absolute right-2 top-2 rounded-full ${p.badge.includes('ارگانیک') ? 'bg-cyprus-soft text-cyprus ring-1 ring-cyprus/15' : 'bg-white text-cyprus-mid ring-1 ring-cyprus/10'} px-2.5 py-1 font-display text-[11px] font-bold shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)]">${p.stock > 0 ? p.badge : 'ناموجود'}</span>
         <div class="p-tools absolute left-2 top-2 flex flex-col gap-1.5">
-          <button class="fav ease-ui grid h-9 w-9 place-items-center rounded-full bg-white shadow-sm hover:scale-110 hover:text-cyprus active:scale-90 ${fav ? 'text-cyprus' : 'text-ink-soft'}" aria-pressed="${fav}" aria-label="افزودن ${p.name} به علاقه‌مندی‌ها">
+          <button class="fav ease-ui grid h-9 w-9 place-items-center rounded-full bg-white shadow-sm hover:scale-110 hover:text-cyprus active:scale-90 ${fav ? 'text-cyprus' : 'text-ink-soft'}" aria-pressed="${fav}" aria-label="علاقه‌مندی: ${p.name}">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="${fav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
           </button>
           <button class="quick ease-ui grid h-9 w-9 place-items-center rounded-full bg-white text-ink-soft shadow-sm hover:scale-110 hover:text-cyprus active:scale-90" aria-label="نمایش سریع ${p.name}">${svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 17, 2)}</button>
@@ -114,7 +114,7 @@
       <div class="flex flex-1 flex-col pt-4 text-center">
         <h3 class="font-display text-[15px] font-extrabold leading-snug text-ink transition-colors duration-300 group-hover:text-cyprus-mid sm:text-[17px]">${p.name}</h3>
         <p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-muted sm:text-[13px]">${DESC[p.id] || ''}</p>
-        <span class="mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid">${svg('<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/>', 12, 2.4)}${p.unit}</span>
+        <span class="unit-pill mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid">${svg('<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/>', 12, 2.4)}${p.unit}</span>
         <div class="mt-auto flex flex-col items-stretch gap-3 pt-4 xl:flex-row xl:items-center xl:justify-between">
           <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">${fa(p.price)}</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           ${p.stock <= 0 ? `<div class="grid h-11 place-items-center rounded-xl bg-sand px-4 font-display text-sm font-bold text-ink-soft xl:w-32">ناموجود</div>` : `<div class="buy w-full xl:w-32" data-id="${p.id}" data-state="${q ? 'open' : 'idle'}">
@@ -227,8 +227,22 @@
       return;
     }
     const quick = e.target.closest('.quick');
-    if (quick) { const p = byId[quick.closest('.p-card').dataset.id]; toast(`${p.name} · ${p.unit} · ${fa(p.price)} تومان`); }
+    if (quick) openQV(quick.closest('.p-card').dataset.id, quick);
+    if (e.target.closest('#qvOverlay, #qvClose')) closeQV();
   });
+
+  /* ── Quick view: bottom sheet on phones, centered card on desktop (same card → add/favourite keep working) ── */
+  let qvFrom = null;
+  function openQV(id, from) {
+    qvFrom = from; $('#qvBody').innerHTML = cardHTML(byId[id]);
+    $('#qv').hidden = false; $('#qvOverlay').hidden = false; document.documentElement.classList.add('qv-lock');
+    setTimeout(() => $('#qvClose').focus({ preventScroll: true }), 30);
+  }
+  function closeQV() {
+    if ($('#qv').hidden) return false;
+    $('#qv').hidden = true; $('#qvOverlay').hidden = true; document.documentElement.classList.remove('qv-lock');
+    qvFrom && document.contains(qvFrom) && qvFrom.focus({ preventScroll: true }); return true;
+  }
 
   /* ── Floating cart capsule ── */
   const bar = $('#cartBar');
@@ -252,7 +266,7 @@
         <div class="h-16 w-16 shrink-0 overflow-hidden rounded-2xl bg-sand-light">${thumb(p, ' mini')}</div>
         <div class="min-w-0 flex-1">
           <p class="truncate font-display text-sm font-extrabold text-cyprus">${p.name}</p>
-          <p class="mt-0.5 text-[11px] text-ink-soft">${p.unit} · ${fa(p.price)} تومان</p>
+          <p class="mt-0.5 text-[11px] leading-5 text-ink-soft">${p.unit}<span class="block whitespace-nowrap">هر عدد ${fa(p.price)} تومان</span></p>
           <p class="mt-1.5 font-display text-[15px] font-black tabular-nums text-cyprus">${fa(p.price * q)} <span class="text-[10px] font-bold text-cyprus-mid">تومان</span></p>
         </div>
         <div class="flex shrink-0 flex-col items-end gap-2">
@@ -432,6 +446,7 @@
     stallBar(); views[current].classList.add('leaving');
     navT = setTimeout(() => { Object.values(views).forEach(v => v.classList.remove('leaving')); route(); if (lb.classList.contains('stall')) finishBar(); }, NAV_DELAY);
   };
+  $('#skipLink').addEventListener('click', e => { e.preventDefault(); const v = views[current]; v.setAttribute('tabindex', '-1'); v.focus(); });
   addEventListener('hashchange', onNav);
   addEventListener('popstate', onNav);
 
@@ -453,7 +468,7 @@
   const closeMenu = () => { menu.hidden = true; menuBtn.setAttribute('aria-expanded', 'false'); };
   menuBtn.addEventListener('click', () => { const open = menu.hidden; menu.hidden = !open; menuBtn.setAttribute('aria-expanded', open); });
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-  addEventListener('keydown', e => { if (e.key === 'Escape') { if (drawerOpen) closeCart(); else { openSearch(false); closeMenu(); } } });
+  addEventListener('keydown', e => { if (e.key === 'Escape') { if (closeQV()) return; if (drawerOpen) closeCart(); else { openSearch(false); closeMenu(); } } });
 
   /* ── Hero slider: one timer every 6s, pauses on hover/focus and while the catalog is open ── */
   const slides = $$('.slide'), dots = $$('.dot'), track = $('#heroTrack'); let cur = 0, timer;
@@ -482,8 +497,16 @@
   $$('[data-service]').forEach(a => a.addEventListener('click', () => selectService(a.dataset.service)));
 
   /* ── Forms (front-end only) ── */
-  const toLatin = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[\s-]/g, '');
+  const toLatin = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[\s-]/g, '');   // Persian + Arabic digits
   const validPhone = v => /^09\d{9}$/.test(toLatin(v));
+  /* ── No server yet: orders & inquiries reach the shop as a pre-filled SMS the customer just sends ── */
+  const SHOP_SMS = '+989931934298';
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const smsHref = body => `sms:${SHOP_SMS}${isIOS ? '&' : '?'}body=${encodeURIComponent(body)}`;
+  const canSMS = matchMedia('(pointer: coarse)').matches;          // desktops have no SMS app → copy the text instead
+  const SHOP_SMS_FA = '۰۹۹۳۱۹۳۴۲۹۸';
+  const copyText = async t => { try { await navigator.clipboard.writeText(t); return true; } catch { return false; } };
+  const SVC_FA = { bulk: 'سفارش عمده', storage: 'رزرو سالن سردخانه', shipping: 'استعلام حمل' };
   $('#inquiryForm').addEventListener('submit', e => {
     e.preventDefault();
     const n = $('#fName'), p = $('#fPhone'), msg = $('#formMsg');
@@ -494,8 +517,13 @@
     const phone = toLatin(p.value), svc = $('.svc[aria-checked="true"]');
     requests.unshift({ id: 'SR-' + (Math.max(208, ...requests.map(r => +r.id.split('-')[1] || 0)) + 1), phone, name: n.value.trim(), type: svc ? svc.dataset.value : 'bulk', product: $('#fProduct').value, qty: $('#fQty').value.trim(), date: Date.now(), status: 'review' });
     saveRequests();
-    e.target.reset(); selectService('bulk');
-    msg.textContent = user && user.phone === phone ? 'درخواست ثبت شد؛ وضعیتش را در «درخواست‌های سردخانه» حساب کاربری دنبال کنید.' : 'درخواست شما ثبت شد؛ به‌زودی تماس می‌گیریم.'; msg.className = 'min-h-[1.25rem] text-sm font-bold text-cyprus';
+    const r0 = requests[0], note = $('#fMsg') ? $('#fMsg').value.trim() : '';
+    const href = smsHref([`استعلام ${r0.id} · نخل جیرفت`, `نوع: ${SVC_FA[r0.type] || r0.type}`, `نام: ${r0.name}`, `موبایل: ${r0.phone}`, `محصول: ${r0.product}`, r0.qty && `مقدار: ${r0.qty}`, note && `توضیحات: ${note}`].filter(Boolean).join('\n'));
+    const body = decodeURIComponent(href.split('body=')[1]);
+    e.target.reset(); selectService('bulk'); msg.className = 'min-h-[1.25rem] text-sm font-bold text-cyprus';
+    if (!canSMS) { copyText(body).then(ok => { msg.textContent = ok ? `متن استعلام کپی شد؛ آن را به ${SHOP_SMS_FA} پیامک کنید.` : `استعلام ثبت شد؛ لطفاً با ${SHOP_SMS_FA} تماس بگیرید.`; }); return; }
+    msg.innerHTML = `متن استعلام در برنامه‌ی پیامک آماده شد؛ فقط «ارسال» را بزنید. <a href="${href}" class="underline underline-offset-4">باز نشد؟ اینجا بزنید</a>`;
+    location.href = href;                                   // inside the submit gesture → mobile opens the SMS app
   });
   ['#fName', '#fPhone'].forEach(id => $(id).addEventListener('input', e => e.target.setAttribute('aria-invalid', 'false')));
   $('#newsForm') && $('#newsForm').addEventListener('submit', e => {
@@ -633,24 +661,26 @@
     $$('[data-screen]').forEach(el => { el.hidden = el.dataset.screen !== scr; });
     $('#authTabs').hidden = scr === 'forgot';
     $$('[data-auth-tab]').forEach(a => { const on = a.dataset.authTab === scr; a.classList.toggle('text-cyprus', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
-    const T = { signin: ['ورود به حساب', 'با شماره موبایل و رمز عبور وارد شوید.'], signup: ['ساخت حساب تازه', 'در کمتر از یک دقیقه عضو نخل جیرفت شوید.'], forgot: ['بازیابی رمز عبور', 'کد تأیید را دریافت کنید و رمز تازه بسازید.'] }[scr];
+    const T = { signin: ['ورود به حساب', 'با شماره موبایل و رمز عبور وارد شوید.'], signup: ['ساخت حساب تازه', 'در کمتر از یک دقیقه عضو نخل جیرفت شوید.'], forgot: ['بازیابی رمز عبور', 'شماره‌ی حساب را وارد کنید و رمز تازه بسازید.'] }[scr];
     $('#authHeading').textContent = T[0]; $('#authLead').textContent = T[1];
     $('#authPill').style.transform = scr === 'signup' ? 'translateX(-100%)' : '';
     const B = { signup: ['به خانواده‌ی نخل<br>خوش آمدید', 'با یک حساب رایگان، سفارش‌ها را لحظه‌به‌لحظه در زنجیره‌ی سرد دنبال کنید.', 'به خانواده‌ی نخل خوش آمدید', 'خرمای تازه با زنجیره‌ی سرد'],
                 signin: ['دوباره خوش آمدید<br>به نخل جیرفت', 'سفارش‌ها، کیف پول و درخواست‌های سردخانه‌تان منتظر شماست.', 'دوباره خوش آمدید', 'سفارش‌هایتان منتظر شماست'],
-                forgot: ['نگران نباشید،<br>حسابتان امن است', 'با کد تأیید پیامکی، در چند ثانیه رمز تازه بسازید.', 'بازیابی رمز عبور', 'با کد تأیید پیامکی'] }[scr];
+                forgot: ['نگران نباشید،<br>حسابتان امن است', 'در چند ثانیه برای حساب ذخیره‌شده روی همین دستگاه رمز تازه بسازید.', 'بازیابی رمز عبور', 'رمز تازه در چند ثانیه'] }[scr];
     $('#authBrandT').innerHTML = B[0]; $('#authBrandL').textContent = B[1]; $('#authBrandM').textContent = B[2]; $('#authBrandMs').textContent = B[3];
     [$('#authBrandT'), $('#authBrandL')].forEach(el => { el.classList.remove('a-in'); void el.offsetWidth; el.classList.add('a-in'); });
     const scrEl = $(`[data-screen="${scr}"]`), anim = scr === 'forgot' ? $('#fpPhoneForm') : scrEl;   /* replay the cascade on every switch */
     [scrEl, anim, $('#authHeading'), $('#authLead')].forEach(el => { el.classList.remove('a-in'); void el.offsetWidth; el.classList.add('a-in'); });
     if (scr === 'forgot') { $('#fpPhoneForm').hidden = false; $('#fpCodeForm').hidden = true; $('#fpNewForm').hidden = true; }
     $$('#authView [role="alert"]').forEach(p => { p.textContent = ''; });
-    if (!$('#authNote').dataset.keep) note(authReturn === 'admin' ? 'برای ورود به پنل مدیریت، با حساب مدیر وارد شوید.' : pendingAfter ? 'برای تکمیل خرید وارد شوید یا ثبت‌نام کنید.' : '');
+    if (!$('#authNote').dataset.keep) note(scr === 'forgot' ? '' : authReturn === 'admin' ? 'برای ورود به پنل مدیریت، با حساب مدیر وارد شوید.' : pendingAfter ? 'برای تکمیل خرید وارد شوید یا ثبت‌نام کنید.' : '');
     delete $('#authNote').dataset.keep;
-    setTimeout(() => { const f = $(`[data-screen="${scr}"] input`); f && f.focus({ preventScroll: true }); }, 60);
+    if (!touchUI) setTimeout(() => { const f = $(`[data-screen="${scr}"] input`); f && f.focus({ preventScroll: true }); }, 60);   // phones: no auto-keyboard over the form
   }
+  const touchUI = matchMedia('(hover: none) and (pointer: coarse)').matches;
   const shake = el => { el.classList.remove('a-shake'); void el.offsetWidth; el.classList.add('a-shake'); };
-  const fieldErr = (el, msgEl, m) => { msgEl.textContent = m; el.setAttribute('aria-invalid', 'true'); shake(el); el.focus(); return false; };
+  const fieldErr = (el, msgEl, m) => { const w = el.closest('.gap-1\\.5'); if (w && msgEl.parentElement !== w) { msgEl.classList.remove('min-h-[1.25rem]'); w.appendChild(msgEl); }   // message sits under the field that failed
+    msgEl.textContent = m; el.setAttribute('aria-invalid', 'true'); shake(el); el.focus(); return false; };
   $$('#authView input').forEach(i => i.addEventListener('input', () => i.setAttribute('aria-invalid', 'false')));
   const EYE = svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', 18, 2);
   const EYE_OFF = svg('<path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A10 10 0 0 1 12 5c6.5 0 10 7 10 7a17 17 0 0 1-3.2 4.2M6.6 6.6C3.9 8.4 2 12 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/>', 18, 2);
@@ -679,7 +709,7 @@
   $('#signinForm').addEventListener('submit', e => {
     e.preventDefault();
     const ph = $('#siPhone'), pw = $('#siPass'), err = $('#siErr'), phone = toLatin(ph.value);
-    if (!validPhone(phone)) return fieldErr(ph, err, 'شماره موبایل باید ۱۱ رقم و با ۰۹ شروع شود.');
+    if (!validPhone(phone)) return fieldErr(ph, err, phone ? 'شماره موبایل باید ۱۱ رقم و با ۰۹ شروع شود.' : 'شماره موبایل را وارد کنید.');
     if (!pw.value) return fieldErr(pw, err, 'رمز عبور را وارد کنید.');
     // TODO: POST to your backend; it checks the password and returns a session token + role
     if (!users[phone] || users[phone].hash !== pwHash(phone, pw.value)) { pw.value = ''; return fieldErr(pw, err, 'شماره موبایل یا رمز عبور درست نیست.'); }
@@ -703,9 +733,11 @@
     const ph = $('#fpPhone'), phone = toLatin(ph.value);
     if (!validPhone(phone)) return fieldErr(ph, $('#fpErr1'), 'شماره موبایل باید ۱۱ رقم و با ۰۹ شروع شود.');
     if (!users[phone]) return fieldErr(ph, $('#fpErr1'), 'حسابی با این شماره پیدا نشد.');
-    // TODO: your backend sends the reset code by SMS
+    if (users[phone].role === 'admin') return fieldErr(ph, $('#fpErr1'), 'رمز حساب مدیر از این صفحه بازیابی نمی‌شود.');   // demo OTP must never unlock the manager account
+    // No SMS gateway yet: accounts live on this device, so the reset goes straight to a new password.
+    // TODO (with a backend): send a code by SMS and show #fpCodeForm here instead.
     fpPhone = phone; $('#fpTo').textContent = phone; fpBoxes.forEach(b => { b.value = ''; b.setAttribute('aria-invalid', 'false'); });
-    $('#fpPhoneForm').hidden = true; $('#fpCodeForm').hidden = false; fpBoxes[0].focus(); toast('کد تأیید ارسال شد');
+    $('#fpPhoneForm').hidden = true; $('#fpNewForm').hidden = false; $('#fpPass').focus();
   });
   const digits = v => toLatin(v).replace(/\D/g, '');
   const checkCode = () => {
@@ -754,7 +786,7 @@
   const startAct = ph => { actAs = ph; store.set('nakhl:actAs:v2', ph); syncSession(); dashTab = 'overview'; location.hash = '#dashboard'; toast(`حساب ${custName(ph)} باز شد`); };
   const endAct = () => { actAs = null; store.set('nakhl:actAs:v2', null); syncSession(); admTab = 'customers'; location.hash = '#admin'; };
   $$('[data-logout]').forEach(b => b.addEventListener('click', () => {
-    if (user && user.viaAdmin) return endAct();            // in support mode "exit" just leaves the customer's account
+    if (user && user.viaAdmin && !b.closest('#adminView')) return endAct();   // the admin panel's own button always signs the manager out            // in support mode "exit" just leaves the customer's account
     // TODO: also invalidate the session on the server
     session = null; store.set('nakhl:session', null); store.set('nakhl:actAs:v2', null); syncSession(); updateUserUI();
     toast('از حساب خارج شدید'); location.hash = '#top';
@@ -772,7 +804,7 @@
   /* ════════ CUSTOMER DASHBOARD ════════ */
   let dashTab = 'overview';
   const TIERS = [['جوانه', 0], ['نهال', 300], ['نخل', 800], ['نخلستان', 1500]];
-  const TRACK = [['ثبت سفارش', 0], ['تأیید پرداخت', 1], ['بسته‌بندی در سالن سرد (+۲ تا +۴°C)', 6], ['تحویل به کامیون یخچال‌دار', 20], ['در مسیر مقصد', 30], ['تحویل به مشتری', 48]];
+  const TRACK = [['ثبت سفارش', 0], ['تأیید سفارش', 1], ['بسته‌بندی در سالن سرد (۲ تا ۴ درجه)', 6], ['تحویل به کامیون یخچال‌دار', 20], ['در مسیر مقصد', 30], ['تحویل به مشتری', 48]];
   const TRACK_AT = { pending: 1, processing: 2, shipped: 4, delivered: 5 };
   const pm = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { year: 'numeric', month: 'numeric' }), mon = new Intl.DateTimeFormat('fa-IR', { month: 'short' });
   const favCard = p => `
@@ -781,7 +813,7 @@
         <div class="min-w-0"><p class="truncate font-display text-sm font-black text-cyprus">${p.name}</p><p class="mt-0.5 text-[11px] text-ink-soft">${p.unit}</p></div>
         <p class="font-display font-black tabular-nums text-cyprus">${fa(p.price)} <span class="text-[10px] font-bold text-cyprus-mid">تومان</span></p>
         <div class="mt-auto flex gap-2">
-          <button data-qadd="${p.id}" class="btn-cyprus h-10 flex-1 px-2 text-xs"${p.stock > 0 ? '' : ' disabled'}>${p.stock > 0 ? PLUS_S + 'افزودن به سبد' : 'ناموجود'}</button>
+          <button data-qadd="${p.id}" class="btn-cyprus h-10 flex-1 px-2 text-xs"${p.stock > 0 ? '' : ' disabled'}>${p.stock > 0 ? PLUS_S + 'افزودن' : 'ناموجود'}</button>
           <button data-unfav="${p.id}" class="ease-ui grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand text-cyprus hover:bg-cyprus hover:text-white active:scale-90" aria-label="حذف ${p.name} از علاقه‌مندی‌ها"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
         </div>
       </li>`;
@@ -816,7 +848,7 @@
     mine.forEach(o => { const m = months.find(x => x.key === pm.format(o.date)); if (m) m.kg += kgOf(o); });
     const mx = Math.max(1, ...months.map(m => m.kg));
     $('#yTotal').textContent = kgFa(months.reduce((s, m) => s + m.kg, 0));
-    $('#yChart').innerHTML = months.map((m, i) => `<div class="group flex flex-1 flex-col items-center gap-1.5">
+    $('#yChart').innerHTML = months.map((m, i) => `<div class="group flex min-w-0 flex-1 flex-col items-center gap-1.5">
         <span class="text-[10px] font-bold text-cyprus opacity-0 transition-opacity group-hover:opacity-100">${m.kg ? kgFa(m.kg) : ''}</span>
         <div class="flex h-28 w-full items-end"><span class="block w-full rounded-lg ${i === months.length - 1 ? 'bg-[#28622D]' : m.kg ? 'bg-cyprus/30 group-hover:bg-cyprus/60' : 'bg-cyprus/10'} transition-colors" style="height:${m.kg ? Math.max(8, m.kg / mx * 100) : 4}%" title="${kgFa(m.kg)} کیلوگرم"></span></div>
         <span class="whitespace-nowrap text-[9px] text-ink-soft sm:text-[10px] ${i % 2 ? 'max-sm:invisible' : ''}">${m.label}</span></div>`).join('');
@@ -833,7 +865,7 @@
         <div class="mt-4 flex flex-wrap items-center gap-2 rounded-2xl bg-sand-light p-3">
           <span class="text-xs text-ink-soft">کد رهگیری</span><b dir="ltr" class="latin text-sm tracking-wider text-cyprus">${code}</b>
           <button data-copy="${code}" class="ease-ui ms-auto inline-flex h-8 items-center gap-1 rounded-full bg-white px-3 text-xs font-bold text-cyprus shadow-sm hover:bg-cyprus hover:text-white active:scale-95">${svg('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', 13, 2)}کپی</button>
-          ${live.status === 'shipped' ? `<span class="inline-flex h-8 items-center gap-1 rounded-full bg-cyprus-soft px-3 text-xs font-bold text-cyprus">${svg('<path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z"/>', 13, 2)}<span dir="ltr">+3.1°C</span> کامیون</span>` : ''}
+          ${live.status === 'shipped' ? `<span class="inline-flex h-8 items-center gap-1 rounded-full bg-cyprus-soft px-3 text-xs font-bold text-cyprus">${svg('<path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z"/>', 13, 2)}دمای کامیون <span dir="ltr">+۳٫۱°C</span></span>` : ''}
         </div>
         <ol class="mt-5 flex flex-col">${TRACK.map(([l, h], i) => { const done = i <= at, cur = i === at; return `
           <li class="relative flex gap-3 ${i < TRACK.length - 1 ? 'pb-4' : ''}"${cur ? ' aria-current="step"' : ''}>
@@ -884,7 +916,6 @@
         <button data-del-addr="${i}" class="ease-ui grid h-9 w-9 shrink-0 place-items-center rounded-full text-ink-soft hover:bg-sand hover:text-cyprus active:scale-90" aria-label="حذف آدرس ${esc(a.title)}">${TRASH}</button>
       </li>`).join('') : `<li class="rounded-3xl border border-dashed border-cyprus/20 p-6 text-center text-sm text-ink-muted sm:col-span-2">هنوز آدرسی ذخیره نکرده‌اید.</li>`;
 
-    $('#profName').value = user.name || ''; $('#profPhone').value = user.phone;
   }
   const goDashTab = t => { if (t !== dashTab) { loadBar(); dashTab = t; renderDash(); } };
   $('#dashTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goDashTab(b.dataset.tab); });
@@ -910,11 +941,6 @@
     const b = e.target.closest('[data-del-addr]'); if (!b) return;
     addrBook[user.phone].splice(+b.dataset.delAddr, 1); store.set('nakhl:addr:v2', addrBook); renderDash(); toast('آدرس حذف شد');
   });
-  $('#profileForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const nm = $('#profName').value.trim(); if (nm.length < 3) { toast('نام را کامل وارد کنید'); return; }
-    users[user.phone] = Object.assign({ role: 'customer', hash: null }, users[user.phone], { name: nm }); saveUsers(); syncSession(); updateUserUI(); renderDash(); toast('اطلاعات حساب ذخیره شد');
-  });
 
   /* ════════ ADMIN PANEL ════════ */
   const HALLS = [                        // sample hall data → 3,900 of 5,000 t = 78%
@@ -933,7 +959,7 @@
   const orderRow = o => `
       <li class="card grid gap-4 p-5 lg:grid-cols-[1fr_1.4fr_1fr_300px] lg:items-center lg:gap-5">
         <div><p class="font-display font-black text-cyprus" dir="ltr" style="text-align:right">${o.id}</p><p class="mt-1 text-xs text-ink-soft">${dateFa(o.date)} · ${kgFa(kgOf(o))} کیلوگرم</p></div>
-        <div class="min-w-0 text-sm"><p class="tel font-bold text-ink" dir="ltr" style="text-align:right">${o.phone}</p><p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-soft">${o.items.map(([id, q]) => `${byId[id].name} × ${fa(q)}`).join('، ')}</p></div>
+        <div class="min-w-0 text-sm"><p class="tel font-bold text-ink" dir="ltr" style="text-align:right">${o.phone}</p><p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-soft">${o.items.map(([id, q]) => `<span class="whitespace-nowrap">${byId[id].name} × ${fa(q)}</span>`).join('، ')}</p></div>
         <div class="flex items-center gap-2"><p class="font-display text-lg font-black tabular-nums text-cyprus">${fa(o.total)} <span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           <button data-print="${o.id}" class="ease-ui ms-auto inline-flex h-9 items-center gap-1.5 rounded-full border border-cyprus/15 bg-white px-3 text-xs font-bold text-cyprus hover:border-cyprus hover:bg-cyprus hover:text-white active:scale-95 lg:ms-0" aria-label="چاپ فاکتور ${o.id}">${svg('<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>', 15, 2)}فاکتور</button></div>
         ${seg(o)}
@@ -955,10 +981,10 @@
         <td class="c-id px-3 py-3.5"><b class="latin text-cyprus" dir="ltr">${o.id}</b></td>
         <td class="c-date px-3 py-3.5 text-xs text-ink-muted"><span class="block font-bold text-ink">${dShort(o.date)}</span> ${clock(o.date)}</td>
         <td class="c-cust px-3 py-3.5"><span class="block font-display font-bold text-ink">${esc(o.name || custName(o.phone))}</span><span class="tel text-xs text-ink-soft" dir="ltr">${o.phone}</span></td>
-        <td class="c-items max-w-[220px] px-3 py-3.5 text-xs leading-6 text-ink-muted">${o.items.map(([id, n]) => `${byId[id].name} × ${fa(n)}`).join('، ')}</td>
+        <td class="c-items max-w-[220px] px-3 py-3.5 text-xs leading-6 text-ink-muted">${o.items.map(([id, n]) => `<span class="whitespace-nowrap">${byId[id].name} × ${fa(n)}</span>`).join('، ')}</td>
         <td class="c-amt px-3 py-3.5 font-display font-black tabular-nums text-cyprus">${fa(o.total)} <span class="md:hidden text-[11px] font-bold text-cyprus-mid">تومان</span></td>
         <td class="c-act px-4 py-3.5"><div class="flex justify-center gap-2">
-          <button data-rok="${o.id}" class="ease-ui grid h-9 w-9 place-items-center rounded-xl bg-cyprus-soft text-cyprus hover:bg-[#28622D] hover:text-white active:scale-90" aria-label="تایید سفارش و پرداخت ${o.id}" title="تایید سفارش و پرداخت">${svg(ICO.ok, 17, 2.6)}</button>
+          <button data-rok="${o.id}" class="ease-ui grid h-9 w-9 place-items-center rounded-xl bg-cyprus-soft text-cyprus hover:bg-[#28622D] hover:text-white active:scale-90" aria-label="تأیید سفارش ${o.id}" title="تایید سفارش و پرداخت">${svg(ICO.ok, 17, 2.6)}</button>
           <button data-rdel="${o.id}" class="ease-ui grid h-9 w-9 place-items-center rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white active:scale-90" aria-label="حذف ${o.id}" title="حذف سفارش">${svg(ICO.del, 16, 2.2)}</button>
         </div></td>
       </tr>`).join('') : `<tr><td colspan="7" class="px-4 py-10 text-center font-display font-bold text-cyprus">سفارش تازه‌ای برای بررسی نیست ✓</td></tr>`;
@@ -997,12 +1023,16 @@
     const used = HALLS.reduce((s, h) => s + h.used, 0), cap = HALLS.reduce((s, h) => s + h.cap, 0), occ = Math.round(used / cap * 100);
 
     if (admTab === 'stats') {
-      const now = Date.now(), sum = (a, b) => orders.filter(o => now - o.date >= a * DAY && now - o.date < b * DAY).reduce((s, o) => s + o.total, 0);
-      const last = sum(0, 7), prev = sum(7, 14), g = prev ? (last - prev) / prev * 100 : last ? 100 : 0;
-      $('#kRevenue').textContent = fa(orders.reduce((s, o) => s + o.total, 0));
-      $('#kGrowth').innerHTML = `${svg(g >= 0 ? '<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>' : '<path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/>', 14, 2.4)}${g >= 0 ? '+' : '−'}${fa(Math.abs(Math.round(g * 10) / 10))}٪`;
+      const sold = orders.filter(o => o.status !== 'awaiting');           // only approved orders count as sales
+      const now = Date.now(), sum = (a, b) => sold.filter(o => now - o.date >= a * DAY && now - o.date < b * DAY).reduce((s, o) => s + o.total, 0);
+      const last = sum(0, 7), prev = sum(7, 14), g = prev ? (last - prev) / prev * 100 : null;
+      const pend = orders.filter(o => o.status === 'awaiting').reduce((s, o) => s + o.total, 0);
+      $('#kRevenue').textContent = fa(sold.reduce((s, o) => s + o.total, 0));
+      $('#kPending').textContent = pend ? `${fa(pend)} تومان در انتظار تأیید` : '';
+      $('#kGrowth').innerHTML = g === null ? 'بدون مقایسه' : `${svg(g >= 0 ? '<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>' : '<path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/>', 14, 2.4)}${g >= 0 ? '+' : '−'}${fa(Math.abs(Math.round(g * 10) / 10))}٪`;
+      $('#kGrowthL').textContent = g === null ? 'هفته‌ی قبل فروشی نبوده' : 'نسبت به ۷ روز قبل';
       const d0 = new Date(); d0.setHours(0, 0, 0, 0);
-      const days = Array.from({ length: 7 }, (_, i) => { const st = d0.getTime() - (6 - i) * DAY; return { l: new Intl.DateTimeFormat('fa-IR', { weekday: 'short' }).format(st), v: orders.filter(o => o.date >= st && o.date < st + DAY).reduce((s, o) => s + o.total, 0) }; });
+      const days = Array.from({ length: 7 }, (_, i) => { const st = d0.getTime() - (6 - i) * DAY; return { l: new Intl.DateTimeFormat('fa-IR', { weekday: 'short' }).format(st), v: sold.filter(o => o.date >= st && o.date < st + DAY).reduce((s, o) => s + o.total, 0) }; });
       const max = Math.max(1, ...days.map(d => d.v));
       $('#kChart').innerHTML = days.map((d, i) => `<div class="flex flex-1 flex-col items-center gap-1.5"><div class="flex h-24 w-full items-end"><span class="block w-full rounded-lg ${i === 6 ? 'bg-white' : 'bg-white/35'}" style="height:${Math.max(6, d.v / max * 100)}%" title="${fa(d.v)} تومان"></span></div><span class="text-[10px] text-white/60">${d.l}</span></div>`).join('');
       $('#kNew').textContent = fa(k('awaiting')); $('#kProc').textContent = fa(k('processing'));
@@ -1017,15 +1047,15 @@
       $$('#admFilters .chip').forEach(b => { b.setAttribute('aria-pressed', b.dataset.f === admFilter); $('.c', b).textContent = fa(b.dataset.f === 'all' ? orders.filter(o => o.status !== 'awaiting').length : k(b.dataset.f)); });
       renderReview();
       const list = orders.filter(o => o.status !== 'awaiting' && (admFilter === 'all' || o.status === admFilter));
-      $('#admOrders').innerHTML = list.length ? list.map(orderRow).join('') : `<li class="card p-10 text-center font-display font-bold text-cyprus">سفارشی با این وضعیت نیست</li>`;
+      $('#admOrders').innerHTML = list.length ? list.map(orderRow).join('') : `<li class="card p-10 text-center font-display font-bold text-cyprus">${orders.some(o => o.status !== 'awaiting') ? 'سفارشی با این وضعیت نیست' : 'هنوز سفارشی تأیید نشده؛ سفارش‌های جدید در بخش «بررسی و تأیید» بالا هستند.'}</li>`;
     }
     if (admTab === 'inventory') {
       $('#invList').innerHTML = products.map(p => `
         <li class="card grid grid-cols-2 items-center gap-3 p-4 md:grid-cols-[1.6fr_1fr_1fr_110px] md:gap-5">
           <div class="col-span-2 flex min-w-0 items-center gap-3 md:col-span-1"><span class="h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-sand-light">${thumb(p, ' mini')}</span>
             <div class="min-w-0"><p class="truncate font-display text-sm font-black text-cyprus">${p.name}</p><p class="text-xs text-ink-soft">${CAT_FA[p.cat]} · ${p.unit}</p></div></div>
-          <label class="flex flex-col gap-1 text-[11px] font-bold text-ink-soft"><span class="md:sr-only">قیمت (تومان)</span><input data-inv="price" data-id="${p.id}" type="number" min="0" step="1000" value="${p.price}" dir="ltr" class="field h-10 text-right font-display text-sm font-bold" aria-label="قیمت ${p.name}"></label>
-          <label class="flex flex-col gap-1 text-[11px] font-bold text-ink-soft"><span class="md:sr-only">موجودی (عدد)</span><input data-inv="stock" data-id="${p.id}" type="number" min="0" step="1" value="${p.stock}" dir="ltr" class="field h-10 text-right font-display text-sm font-bold" aria-label="موجودی ${p.name}"></label>
+          <label class="flex flex-col gap-1 text-[11px] font-bold text-ink-soft"><span class="md:sr-only">قیمت (تومان)</span><input data-inv="price" data-id="${p.id}" type="text" inputmode="numeric" autocomplete="off" value="${fa(p.price)}" dir="ltr" class="field h-10 text-right font-display text-sm font-bold" aria-label="قیمت ${p.name}"></label>
+          <label class="flex flex-col gap-1 text-[11px] font-bold text-ink-soft"><span class="md:sr-only">موجودی (عدد)</span><input data-inv="stock" data-id="${p.id}" type="text" inputmode="numeric" autocomplete="off" value="${fa(p.stock)}" dir="ltr" class="field h-10 text-right font-display text-sm font-bold" aria-label="موجودی ${p.name}"></label>
           ${p.stock > 0 ? pill(['', p.stock < 10 ? 'رو به اتمام' : 'موجود', p.stock < 10 ? 'bg-sand text-cyprus-mid' : 'bg-cyprus-soft text-cyprus']) : pill(['', 'ناموجود', 'bg-cyprus/10 text-ink-soft'])}
         </li>`).join('');
     }
@@ -1046,7 +1076,7 @@
           </div>
           <form data-credit-form="${c.ph}" hidden novalidate class="flex flex-wrap items-center gap-2 lg:col-span-3">
             <label class="sr-only" for="cr-${c.ph}">مبلغ شارژ برای ${esc(c.name)}</label>
-            <input id="cr-${c.ph}" type="number" min="1000" step="1000" dir="ltr" placeholder="مبلغ به تومان" class="field h-10 w-48 text-right text-sm">
+            <input id="cr-${c.ph}" data-money type="text" inputmode="numeric" autocomplete="off" dir="ltr" placeholder="مبلغ به تومان" class="field h-10 w-48 text-right text-sm">
             <button class="btn-cyprus h-10 px-4 text-xs">افزودن به کیف پول</button>
           </form>
           <p data-cust-msg="${c.ph}" hidden class="rounded-2xl bg-cyprus-soft px-4 py-2.5 text-xs font-bold leading-6 text-cyprus lg:col-span-3"></p>
@@ -1097,9 +1127,13 @@
     if (e.target.id === 'revAll') { const lim = revRange ? Date.now() - revRange * DAY : 0; revSel.clear(); if (e.target.checked) orders.filter(o => o.status === 'awaiting' && o.date >= lim).forEach(o => revSel.add(o.id)); return renderReview(); }
     const c = e.target.closest('[data-rsel]'); if (c) { c.checked ? revSel.add(c.dataset.rsel) : revSel.delete(c.dataset.rsel); renderReview(); }
   });
+  $('#invList').addEventListener('input', e => {
+    const inp = e.target.closest('[data-inv="price"]'); if (!inp) return;
+    const d = toLatin(inp.value).replace(/\D/g, ''); inp.value = d ? fa(+d) : '';
+  });
   $('#invList').addEventListener('change', e => {
     const inp = e.target.closest('[data-inv]'); if (!inp) return;
-    const p = byId[inp.dataset.id], v = Math.max(0, Math.round(+inp.value || 0));
+    const p = byId[inp.dataset.id], v = Math.max(0, +toLatin(inp.value).replace(/\D/g, '') || 0);   // accepts ۱۲۵٬۰۰۰ / 125,000 / 125000
     // TODO: save price/stock on your backend
     p[inp.dataset.inv] = v; saveInv(); renderHome(); renderAdmin();
     toast(`${p.name}: ${inp.dataset.inv === 'price' ? 'قیمت ' + fa(v) + ' تومان' : 'موجودی ' + fa(v) + ' عدد'}`);
@@ -1119,11 +1153,14 @@
       m.innerHTML = `رمز موقت: <b dir="ltr" class="latin text-sm">${tmp}</b> — به مشتری بدهید تا وارد شود و از «فراموشی رمز» رمز تازه بسازد.`;
     }
   });
+  $('#custList').addEventListener('input', e => {            // live thousands separators in the wallet amount
+    const i = e.target.closest('[data-money]'); if (!i) return; const d = toLatin(i.value).replace(/\D/g, ''); i.value = d ? fa(+d) : '';
+  });
   $('#custList').addEventListener('submit', e => {
     const f = e.target.closest('[data-credit-form]'); if (!f) return;
     e.preventDefault();
-    const ph = f.dataset.creditForm, v = Math.round(+toLatin($('input', f).value) || 0);
-    if (v < 1000) { toast('مبلغ را درست وارد کنید (حداقل ۱٬۰۰۰ تومان)'); return; }
+    const ph = f.dataset.creditForm, v = +toLatin($('input', f).value).replace(/\D/g, '') || 0;   // accepts ۵۰,۰۰۰ / 50000
+    if (v < 1000) { toast('مبلغ را درست وارد کنید (حداقل ۱,۰۰۰ تومان)'); return; }
     // TODO: record the wallet transaction on your backend
     wallet[ph] = (wallet[ph] || 0) + v; saveWallet(); renderAdmin(); toast(`${fa(v)} تومان به کیف پول ${custName(ph)} اضافه شد`);
   });
@@ -1146,21 +1183,42 @@
   const trackCode = o => `JRF-${o.id.split('-')[1]}-${o.phone.slice(-4)}`;
   function renderReceipt(o) {
     const d = new Date(o.date);
-    const row = (k, v, ltr) => `<div class="flex items-start justify-between gap-4"><dt class="shrink-0 text-ink-muted">${k}:</dt><dd class="text-left font-bold leading-6 text-ink"${ltr ? ' dir="ltr"' : ''}>${v}</dd></div>`;
+    const row = (k, v, ltr) => `<div class="flex items-start justify-between gap-4"><dt class="min-w-0 text-ink-muted">${k}:</dt><dd class="text-left font-bold leading-6 text-ink"${ltr ? ' dir="ltr"' : ''}>${v}</dd></div>`;
     $('#rcWhen').textContent = `${new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' }).format(d)} - ${new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(d)}`;
     $('#rcBuyer').innerHTML = row('نام و نام خانوادگی', esc(o.name || custName(o.phone)))
       + row('شماره تماس', o.phone, true)
       + row('آدرس تحویل', esc(o.addr || 'هماهنگی تلفنی'));
     const sub = o.sub ?? o.items.reduce((s, [id, q, pr]) => s + q * (pr ?? byId[id].price), 0), disc = o.disc ?? Math.max(0, sub - o.total);
-    $('#rcOrder').innerHTML = o.items.map(([id, q]) => row(byId[id].name, `${kgFa(byId[id].kg * q)} کیلوگرم`)).join('')
+    $('#rcOrder').innerHTML = o.items.map(([id, q, pr]) => { const p = byId[id], u = pr ?? p.price;
+        return `<div class="flex items-start justify-between gap-4"><dt class="min-w-0 text-ink"><b class="font-bold">${p.name}</b><span class="block text-xs text-ink-soft">${p.unit} · ${fa(q)} عدد، هر عدد ${fa(u)} تومان</span></dt><dd class="shrink-0 whitespace-nowrap text-left font-bold leading-6 text-ink">${fa(q * u)} تومان</dd></div>`; }).join('')
+      + row('جمع کالاها', `${fa(sub)} تومان`)
+      + (disc ? row('تخفیف', `− ${fa(disc)} تومان`) : '')
+      + row('وزن کل', `${kgFa(o.items.reduce((s, [id, q]) => s + byId[id].kg * q, 0))} کیلوگرم`)
       + row('شماره سفارش', o.id, true)
       + row('کد رهگیری', trackCode(o), true)
-      + (disc ? row('تخفیف', `${fa(disc)} تومان`) : '')
       + row('ارسال', (o.free ?? sub >= FREE_SHIP) ? 'رایگان (یخچال‌دار)' : 'پس‌کرایه (یخچال‌دار)');
     $('#rcTotal').textContent = fa(o.total);
     $('#rcToman').textContent = `معادل ${fa(o.total * 10)} ریال`;
     $('#rcDash').hidden = !(user && user.phone === o.phone);
+    $('#rcSms').href = smsHref(orderSms(o)); rcOrder = o;
+    $('#rcSmsLbl').textContent = canSMS ? 'ارسال سفارش با پیامک' : 'کپی متن سفارش برای پیامک'; $('#rcSmsNote').hidden = true;
   }
+  let rcOrder = null;
+  $('#rcSms').addEventListener('click', e => {
+    if (canSMS || !rcOrder) return;
+    e.preventDefault();
+    copyText(orderSms(rcOrder)).then(ok => {
+      const n = $('#rcSmsNote'); n.hidden = false;
+      n.textContent = ok ? `متن سفارش کپی شد. آن را از گوشی به ${SHOP_SMS_FA} پیامک کنید.` : `لطفاً شماره‌ی سفارش را به ${SHOP_SMS_FA} پیامک کنید.`;
+    });
+  });
+  const orderSms = o => {
+    const lines = [`سفارش ${o.id} · نخل جیرفت`, `نام: ${o.name || custName(o.phone)}`, `موبایل: ${o.phone}`, `آدرس: ${o.addr || 'هماهنگی تلفنی'}`, '—'];
+    o.items.forEach(([id, q, pr]) => { const p = byId[id]; lines.push(`${p.name} (${p.unit}) × ${fa(q)} = ${fa(q * (pr ?? p.price))}`); });
+    if (o.disc) lines.push(`تخفیف: ${fa(o.disc)}`);
+    lines.push(`مبلغ کل: ${fa(o.total)} تومان`, `کد رهگیری: ${trackCode(o)}`);
+    return lines.join('\n');
+  };
   $('#rcPrint').addEventListener('click', () => {
     document.body.classList.add('print-receipt'); window.print();
     setTimeout(() => document.body.classList.remove('print-receipt'), 500);
