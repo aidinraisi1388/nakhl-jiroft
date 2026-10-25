@@ -142,7 +142,7 @@
     const el = e.target; rvIO.unobserve(el); el.classList.add('rv-in');
     const done = ev => { if (ev.target !== el) return; el.classList.remove('rv', 'rv-in'); el.style.removeProperty('--rv-d'); el.removeEventListener('animationend', done); };
     el.addEventListener('animationend', done);
-  }), { rootMargin: '0px 0px -6% 0px', threshold: .06 }) : null;
+  }), matchMedia('(max-width: 1023px)').matches ? { rootMargin: '0px 0px 12% 0px', threshold: 0 } : { rootMargin: '0px 0px -6% 0px', threshold: .06 }) : null;
   const reveal = (root = document) => {
     if (!rvIO) return;
     const seen = new Map();
@@ -155,6 +155,7 @@
     });
   };
   reveal();
+  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => document.documentElement.classList.toggle('at-foot', e.isIntersecting && !$('#footer').hidden), { rootMargin: '0px 0px 0px 0px' }).observe($('#footer'));
 
   /* ── Toast ── */
   let tt;
@@ -250,7 +251,7 @@
     const n = count();
     $('#barCount').textContent = fa(n);
     $('#barTotal').textContent = fa(totals().total);
-    bar.classList.toggle('show', n > 0 && !drawerOpen);
+    bar.classList.toggle('show', n > 0 && !drawerOpen); document.body.classList.toggle('cart-on', n > 0);
     bar.tabIndex = n > 0 && !drawerOpen ? 0 : -1;
     bar.setAttribute('aria-hidden', !(n > 0 && !drawerOpen));
     if (animate) bump($('#cartBarIcon'));
@@ -465,9 +466,16 @@
   st.addEventListener('click', () => openSearch(!ns.classList.contains('open')));
   si.addEventListener('blur', () => { if (!si.value) openSearch(false); });
   const menuBtn = $('#menuBtn'), menu = $('#mobileMenu');
-  const closeMenu = () => { menu.hidden = true; menuBtn.setAttribute('aria-expanded', 'false'); };
-  menuBtn.addEventListener('click', () => { const open = menu.hidden; menu.hidden = !open; menuBtn.setAttribute('aria-expanded', open); });
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  const shade = $('#menuShade');
+  const setMenu = open => {
+    document.documentElement.classList.toggle('menu-open', open); menu.inert = !open;
+    menuBtn.setAttribute('aria-expanded', open);
+    if (open) $('#menuClose').focus({ preventScroll: true });
+  };
+  const closeMenu = () => { if (document.documentElement.classList.contains('menu-open')) { setMenu(false); menuBtn.focus({ preventScroll: true }); } };
+  menuBtn.addEventListener('click', () => setMenu(!document.documentElement.classList.contains('menu-open')));
+  $('#menuClose').addEventListener('click', closeMenu); shade.addEventListener('click', closeMenu);
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setMenu(false)));
   addEventListener('keydown', e => { if (e.key === 'Escape') { if (closeQV()) return; if (drawerOpen) closeCart(); else { openSearch(false); closeMenu(); } } });
 
   /* ── Hero slider: one timer every 6s, pauses on hover/focus and while the catalog is open ── */
