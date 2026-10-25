@@ -282,8 +282,8 @@ body.cart-on #footer{padding-bottom:5.5rem}
 @media (hover:hover){ .pop:hover,.band-b .p-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 34px 60px -18px rgba(17,44,19,.5)} }
 
 /* hero slides */
-#heroTrack{transform:translate3d(0,0,0);will-change:transform}
-.slide{flex:0 0 100%;min-width:100%;contain:paint;
+#heroTrack{transform:translate3d(0,0,0);will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.slide{flex:0 0 100%;min-width:100%;transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden;
   background:radial-gradient(55% 65% at 80% 115%,rgba(55,123,61,.85),transparent 70%),radial-gradient(40% 55% at 5% -5%,rgba(240,247,241,.12),transparent 70%),#28622D}
 .dot{position:relative;cursor:pointer}
 .dot::before{content:"";position:absolute;inset:-12px -6px}             /* easy to click */
@@ -499,3 +499,20 @@ body:not([data-view="dashboard"]) #dashDock{display:none}
   #dashboardView .db-pane .card{border-radius:22px;border:0;box-shadow:var(--db-sh)}
 }
 .db-chart > div:nth-child(even) > span:last-child{visibility:hidden}
+
+/* notifications panel under the bell */
+.db-me{position:relative}
+.db-notes{position:absolute;z-index:30;top:calc(100% + 10px);left:0;width:min(340px,calc(100vw - 24px));max-height:min(70vh,460px);overflow:auto;padding:10px;border-radius:24px;background:#fff;box-shadow:0 24px 50px -16px rgba(17,44,19,.35),0 0 0 1px rgba(40,98,45,.06);
+  opacity:0;transform:translateY(-6px) scale(.98);transform-origin:top left;transition:opacity .25s,transform .35s cubic-bezier(.22,1,.36,1)}
+.db-notes.on{opacity:1;transform:none}
+.db-notes-h{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 10px;font:900 15px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-ink)}
+.db-notes-h span{font:700 11px Peyda,Vazirmatn,Tahoma,sans-serif;color:#fff;background:#E0782F;border-radius:999px;padding:2px 8px}
+.db-notes-h span:empty{display:none}
+.db-note{display:flex;gap:10px;width:100%;padding:10px;border-radius:16px;text-align:right;transition:background .2s}
+.db-note:active,.db-note:hover{background:#F6FAF6}
+.db-note i{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:12px;background:#F0F7F1;color:var(--db-g)}
+.db-note.new i{background:#28622D;color:#fff}
+.db-note b{display:block;font:700 13px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-ink)}
+.db-note small{display:block;margin-top:2px;font-size:12px;line-height:1.6;color:var(--db-soft)}
+.db-note em{display:block;margin-top:2px;font-style:normal;font-size:10px;color:#9AB09D}
+.db-note-empty{padding:22px 8px;text-align:center;font-size:13px;color:var(--db-soft)}

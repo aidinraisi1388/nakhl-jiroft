@@ -24,8 +24,8 @@
 <link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/tailwind.css?v=20261026d">
-<link rel="stylesheet" href="css/style.css?v=20261026d">
+<link rel="stylesheet" href="css/tailwind.css?v=20261026e">
+<link rel="stylesheet" href="css/style.css?v=20261026e">
 
 
 </head>
@@ -555,8 +555,12 @@
           <span id="dashTier" class="db-tier"></span>
         </div>
         <div class="db-me">
-          <button type="button" data-dtab="orders" class="db-bell" aria-label="سفارش‌های فعال"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /> </svg><span id="liveDot" hidden class="db-dot"></span></button>
+          <button type="button" id="dbBell" class="db-bell" aria-label="اعلان‌ها" aria-expanded="false" aria-controls="dbNotes"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /> </svg><span id="liveDot" hidden class="db-dot"></span></button>
           <span id="dbAvatar" class="db-avatar" aria-hidden="true"></span>
+          <div id="dbNotes" class="db-notes" hidden role="dialog" aria-label="اعلان‌ها">
+            <div class="db-notes-h"><b>اعلان‌ها</b><span id="dbNotesN"></span></div>
+            <ul id="dbNotesList"></ul>
+          </div>
         </div>
       </header>
 
@@ -594,12 +598,12 @@
           </div>
         </section>
 
-        <section class="db-sec db-wide">
+        <section id="dbRecentSec" class="db-sec db-wide">
           <div class="db-h"><h2>سفارش‌های اخیر</h2><button type="button" data-dtab="orders" class="db-all">دیدن همه</button></div>
           <ul id="dbRecent" class="db-row no-scrollbar"></ul>
         </section>
 
-        <section class="db-sec db-wide">
+        <section id="dbFavSec" class="db-sec db-wide">
           <div class="db-h"><h2>علاقه‌مندی‌ها</h2><button type="button" data-dtab="favorites" class="db-all">دیدن همه</button></div>
           <ul id="ovFavs" class="db-row db-favs no-scrollbar"></ul>
         </section>
@@ -1073,6 +1077,6 @@
 <!-- Toast (top, so it never collides with the cart capsule) -->
 <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
 
-<script src="js/app.js?v=20261026d"></script>
+<script src="js/app.js?v=20261026e"></script>
 </body>
 </html>

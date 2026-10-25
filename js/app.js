@@ -842,7 +842,7 @@
     const mine = orders.filter(o => o.phone === user.phone), active = mine.filter(o => o.status !== 'delivered');
     $('#dashTitle').textContent = user.name;
     $('#dashName').textContent = user.name; $('#dashPhone').textContent = user.phone;
-    $('#mActive').textContent = fa(active.length); $('#liveDot').hidden = !active.length;
+    $('#mActive').textContent = fa(active.length);
     $('#mKg').textContent = kgFa(mine.reduce((s, o) => s + kgOf(o), 0));
     $('#mDone').textContent = fa(mine.length - active.length);
     $('#dashBadge').textContent = fa(active.length); $('#dashBadge').hidden = !active.length;
@@ -897,10 +897,36 @@
         <div class="min-w-0"><p class="truncate font-display text-sm font-black text-cyprus" dir="ltr" style="text-align:right">${o.id}</p><p class="mt-0.5 text-[11px] text-ink-soft">${dateFa(o.date)}</p></div>
         <p class="font-display font-black tabular-nums text-ink">${fa(o.total)} <small class="text-[11px] font-bold text-cyprus-mid">تومان</small></p>
         <div class="mt-auto flex items-center justify-between gap-2">${statusPill(o.status)}<a href="#receipt/${o.id}" class="db-link" aria-label="رسید ${o.id}">${svg('<path d="m15 18-6-6 6-6"/>', 16, 2.4)}</a></div>
-      </li>`; }).join('') : `<li class="db-empty">هنوز سفارشی ثبت نکرده‌اید. <a href="#products">شروع خرید</a></li>`;
+      </li>`; }).join('') : '';
+    $('#dbRecentSec').hidden = !mine.length;
 
     /* cold storage / bulk inquiry status */
     const reqs = requests.filter(r => r.phone === user.phone), lastReq = reqs[0];
+    {
+      const NOTE = {
+        awaiting:   ['ثبت شد', 'منتظر تایید سفارش و پرداخت توسط مدیر است.'],
+        pending:    ['تایید شد', 'پرداخت تایید شد و به‌زودی بسته‌بندی می‌شود.'],
+        processing: ['در حال بسته‌بندی سرد', 'در سالن سرد بسته‌بندی و آماده‌ی ارسال می‌شود.'],
+        shipped:    ['ارسال شد', 'با کامیون یخچال‌دار در راه شماست.'],
+        delivered:  ['تحویل داده شد', 'امیدواریم از خرمای تازه لذت ببرید.']
+      };
+      const notes = [
+        ...mine.map(o => ({ d: o.date, href: `#receipt/${o.id}`, ic: o.status === 'shipped' ? 'truck' : o.status === 'delivered' ? 'home' : 'box',
+          t: `سفارش <span dir="ltr">${o.id}</span> ${(NOTE[o.status] || NOTE.pending)[0]}`, s: (NOTE[o.status] || NOTE.pending)[1], k: o.id + o.status })),
+        ...reqs.map(r => ({ d: r.date, dtab: 'storage', ic: 'snow',
+          t: `${REQ_TYPES[r.type] || 'درخواست'} <span dir="ltr">${r.id}</span>`, s: r.status === 'approved' ? 'درخواست شما تایید شد.' : r.status === 'closed' ? 'این درخواست بسته شد.' : 'در حال بررسی است؛ به‌زودی تماس می‌گیریم.', k: r.id + r.status }))
+      ].sort((a, b) => b.d - a.d).slice(0, 8);
+      const IC = { box: '<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/>', truck: '<path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>', home: '<path d="M3 11 12 4l9 7v9H3z"/><path d="M9 20v-6h6v6"/>', snow: '<path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/>' };
+      const seenKey = 'nakhl:seen:' + user.phone, seen = new Set(store.get(seenKey, []) || []);
+      const fresh = notes.filter(n => !seen.has(n.k)).length;
+      $('#liveDot').hidden = !fresh;
+      $('#dbNotesN').textContent = fresh ? fa(fresh) + ' تازه' : '';
+      $('#dbNotesList').innerHTML = notes.length ? notes.map(n => `
+        <li><${n.href ? `a href="${n.href}"` : `button type="button" data-dtab="${n.dtab}"`} class="db-note${seen.has(n.k) ? '' : ' new'}">
+          <i>${svg(IC[n.ic], 16, 2)}</i><span class="min-w-0 flex-1"><b>${n.t}</b><small>${n.s}</small><em>${dateFa(n.d)}</em></span>
+        </${n.href ? 'a' : 'button'}></li>`).join('') : `<li class="db-note-empty">اعلان تازه‌ای ندارید.</li>`;
+      $('#dbBell').dataset.keys = JSON.stringify(notes.map(n => n.k)); $('#dbBell').dataset.phone = user.phone;
+    }
     $('#reqCard').innerHTML = lastReq ? (() => { const step = lastReq.status === 'review' ? 1 : 2; return `
         <div class="flex items-center justify-between"><p class="font-display font-black text-cyprus">آخرین درخواست سردخانه</p><span class="grid h-10 w-10 place-items-center rounded-2xl bg-cyprus-soft text-cyprus">${svg('<path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/>', 18, 2.2)}</span></div>
         <p class="mt-3 font-display text-lg font-black text-ink">${REQ_TYPES[lastReq.type] || 'درخواست'}</p>
@@ -912,7 +938,8 @@
 
     /* wishlist */
     const fv = products.filter(p => favs.has(p.id));
-    $('#ovFavs').innerHTML = fv.length ? fv.slice(0, 8).map(favCard).join('') : `<li class="db-empty">هنوز محصولی را نشان نکرده‌اید. روی قلبِ کارت محصولات بزنید.</li>`;
+    $('#ovFavs').innerHTML = fv.slice(0, 8).map(favCard).join('');
+    $('#dbFavSec').hidden = !fv.length;
     $('#favGrid').innerHTML = fv.length ? fv.map(favCard).join('') : favEmpty;
 
     $('#dashOrders').innerHTML = mine.length ? mine.map(o => `
@@ -944,6 +971,22 @@
   const goDashTab = t => { if (t !== dashTab) { loadBar(); dashTab = t; renderDash(); } };
   $('#dashTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goDashTab(b.dataset.tab); });
   $('#dashDock').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; goDashTab(b.dataset.tab); scrollTo({ top: 0, behavior: smooth }); });
+  {
+    const bell = $('#dbBell'), box = $('#dbNotes');
+    const setNotes = open => {
+      box.hidden = !open; bell.setAttribute('aria-expanded', open);
+      if (open) {           // opening the panel marks everything in it as seen
+        if (bell.dataset.phone) store.set('nakhl:seen:' + bell.dataset.phone, JSON.parse(bell.dataset.keys || '[]'));
+        $('#liveDot').hidden = true; $('#dbNotesN').textContent = '';
+        requestAnimationFrame(() => box.classList.add('on'));
+      } else box.classList.remove('on');
+    };
+    bell.addEventListener('click', e => { e.stopPropagation(); setNotes(box.hidden); });
+    box.addEventListener('click', e => { if (e.target.closest('a,button')) { $$('.db-note.new', box).forEach(n => n.classList.remove('new')); setNotes(false); } });
+    document.addEventListener('click', e => { if (!box.hidden && !e.target.closest('#dbNotes')) setNotes(false); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) setNotes(false); });
+    addEventListener('hashchange', () => { if (!box.hidden) setNotes(false); });
+  }
   $('#dbSearch').addEventListener('click', () => { location.hash = '#products'; setTimeout(() => { if (!$('#navSearch').classList.contains('open')) $('#searchToggle').click(); }, 620); });
   $('#dashBody').addEventListener('click', e => {
     const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
