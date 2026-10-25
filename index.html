@@ -24,14 +24,23 @@
 <link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/tailwind.css?v=20261026c">
-<link rel="stylesheet" href="css/style.css?v=20261026c">
+<link rel="stylesheet" href="css/tailwind.css?v=20261026d">
+<link rel="stylesheet" href="css/style.css?v=20261026d">
 
 
 </head>
 
 <body data-view="home" class="bg-sand font-body text-ink antialiased">
 <a href="#" id="skipLink" class="skip-link">رفتن به محتوای اصلی</a>
+
+<!-- Customer dashboard dock (phones): the active section grows into a green capsule with its name -->
+<nav id="dashDock" class="db-dock" hidden aria-label="بخش‌های حساب کاربری">
+  <button type="button" data-tab="overview"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> </svg><span>خانه</span></button>
+  <button type="button" data-tab="orders"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7" /> <path d="m7.5 4.27 9 5.15" /> </svg><span>سفارش‌ها</span></button>
+  <button type="button" data-tab="favorites"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /> </svg><span>علاقه‌مندی</span></button>
+  <button type="button" data-tab="storage"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg><span>سردخانه</span></button>
+  <button type="button" data-tab="addresses"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /> </svg><span>حساب من</span></button>
+</nav>
 
 <!-- Mobile side menu: slides in from the left edge (where the ☰ button is), page dims behind it -->
 <div id="menuShade" class="m-shade fixed inset-0 z-[80] bg-[#0F2411]/45 lg:hidden" aria-hidden="true"></div>
@@ -515,19 +524,19 @@
     <span class="text-cyprus" aria-current="page">حساب کاربری</span>
   </nav>
 
-  <div id="dashBody" hidden class="mt-6 grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[264px_minmax(0,1fr)] lg:items-start">
-    <!-- customer sidebar -->
-    <aside class="card p-2.5 lg:sticky lg:top-28 lg:p-3">
+  <div id="dashBody" hidden class="db mt-2 grid grid-cols-[minmax(0,1fr)] gap-6 lg:mt-6 lg:grid-cols-[264px_minmax(0,1fr)] lg:items-start">
+    <!-- customer sidebar (desktop) — on phones the bottom dock takes its place -->
+    <aside class="card hidden p-3 lg:sticky lg:top-28 lg:block">
       <div class="hidden items-center gap-3 border-b border-cyprus/10 px-2 pb-4 pt-2 lg:flex">
         <span class="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#28622D] text-white"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /> </svg></span>
         <div class="min-w-0"><p id="dashName" class="truncate font-display font-black text-cyprus"></p><p id="dashPhone" dir="ltr" class="tel text-right text-xs text-ink-soft"></p></div>
       </div>
-      <nav id="dashTabs" class="no-scrollbar flex gap-1.5 overflow-x-auto lg:mt-3 lg:flex-col" aria-label="بخش‌های حساب کاربری">
+      <nav id="dashTabs" class="mt-3 flex flex-col gap-1.5" aria-label="بخش‌های حساب کاربری">
         <button class="side-btn" data-tab="overview" aria-current="page"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="7" height="7" x="3" y="3" rx="1" /> <rect width="7" height="7" x="14" y="3" rx="1" /> <rect width="7" height="7" x="14" y="14" rx="1" /> <rect width="7" height="7" x="3" y="14" rx="1" /> </svg>پیشخوان</button>
         <button class="side-btn" data-tab="orders"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7" /> <path d="m7.5 4.27 9 5.15" /> </svg>سفارش‌های من<span id="dashBadge" hidden class="ms-auto grid h-5 min-w-5 place-items-center rounded-full bg-cyprus-soft px-1.5 text-[11px] font-black text-cyprus"></span></button>
         <button class="side-btn" data-tab="storage"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg>درخواست‌های سردخانه</button>
         <button class="side-btn" data-tab="favorites"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /> </svg>علاقه‌مندی‌ها</button>
-        <button class="side-btn" data-tab="addresses"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg>آدرس‌های من</button>
+        <button class="side-btn" data-tab="addresses"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg>حساب و آدرس‌ها</button>
       </nav>
       <button data-logout class="side-btn mt-1.5 w-full text-ink-soft"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج از حساب</button>
     <div aria-hidden="true" class="orn-vase orn-fit mt-4 hidden aspect-[260/96] w-full lg:block"></div>
@@ -538,93 +547,103 @@
         <p class="flex items-center gap-2 text-sm font-bold text-cyprus"><svg class="h-5 w-5 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><span id="actText"></span></p>
         <button data-endact class="btn-cyprus h-10 shrink-0 px-5 text-xs"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg>بازگشت به پنل مدیریت</button>
       </div>
-      <!-- header stage + personal metrics -->
-      <div class="relative overflow-hidden rounded-4xl bg-[#28622D] p-5 text-white shadow-xl sm:p-7">
-        <div aria-hidden="true" class="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(240,247,241,.14),transparent_70%)]"></div>
-        <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 right-1/3 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(55,123,61,.7),transparent_70%)]"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-2">
-          <h1 id="dashTitle" class="font-display text-2xl font-black sm:text-[32px]">داشبورد من</h1>
-          <span id="dashTier" class="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 font-display text-xs font-bold"></span>
-        </div>
-        <div class="relative mt-5 grid grid-cols-3 gap-2 sm:gap-4">
-          <div class="glass glass-hover flex min-w-0 flex-col gap-4 rounded-3xl p-3 sm:p-5">
-            <span class="relative grid h-10 w-10 place-items-center rounded-2xl bg-white text-cyprus"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /> </svg><span id="liveDot" hidden class="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-white ring-2 ring-[#28622D]"><span class="absolute inset-0 animate-ping rounded-full bg-white/70"></span></span></span>
-            <div><p class="text-[11px] font-bold leading-6 text-white/60 sm:text-xs">سفارش فعال</p><p id="mActive" class="mt-1 font-display text-3xl font-black sm:text-4xl">۰</p></div>
-          </div>
-          <div class="glass glass-hover flex min-w-0 flex-col gap-4 rounded-3xl p-3 sm:p-5">
-            <span class="grid h-10 w-10 place-items-center rounded-2xl bg-white text-cyprus"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="5" r="3" /> <path d="M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z" /> </svg></span>
-            <div><p class="text-[11px] font-bold leading-6 text-white/60 sm:text-xs">وزن کل خرید</p><p class="mt-1 flex flex-wrap items-baseline gap-1 font-display"><b id="mKg" class="text-3xl font-black tabular-nums sm:text-4xl">۰</b><span class="text-[11px] text-white/70">کیلوگرم</span></p></div>
-          </div>
-          <div class="glass glass-hover flex min-w-0 flex-col gap-4 rounded-3xl p-3 sm:p-5">
-            <span class="grid h-10 w-10 place-items-center rounded-2xl bg-white text-cyprus"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m16 16 2 2 4-4" /> <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /> <path d="m7.5 4.27 9 5.15" /> <polyline points="3.29 7 12 12 20.71 7" /> <line x1="12" x2="12" y1="22" y2="12" /> </svg></span>
-            <div><p class="text-[11px] font-bold leading-6 text-white/60 sm:text-xs">تحویل‌شده</p><p id="mDone" class="mt-1 font-display text-3xl font-black sm:text-4xl">۰</p></div>
-          </div>
-        </div>
-      </div>
 
-      <!-- pane: overview (bento widgets) -->
-      <div data-pane="overview" class="mt-6 grid gap-3 sm:gap-4 xl:grid-cols-3">
-        <!-- club wallet & loyalty -->
-        <div class="relative flex flex-col gap-5 overflow-hidden rounded-4xl bg-[#19431D] p-6 text-white shadow-xl">
-          <div aria-hidden="true" class="pointer-events-none absolute -bottom-20 -left-12 h-52 w-52 rounded-full bg-[radial-gradient(circle,rgba(240,247,241,.14),transparent_70%)]"></div>
-          <div class="relative flex items-center justify-between"><p class="font-display font-black">کیف پول و باشگاه مشتریان</p><svg class="h-5 w-5 text-white/70" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /> </svg></div>
-          <div class="relative grid grid-cols-2 gap-3">
-            <div class="glass rounded-3xl p-4"><p class="text-[11px] text-white/60">اعتبار کیف پول</p><p class="mt-1 font-display"><b id="wCredit" class="text-xl font-black tabular-nums">۰</b> <span class="text-[10px] text-white/70">تومان</span></p></div>
-            <div class="glass rounded-3xl p-4"><p class="text-[11px] text-white/60">امتیاز باشگاه</p><p class="mt-1 font-display"><b id="wPoints" class="text-xl font-black tabular-nums">۰</b> <span class="text-[10px] text-white/70">امتیاز</span></p></div>
-          </div>
-          <div class="relative">
-            <div class="flex items-center justify-between text-xs"><span id="wTierNow" class="font-display font-bold"></span><span id="wTierNext" class="text-white/60"></span></div>
-            <div class="mt-2 h-2 overflow-hidden rounded-full bg-white/15"><div id="wTierBar" class="h-full w-full origin-right rounded-full bg-white transition-transform duration-500" style="transform:scaleX(0)"></div></div>
-            <p class="mt-2 text-[11px] text-white/60">هر ۱۰ هزار تومان خرید تحویل‌شده = ۱ امتیاز</p>
-          </div>
+      <!-- top bar: who is signed in + order bell -->
+      <header class="db-top">
+        <div class="min-w-0">
+          <h1 id="dashTitle" class="db-name"></h1>
+          <span id="dashTier" class="db-tier"></span>
+        </div>
+        <div class="db-me">
+          <button type="button" data-dtab="orders" class="db-bell" aria-label="سفارش‌های فعال"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /> </svg><span id="liveDot" hidden class="db-dot"></span></button>
+          <span id="dbAvatar" class="db-avatar" aria-hidden="true"></span>
+        </div>
+      </header>
+
+      <!-- pane: overview -->
+      <div data-pane="overview" class="db-stack">
+        <button type="button" id="dbSearch" class="db-search db-wide"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg><span>جستجوی خرما و خشکبار…</span></button>
+
+        <div class="db-chips no-scrollbar db-wide">
+          <button type="button" data-dtab="orders" class="db-chip"><i><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7" /> <path d="m7.5 4.27 9 5.15" /> </svg></i><span>سفارش‌ها</span></button>
+          <button type="button" data-dtab="favorites" class="db-chip"><i><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /> </svg></i><span>علاقه‌مندی</span></button>
+          <button type="button" data-dtab="storage" class="db-chip"><i><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg></i><span>سردخانه</span></button>
+          <button type="button" data-dtab="addresses" class="db-chip"><i><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg></i><span>آدرس‌ها</span></button>
+          <a href="#products" class="db-chip"><i><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 11-1 9" /> <path d="m19 11-4-7" /> <path d="M2 11h20" /> <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" /> <path d="M4.5 15.5h15" /> <path d="m5 11 4-7" /> <path d="m9 11 1 9" /> </svg></i><span>خرید تازه</span></a>
         </div>
 
-        <!-- yearly purchase analytics -->
-        <div class="card flex flex-col p-6 xl:col-span-2">
+        <section class="db-sec">
+          <div class="db-h"><h2>سفارش در راه</h2></div>
+          <div id="trackCard" class="db-hero"></div>
+        </section>
+
+        <section class="db-sec">
+          <div class="db-h"><h2>کیف پول و باشگاه</h2></div>
+          <div class="db-card db-wallet">
+            <div class="db-wallet-row">
+              <div><p class="db-lbl"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /> </svg>اعتبار کیف پول</p><p class="db-num"><b id="wCredit">۰</b> <small>تومان</small></p></div>
+              <div><p class="db-lbl"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" /> </svg>امتیاز باشگاه</p><p class="db-num"><b id="wPoints">۰</b> <small>امتیاز</small></p></div>
+            </div>
+            <div class="db-tierbar"><div class="flex items-center justify-between text-xs"><span id="wTierNow" class="font-display font-bold text-cyprus"></span><span id="wTierNext" class="text-ink-soft"></span></div>
+              <div class="mt-2 h-2 overflow-hidden rounded-full bg-cyprus-soft"><div id="wTierBar" class="h-full w-full origin-right rounded-full bg-[#28622D] transition-transform duration-500" style="transform:scaleX(0)"></div></div></div>
+            <div class="db-mini">
+              <div><b id="mActive">۰</b><span>سفارش فعال</span></div>
+              <div><b id="mDone">۰</b><span>تحویل‌شده</span></div>
+              <div><b id="mKg">۰</b><span>کیلوگرم خرید</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="db-sec db-wide">
+          <div class="db-h"><h2>سفارش‌های اخیر</h2><button type="button" data-dtab="orders" class="db-all">دیدن همه</button></div>
+          <ul id="dbRecent" class="db-row no-scrollbar"></ul>
+        </section>
+
+        <section class="db-sec db-wide">
+          <div class="db-h"><h2>علاقه‌مندی‌ها</h2><button type="button" data-dtab="favorites" class="db-all">دیدن همه</button></div>
+          <ul id="ovFavs" class="db-row db-favs no-scrollbar"></ul>
+        </section>
+
+        <div id="reqCard" class="db-card flex flex-col"></div>
+
+        <div class="db-card flex flex-col">
           <div class="flex flex-wrap items-end justify-between gap-2">
-            <div><p class="font-display font-black text-cyprus">حجم خرید ۱۲ ماه اخیر</p><p class="mt-1 text-xs text-ink-soft">بر حسب کیلوگرم، به تفکیک ماه</p></div>
-            <p class="font-display text-cyprus"><b id="yTotal" class="text-2xl font-black tabular-nums">۰</b> <span class="text-xs font-bold">کیلوگرم</span></p>
+            <div><p class="font-display font-black text-cyprus">حجم خرید ۱۲ ماه اخیر</p><p class="mt-1 text-xs text-ink-soft">بر حسب کیلوگرم</p></div>
+            <p class="font-display text-cyprus"><b id="yTotal" class="text-xl font-black tabular-nums">۰</b> <span class="text-xs font-bold">کیلوگرم</span></p>
           </div>
-          <div id="yChart" class="mt-6 flex flex-1 items-end gap-1.5 sm:gap-2" aria-label="نمودار حجم خرید ماهانه"></div>
-        </div>
-
-        <!-- live shipping tracker -->
-        <div id="trackCard" class="card p-6 xl:col-span-2"></div>
-
-        <!-- cold storage / bulk inquiry status -->
-        <div id="reqCard" class="card flex flex-col p-6"></div>
-
-        <!-- wishlist -->
-        <div class="xl:col-span-3">
-          <div class="mt-2 flex items-end justify-between"><h2 class="halo font-display text-lg font-black text-cyprus">علاقه‌مندی‌ها</h2><button data-dtab="favorites" class="plate inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">همه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></button></div>
-          <ul id="ovFavs" class="mt-3 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4"></ul>
+          <div id="yChart" class="db-chart mt-5 flex flex-1 items-end gap-1.5" aria-label="نمودار حجم خرید ماهانه"></div>
         </div>
       </div>
 
       <!-- pane: my orders -->
-      <div data-pane="orders" hidden class="mt-8">
-        <div class="flex items-end justify-between"><h2 class="halo font-display text-xl font-black text-cyprus sm:text-2xl">سفارش‌های من</h2><a href="#products" class="plate ease-ui inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">خرید تازه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a></div>
+      <div data-pane="orders" hidden class="db-pane">
+        <div class="flex items-end justify-between"><h2 class="db-title">سفارش‌های من</h2><a href="#products" class="plate ease-ui inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">خرید تازه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a></div>
         <p class="plate mt-1 text-sm text-ink">هر سفارش در زنجیره‌ی سرد پیگیری می‌شود: ثبت، بسته‌بندی سرد، باربری یخچال‌دار و تحویل.</p>
         <ul id="dashOrders" class="mt-4 flex flex-col gap-3"></ul>
       </div>
 
       <!-- pane: storage requests -->
-      <div data-pane="storage" hidden class="mt-8">
-        <div class="flex items-end justify-between"><h2 class="halo font-display text-xl font-black text-cyprus sm:text-2xl">درخواست‌های سردخانه</h2><a href="#storage" data-service="storage" class="plate ease-ui inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">درخواست تازه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a></div>
+      <div data-pane="storage" hidden class="db-pane">
+        <div class="flex items-end justify-between"><h2 class="db-title">درخواست‌های سردخانه</h2><a href="#storage" data-service="storage" class="plate ease-ui inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">درخواست تازه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a></div>
         <p class="plate mt-1 text-sm text-ink">استعلام‌هایی که با همین شماره در فرم «استعلام سریع» ثبت کرده‌اید.</p>
         <ul id="dashRequests" class="mt-4 flex flex-col gap-3"></ul>
       </div>
 
       <!-- pane: favourites -->
-      <div data-pane="favorites" hidden class="mt-8">
-        <h2 class="halo font-display text-xl font-black text-cyprus sm:text-2xl">علاقه‌مندی‌ها</h2>
+      <div data-pane="favorites" hidden class="db-pane">
+        <h2 class="db-title">علاقه‌مندی‌ها</h2>
         <p class="plate mt-1 text-sm text-ink">روی قلبِ کارت محصولات بزنید تا اینجا ذخیره شود.</p>
         <ul id="favGrid" class="mt-4 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 xl:grid-cols-4"></ul>
       </div>
 
       <!-- pane: addresses -->
-      <div data-pane="addresses" hidden class="mt-8">
-        <h2 class="halo font-display text-xl font-black text-cyprus sm:text-2xl">آدرس‌های من</h2>
+      <div data-pane="addresses" hidden class="db-pane">
+        <div class="db-card db-profile">
+          <span id="dbPAvatar" class="db-avatar db-avatar-lg" aria-hidden="true"></span>
+          <div class="min-w-0 flex-1"><p id="dbPName" class="truncate font-display text-lg font-black text-ink"></p><p id="dbPPhone" dir="ltr" class="tel text-right text-sm text-ink-soft"></p></div>
+          <button data-logout class="db-logout lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج</button>
+        </div>
+        <h2 class="db-title mt-6">آدرس‌های من</h2>
         <ul id="addrList" class="mt-4 grid gap-3 sm:grid-cols-2"></ul>
         <form id="addrForm" novalidate class="card mt-4 grid gap-4 p-6 sm:grid-cols-2">
           <h3 class="font-display font-black text-cyprus sm:col-span-2">افزودن آدرس تازه</h3>
@@ -1054,6 +1073,6 @@
 <!-- Toast (top, so it never collides with the cart capsule) -->
 <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
 
-<script src="js/app.js?v=20261026c"></script>
+<script src="js/app.js?v=20261026d"></script>
 </body>
 </html>

@@ -830,12 +830,17 @@
 
   function renderDash() {
     $('#dashBody').hidden = !user;
-    if (!user) return;
+    if (!user) { $('#dashDock').hidden = true; return; }
     $('#actBanner').hidden = !user.viaAdmin;
     $('#actText').textContent = `حالت پشتیبانی: شما به‌عنوان مدیر، حساب «${user.name}» (${user.phone}) را مدیریت می‌کنید.`;
     setTab($('#dashTabs'), dashTab, $('#dashBody'));
+    $$('#dashDock [data-tab]').forEach(b => b.dataset.tab === dashTab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+    $('#dashDock').hidden = false;
+    const ini = (user.name || 'م').trim()[0];
+    $('#dbAvatar').textContent = ini; $('#dbPAvatar').textContent = ini;
+    $('#dbPName').textContent = user.name; $('#dbPPhone').textContent = user.phone;
     const mine = orders.filter(o => o.phone === user.phone), active = mine.filter(o => o.status !== 'delivered');
-    $('#dashTitle').textContent = 'داشبورد ' + user.name;
+    $('#dashTitle').textContent = user.name;
     $('#dashName').textContent = user.name; $('#dashPhone').textContent = user.phone;
     $('#mActive').textContent = fa(active.length); $('#liveDot').hidden = !active.length;
     $('#mKg').textContent = kgFa(mine.reduce((s, o) => s + kgOf(o), 0));
@@ -849,7 +854,7 @@
     $('#wTierNow').textContent = 'سطح ' + TIERS[ti][0];
     $('#wTierNext').textContent = next ? `${fa(next[1] - pts)} امتیاز تا ${next[0]}` : 'بالاترین سطح';
     $('#wTierBar').style.transform = `scaleX(${next ? (pts - TIERS[ti][1]) / (next[1] - TIERS[ti][1]) : 1})`;
-    $('#dashTier').innerHTML = `${svg('<path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17l-5.9 3 1.2-6.5L2.5 8.9 9.1 8z"/>', 14, 2)}عضو سطح ${TIERS[ti][0]}`;
+    $('#dashTier').innerHTML = `${svg('<path d="M12 2l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17l-5.9 3 1.2-6.5L2.5 8.9 9.1 8z"/>', 13, 2)}عضو سطح ${TIERS[ti][0]}`;
 
     /* yearly analytics (kg per Persian month, last 12 months) */
     const months = [];
@@ -862,27 +867,37 @@
         <div class="flex h-28 w-full items-end"><span class="block w-full rounded-lg ${i === months.length - 1 ? 'bg-[#28622D]' : m.kg ? 'bg-cyprus/30 group-hover:bg-cyprus/60' : 'bg-cyprus/10'} transition-colors" style="height:${m.kg ? Math.max(8, m.kg / mx * 100) : 4}%" title="${kgFa(m.kg)} کیلوگرم"></span></div>
         <span class="whitespace-nowrap text-[9px] text-ink-soft sm:text-[10px] ${i % 2 ? 'max-sm:invisible' : ''}">${m.label}</span></div>`).join('');
 
-    /* live shipping tracker (latest active order) */
+    /* green "order on the way" card (latest active order) */
     const live = active[0];
+    const STEP4 = ['ثبت', 'بسته‌بندی سرد', 'ارسال', 'تحویل'], AT4 = { awaiting: 0, pending: 0, processing: 1, shipped: 2, delivered: 3 };
+    const stName = s => (s === 'awaiting' ? AWAIT : STATUS[sIdx(s)])[1];
     if (live) {
-      const at = TRACK_AT[live.status], code = `JRF-${live.id.split('-')[1]}-${live.phone.slice(-4)}`;
+      const at = AT4[live.status] ?? 0, code = `JRF-${live.id.split('-')[1]}-${live.phone.slice(-4)}`;
       $('#trackCard').innerHTML = `
-        <div class="flex flex-wrap items-start justify-between gap-3">
-          <div><p class="font-display font-black text-cyprus">رهگیری زنده‌ی مرسوله</p><p class="mt-1 text-xs text-ink-soft">سفارش <span dir="ltr">${live.id}</span> · ${fa(nItems(live))} کالا · ${kgFa(kgOf(live))} کیلوگرم</p></div>
-          ${statusPill(live.status)}
+        <div class="db-hero-top">
+          <span class="db-hero-ic">${svg('<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>', 20, 2)}</span>
+          <div class="min-w-0 flex-1"><p class="db-hero-t">سفارش <span dir="ltr">${live.id}</span></p><p class="db-hero-s">${dateFa(live.date)} · ${fa(nItems(live))} کالا · ${kgFa(kgOf(live))} کیلوگرم</p></div>
+          <span class="db-pill">${stName(live.status)}</span>
         </div>
-        <div class="mt-4 flex flex-wrap items-center gap-2 rounded-2xl bg-sand-light p-3">
-          <span class="text-xs text-ink-soft">کد رهگیری</span><b dir="ltr" class="latin text-sm tracking-wider text-cyprus">${code}</b>
-          <button data-copy="${code}" class="ease-ui ms-auto inline-flex h-8 items-center gap-1 rounded-full bg-white px-3 text-xs font-bold text-cyprus shadow-sm hover:bg-cyprus hover:text-white active:scale-95">${svg('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', 13, 2)}کپی</button>
-          ${live.status === 'shipped' ? `<span class="inline-flex h-8 items-center gap-1 rounded-full bg-cyprus-soft px-3 text-xs font-bold text-cyprus">${svg('<path d="M14 14.8V4a2 2 0 1 0-4 0v10.8a4 4 0 1 0 4 0z"/>', 13, 2)}دمای کامیون <span dir="ltr">+۳٫۱°C</span></span>` : ''}
-        </div>
-        <ol class="mt-5 flex flex-col">${TRACK.map(([l, h], i) => { const done = i <= at, cur = i === at; return `
-          <li class="relative flex gap-3 ${i < TRACK.length - 1 ? 'pb-4' : ''}"${cur ? ' aria-current="step"' : ''}>
-            ${i < TRACK.length - 1 ? `<span class="absolute right-[13px] top-7 bottom-0 w-0.5 ${i < at ? 'bg-[#28622D]' : 'bg-cyprus/10'}" aria-hidden="true"></span>` : ''}
-            <span class="relative grid h-7 w-7 shrink-0 place-items-center rounded-full ${done ? 'bg-[#28622D] text-white' : 'border border-cyprus/15 bg-white text-ink-soft'} ${cur ? 'ring-4 ring-cyprus/15' : ''}">${done ? svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>', 13, 2.6) : '<span class="h-1.5 w-1.5 rounded-full bg-current"></span>'}</span>
-            <div class="pt-0.5"><p class="text-sm font-bold ${done ? 'text-ink' : 'text-ink-soft'}">${l}</p><p class="text-[11px] text-ink-soft">${done ? timeFa(live.date + h * 36e5) : 'در انتظار'}</p></div>
-          </li>`; }).join('')}</ol>`;
-    } else $('#trackCard').innerHTML = `<p class="font-display font-black text-cyprus">رهگیری زنده‌ی مرسوله</p><p class="mt-3 text-sm text-ink-muted">در حال حاضر مرسوله‌ای در مسیر ندارید.</p><a href="#products" class="btn-ghost mt-4 h-11 px-5 text-sm">شروع خرید</a>`;
+        <ol class="db-steps" style="--p:${at / 3}">${STEP4.map((l, i) => `<li class="${i <= at ? 'on' : ''}${i === at ? ' cur' : ''}"><i></i><span>${l}</span></li>`).join('')}</ol>
+        <div class="db-hero-foot">
+          <span class="db-code"><small>کد رهگیری</small><b dir="ltr" class="latin">${code}</b></span>
+          <button data-copy="${code}" class="db-ghost">${svg('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', 14, 2)}کپی</button>
+          <a href="#receipt/${live.id}" class="db-ghost db-ghost-w">رسید</a>
+        </div>`;
+    } else $('#trackCard').innerHTML = `
+        <div class="db-hero-top"><span class="db-hero-ic">${svg('<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>', 20, 2)}</span>
+          <div class="min-w-0 flex-1"><p class="db-hero-t">الان سفارشی در راه ندارید</p><p class="db-hero-s">سفارش بعدی‌تان اینجا مرحله‌به‌مرحله دیده می‌شود.</p></div></div>
+        <div class="db-hero-foot"><a href="#products" class="db-ghost db-ghost-w">${svg('<path d="m15 18-6-6 6-6"/>', 14, 2.4)}شروع خرید</a></div>`;
+
+    /* recent orders row */
+    $('#dbRecent').innerHTML = mine.length ? mine.slice(0, 6).map(o => { const p = byId[o.items[0][0]]; return `
+      <li class="db-oc">
+        <div class="db-oc-img">${thumb(p, ' mini')}${o.items.length > 1 ? `<span class="db-oc-more">+${fa(o.items.length - 1)}</span>` : ''}</div>
+        <div class="min-w-0"><p class="truncate font-display text-sm font-black text-cyprus" dir="ltr" style="text-align:right">${o.id}</p><p class="mt-0.5 text-[11px] text-ink-soft">${dateFa(o.date)}</p></div>
+        <p class="font-display font-black tabular-nums text-ink">${fa(o.total)} <small class="text-[11px] font-bold text-cyprus-mid">تومان</small></p>
+        <div class="mt-auto flex items-center justify-between gap-2">${statusPill(o.status)}<a href="#receipt/${o.id}" class="db-link" aria-label="رسید ${o.id}">${svg('<path d="m15 18-6-6 6-6"/>', 16, 2.4)}</a></div>
+      </li>`; }).join('') : `<li class="db-empty">هنوز سفارشی ثبت نکرده‌اید. <a href="#products">شروع خرید</a></li>`;
 
     /* cold storage / bulk inquiry status */
     const reqs = requests.filter(r => r.phone === user.phone), lastReq = reqs[0];
@@ -897,7 +912,7 @@
 
     /* wishlist */
     const fv = products.filter(p => favs.has(p.id));
-    $('#ovFavs').innerHTML = fv.length ? fv.slice(0, 4).map(favCard).join('') : favEmpty;
+    $('#ovFavs').innerHTML = fv.length ? fv.slice(0, 8).map(favCard).join('') : `<li class="db-empty">هنوز محصولی را نشان نکرده‌اید. روی قلبِ کارت محصولات بزنید.</li>`;
     $('#favGrid').innerHTML = fv.length ? fv.map(favCard).join('') : favEmpty;
 
     $('#dashOrders').innerHTML = mine.length ? mine.map(o => `
@@ -928,8 +943,10 @@
   }
   const goDashTab = t => { if (t !== dashTab) { loadBar(); dashTab = t; renderDash(); } };
   $('#dashTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goDashTab(b.dataset.tab); });
+  $('#dashDock').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; goDashTab(b.dataset.tab); scrollTo({ top: 0, behavior: smooth }); });
+  $('#dbSearch').addEventListener('click', () => { location.hash = '#products'; setTimeout(() => { if (!$('#navSearch').classList.contains('open')) $('#searchToggle').click(); }, 620); });
   $('#dashBody').addEventListener('click', e => {
-    const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); $('#dashboardView').scrollIntoView({ behavior: smooth }); return; }
+    const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
     const add = e.target.closest('[data-qadd]');
     if (add) { const id = add.dataset.qadd; setQty(id, (cart[id] || 0) + 1); fly(add, () => { bump($('#cartCount')); updateBar(true); }); toast(`${byId[id].name} به سبد اضافه شد`); return; }
     const un = e.target.closest('[data-unfav]');
