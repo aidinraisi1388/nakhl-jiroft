@@ -4,13 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<meta name="theme-color" content="#28622D">
+<!-- link previews (Telegram, WhatsApp, Instagram DM…) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="نخل جیرفت">
+<meta property="og:title" content="نخل جیرفت | خرما و خشکبار ارگانیک جیرفت">
+<meta property="og:description" content="خرید خرمای ارگانیک جیرفت و خشکبار ممتاز، مستقیم از نخلستان‌های هلیل با زنجیره‌ی سرد ۲ تا ۴ درجه.">
+<meta property="og:url" content="https://aidinraisi1388.github.io/nakhl-jiroft/">
+<meta property="og:image" content="https://aidinraisi1388.github.io/nakhl-jiroft/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://aidinraisi1388.github.io/nakhl-jiroft/">
 <title>نخل جیرفت | فروشگاه خرما و خشکبار ارگانیک</title>
 <meta name="description" content="خرید آنلاین خرمای ارگانیک جیرفت و خشکبار ممتاز، مستقیم از نخلستان‌های هلیل با نگهداری در سردخانه‌ی هوشمند.">
 
-<!-- Fonts: Vazirmatn online fallback · Peyda & Yekan Bakh are used automatically when installed or placed in ./fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<!-- Fonts: Peyda & Yekan Bakh are served from ./fonts (no external font request, for speed) -->
+<link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
 <link rel="stylesheet" href="css/tailwind.css">
 <link rel="stylesheet" href="css/style.css">
@@ -19,6 +31,7 @@
 </head>
 
 <body data-view="home" class="bg-sand font-body text-ink antialiased">
+<a href="#" id="skipLink" class="skip-link">رفتن به محتوای اصلی</a>
 
 <!-- Top loading bar (view / tab / page changes) -->
 <div id="loadBar" aria-hidden="true" class="pointer-events-none fixed left-0 right-0 top-0 z-[100] h-1 shadow-[0_0_12px_rgba(135,194,140,.8)] bg-gradient-to-r from-[#28622D] via-[#87C28C] to-[#28622D]"></div>
@@ -45,14 +58,14 @@
         <div id="navSearch" class="flex h-10 items-center overflow-hidden rounded-full">
           <button id="searchToggle" class="ease-ui grid h-10 w-10 shrink-0 place-items-center rounded-full text-white/80 hover:bg-white/10 hover:text-white" aria-label="جستجو" aria-expanded="false" aria-controls="search"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg></button>
           <label for="search" class="sr-only">جستجوی محصول</label>
-          <input id="search" type="search" placeholder="مضافتی، پسته، انجیر…" class="h-full bg-transparent pl-4 text-sm text-white outline-none placeholder:text-white/50" tabindex="-1" enterkeyhint="search">
+          <input id="search" type="search" placeholder="جستجو…" class="h-full bg-transparent pl-4 text-sm text-white outline-none placeholder:text-white/50" tabindex="-1" enterkeyhint="search">
         </div>
         <button id="userBtn" class="hdr-pill btn-shine shine-green ease-ui relative inline-flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-white px-0 sm:w-auto sm:px-2.5 text-sm font-bold text-cyprus shadow-[0_6px_16px_rgba(0,0,0,.16)] hover:bg-sand active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:inline-flex lg:px-4" aria-label="ورود / ثبت‌نام">
           <svg class="hp-ic h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /> </svg>
           <span id="userLabel" class="hidden max-w-[10rem] truncate font-display lg:inline">ورود / ثبت‌نام</span>
           <span id="userDot" hidden class="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-[#377B3D] ring-2 ring-white"></span>
         </button>
-        <button id="cartPill" class="hdr-pill btn-shine shine-green btn-light h-10 shrink-0 px-3 text-sm shadow-[0_6px_16px_rgba(0,0,0,.16)] hover:translate-y-0 hover:shadow-[0_6px_16px_rgba(0,0,0,.16)] sm:px-4" aria-label="ورود و سبد خرید" aria-haspopup="dialog" aria-controls="cartDrawer">
+        <button id="cartPill" class="hdr-pill btn-shine shine-green btn-light h-10 shrink-0 px-3 text-sm shadow-[0_6px_16px_rgba(0,0,0,.16)] hover:translate-y-0 hover:shadow-[0_6px_16px_rgba(0,0,0,.16)] sm:px-4" aria-label="سبد خرید" aria-haspopup="dialog" aria-controls="cartDrawer">
           <svg class="hp-ic h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 11-1 9" /> <path d="m19 11-4-7" /> <path d="M2 11h20" /> <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" /> <path d="M4.5 15.5h15" /> <path d="m5 11 4-7" /> <path d="m9 11 1 9" /> </svg>
           <span id="cartLabel" class="hidden sm:inline">سبد خرید</span>
           <span id="cartCount" class="grid h-5 min-w-5 place-items-center rounded-full bg-[#28622D] px-1.5 font-display text-[11px] font-black text-white">۰</span>
@@ -116,13 +129,13 @@
     <div class="slide relative grid items-center gap-8 overflow-hidden rounded-[28px] p-8 sm:p-12 lg:grid-cols-2" data-slide="2" aria-hidden="true">
       <div class="flex flex-col items-start gap-5">
         <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[13px] text-white/90"><span class="h-2 w-2 rounded-full bg-sand"></span>سردخانه‌ی هوشمند</span>
-        <h2 class="font-display text-[32px] font-black leading-[1.35] sm:text-5xl lg:text-[54px] lg:leading-[1.3]">۵٬۰۰۰ تن ظرفیت<span class="block text-sand/80">با دمای ثابت ۲ تا ۴ درجه</span></h2>
+        <h2 class="font-display text-[32px] font-black leading-[1.35] sm:text-5xl lg:text-[54px] lg:leading-[1.3]">۵,۰۰۰ تن ظرفیت<span class="block text-sand/80">با دمای ثابت ۲ تا ۴ درجه</span></h2>
         <p class="max-w-lg text-base leading-[2] text-white/80">سالن خود را آنلاین رزرو کنید و بار را بدون حضور تحویل دهید.</p>
         <a href="#storage" data-service="storage" class="btn-light h-14 px-8 text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z" /> <path d="M6 18h12" /> <path d="M6 14h12" /> <rect width="12" height="12" x="6" y="10" /> </svg>رزرو سالن</a>
       </div>
       <div class="relative mx-auto hidden aspect-square w-full max-w-sm sm:block lg:max-w-md">
         <div class="absolute inset-[6%] rounded-full bg-[radial-gradient(circle_at_50%_45%,rgba(255,255,255,.16),rgba(255,255,255,.04)_60%,transparent_70%)] ring-1 ring-white/10"></div>
-        <div class="relative grid h-full place-items-center" role="img" aria-label="سردخانه‌ی هوشمند"><div class="render dark lg" style="--hi:#F0F7F1;--mid:#447448;--lo:#19431D;--glow:rgba(240,247,241,.14)"><span class="halo"></span><span class="halo two"></span><span class="ground"></span><span class="orb"></span><span class="tag">۲+ تا ۴+ °C</span></div></div>
+        <div class="relative grid h-full place-items-center" role="img" aria-label="سردخانه‌ی هوشمند"><div class="render dark lg" style="--hi:#F0F7F1;--mid:#447448;--lo:#19431D;--glow:rgba(240,247,241,.14)"><span class="halo"></span><span class="halo two"></span><span class="ground"></span><span class="orb"></span><span class="tag">۲ تا ۴ درجه</span></div></div>
       </div>
     </div>
   </div>
@@ -146,7 +159,7 @@
   <a href="#footer" class="card card-hover group relative flex min-h-[150px] items-center justify-between gap-4 overflow-hidden p-6 text-cyprus sm:p-8">
     <div class="relative">
       <span class="rounded-full bg-cyprus/10 px-3 py-1 text-xs font-bold">اولین خرید</span>
-      <h3 class="mt-3 font-display text-xl font-black leading-snug sm:text-2xl">۱۰٪ تخفیف ویژه<br>با عضویت در خبرنامه</h3>
+      <h3 class="mt-3 font-display text-xl font-black leading-snug sm:text-2xl">۱۰٪ تخفیف ویژه<br>با کد <span class="latin">NAKHL10</span></h3>
     </div>
     <span class="ease-ui grid h-20 w-20 shrink-0 place-items-center rounded-full bg-sand group-hover:rotate-[8deg] group-hover:scale-110"><svg class="h-10 w-10 text-cyprus" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" /> <path d="m15 9-6 6" /> <path d="M9 9h.01" /> <path d="M15 15h.01" /> </svg></span>
   </a>
@@ -154,30 +167,30 @@
 
 <!-- ═════════ Quick category access (6 tiles, no filler) ═════════ -->
 <section class="band band-a pb-12 pt-10 sm:pb-16 sm:pt-12" aria-labelledby="catTitle">
-  <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+  <div class="flex flex-col gap-2">
     <div><span class="eyebrow">دسته‌بندی محصولات</span><h2 id="catTitle" class="mt-1 font-display text-[26px] font-black leading-[1.4] text-[#28622D] sm:text-[36px]">دسترسی سریع به دسته‌بندی‌ها</h2></div>
-    <p class="max-w-xs text-sm text-ink-muted">دسته را انتخاب کنید تا مستقیم به کاتالوگ همان دسته بروید.</p>
+    <p class="max-w-lg text-sm text-ink-muted">دسته را انتخاب کنید تا مستقیم به کاتالوگ همان دسته بروید.</p>
   </div>
   <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
     <a href="#products/mazafati" class="card card-hover pop group flex flex-col gap-3 p-5">
       <span class="ease-ui grid h-12 w-12 place-items-center rounded-2xl bg-sand text-cyprus group-hover:bg-cyprus group-hover:text-white"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="rotate(-32 12 13)"><path d="M12 5.6c3.6 0 5 3.3 5 7.6 0 4.4-2.3 7-5 7s-5-2.6-5-7c0-4.3 1.4-7.6 5-7.6Z"/><path d="M9.7 6.2Q12 4.4 14.3 6.2"/><path d="M9.6 9.3c-.7 1.2-.9 2.6-.8 4"/></g><path d="M16.5 3.2c1.8.2 3.3 1.3 4 3-1.9.1-3.4-.9-4-3Z"/></svg></span>
       <h3 class="font-display font-bold">خرمای مضافتی</h3><p class="text-xs leading-6 text-ink-muted">نرم و شیرین، برداشت تازه‌ی جیرفت</p>
-      <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold text-cyprus">مشاهده‌ی محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
+      <span class="mt-auto inline-flex items-center gap-1 whitespace-nowrap text-xs font-bold text-cyprus">دیدن محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
     </a>
     <a href="#products/piarom" class="card card-hover pop group flex flex-col gap-3 p-5">
       <span class="ease-ui grid h-12 w-12 place-items-center rounded-2xl bg-sand text-cyprus group-hover:bg-cyprus group-hover:text-white"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="rotate(-38 12 12)"><path d="M12 3c2.4 0 3.5 3.8 3.5 9s-1.2 9-3.5 9-3.5-3.8-3.5-9S9.6 3 12 3Z"/><path d="M10.4 3.7Q12 2.4 13.6 3.7"/><path d="M10.5 7.5c-.4 1.4-.6 3-.5 4.6"/></g><path d="M19 2.8l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7Z"/></svg></span>
       <h3 class="font-display font-bold">خرمای پیارم</h3><p class="text-xs leading-6 text-ink-muted">خشک و اصیل، مناسب صادرات</p>
-      <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold text-cyprus">مشاهده‌ی محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
+      <span class="mt-auto inline-flex items-center gap-1 whitespace-nowrap text-xs font-bold text-cyprus">دیدن محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
     </a>
     <a href="#products/kaluteh" class="card card-hover pop group flex flex-col gap-3 p-5">
       <span class="ease-ui grid h-12 w-12 place-items-center rounded-2xl bg-sand text-cyprus group-hover:bg-cyprus group-hover:text-white"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g transform="rotate(-20 8.5 14)"><ellipse cx="8.5" cy="14" rx="3.6" ry="4.6"/><path d="M6.4 9.9Q8.5 8.6 10.6 9.9"/></g><g transform="rotate(22 15.8 12)"><ellipse cx="15.8" cy="12" rx="3.6" ry="4.6"/><path d="M13.7 7.9Q15.8 6.6 17.9 7.9"/></g><path d="M12 2.8v3.4M12 6.2Q9.6 6.6 8.3 9.2M12 6.2Q14.3 6.3 15.4 7.3"/></svg></span>
       <h3 class="font-display font-bold">خرمای کلوته</h3><p class="text-xs leading-6 text-ink-muted">نیمه‌خشک، طعم اصیل جنوب</p>
-      <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold text-cyprus">مشاهده‌ی محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
+      <span class="mt-auto inline-flex items-center gap-1 whitespace-nowrap text-xs font-bold text-cyprus">دیدن محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
     </a>
     <a href="#products/dried" class="card card-hover pop group flex flex-col gap-3 p-5">
       <span class="ease-ui grid h-12 w-12 place-items-center rounded-2xl bg-sand text-cyprus group-hover:bg-cyprus group-hover:text-white"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.2 16.8C4.3 13.4 4.9 7.7 9 5.2c1.9-1.1 3.9-1.2 5.3-.2"/><path d="M16.8 7.2c2.9 3.4 2.3 9.1-1.8 11.6-1.9 1.1-3.9 1.2-5.3.2"/><path d="M9.6 15.2c-1.6-2.2-1-5.6 1.4-7.2 2.4-1.5 5.3-.8 5.6 1.8.3 3.2-4.4 8.3-7 5.4Z"/></svg></span>
       <h3 class="font-display font-bold">خشکبار ممتاز</h3><p class="text-xs leading-6 text-ink-muted">پسته، بادام و انجیر دست‌چین</p>
-      <span class="mt-auto inline-flex items-center gap-1 text-xs font-bold text-cyprus">مشاهده‌ی محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
+      <span class="mt-auto inline-flex items-center gap-1 whitespace-nowrap text-xs font-bold text-cyprus">دیدن محصولات<svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
     </a>
     <a href="#storage" data-service="storage" class="card card-hover pop group flex flex-col gap-3 p-5">
       <span class="ease-ui grid h-12 w-12 place-items-center rounded-2xl bg-sand text-cyprus group-hover:bg-cyprus group-hover:text-white"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20.5V9.4L12 4l9 5.4v11.1"/><path d="M1.8 20.5h20.4"/><path d="M12 10.5v7.5M8.8 12.4l6.4 3.7M15.2 12.4l-6.4 3.7"/></svg></span>
@@ -194,9 +207,9 @@
 
 <!-- ═════════ Curated products: only 4 + "see all" CTA ═════════ -->
 <section id="featured" class="band band-b pb-10 pt-10 sm:pb-12 sm:pt-12" aria-labelledby="featTitle">
-  <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+  <div class="flex flex-col gap-2">
     <div><span class="eyebrow text-sand before:bg-sand">پیشنهاد نخل</span><h2 id="featTitle" class="mt-1 font-display text-[26px] font-black leading-[1.4] text-white sm:text-[36px]">محصولات منتخب این هفته</h2></div>
-    <p class="max-w-xs text-sm text-white/75">چهار محصول پرفروش، دست‌چین از نخلستان‌های جیرفت.</p>
+    <p class="max-w-lg text-sm text-white/75">چهار محصول پرفروش، دست‌چین از نخلستان‌های جیرفت.</p>
   </div>
   <div id="homeGrid" class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"><article class="p-card group relative flex flex-col rounded-3xl border border-[#28622D]/10 p-4 sm:p-5" data-id="maz5">
       <div class="relative">
@@ -218,7 +231,7 @@
         <p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-muted sm:text-[13px]">نرم و شیرین، برداشت تازه‌ی جیرفت</p>
         <span class="mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5"></path></svg>بسته‌بندی ۵۰۰ گرمی</span>
         <div class="mt-auto flex flex-col items-stretch gap-3 pt-4 xl:flex-row xl:items-center xl:justify-between">
-          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۱۴۰٬۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
+          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۱۴۰,۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           <div class="buy w-full xl:w-32" data-id="maz5" data-state="idle">
             <button class="add" aria-label="افزودن خرمای مضافتی جیرفت به سبد"><span class="lbl inline-flex items-center gap-1.5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>افزودن</span><span class="ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>افزوده شد</span></button>
             <div class="step stepper" role="group" aria-label="تعداد خرمای مضافتی جیرفت در سبد">
@@ -250,7 +263,7 @@
         <p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-muted sm:text-[13px]">خشک و کم‌شیرین، ماندگاری بالا</p>
         <span class="mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5"></path></svg>بسته‌بندی ۵۰۰ گرمی</span>
         <div class="mt-auto flex flex-col items-stretch gap-3 pt-4 xl:flex-row xl:items-center xl:justify-between">
-          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۳۴۵٬۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
+          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۳۴۵,۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           <div class="buy w-full xl:w-32" data-id="pia5" data-state="idle">
             <button class="add" aria-label="افزودن خرمای پیارم به سبد"><span class="lbl inline-flex items-center gap-1.5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>افزودن</span><span class="ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>افزوده شد</span></button>
             <div class="step stepper" role="group" aria-label="تعداد خرمای پیارم در سبد">
@@ -282,7 +295,7 @@
         <p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-muted sm:text-[13px]">نیمه‌خشک با طعم اصیل جنوب</p>
         <span class="mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5"></path></svg>بسته‌بندی ۵۰۰ گرمی</span>
         <div class="mt-auto flex flex-col items-stretch gap-3 pt-4 xl:flex-row xl:items-center xl:justify-between">
-          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۱۲۰٬۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
+          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۱۲۰,۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           <div class="buy w-full xl:w-32" data-id="kal5" data-state="idle">
             <button class="add" aria-label="افزودن خرمای کلوته به سبد"><span class="lbl inline-flex items-center gap-1.5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>افزودن</span><span class="ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>افزوده شد</span></button>
             <div class="step stepper" role="group" aria-label="تعداد خرمای کلوته در سبد">
@@ -314,7 +327,7 @@
         <p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-muted sm:text-[13px]">مغز درشت و خندان، تازه‌برشته</p>
         <span class="mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="M3 8l9 5 9-5"></path></svg>بسته‌بندی ۵۰۰ گرمی</span>
         <div class="mt-auto flex flex-col items-stretch gap-3 pt-4 xl:flex-row xl:items-center xl:justify-between">
-          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۹۷۵٬۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
+          <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">۹۷۵,۰۰۰</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           <div class="buy w-full xl:w-32" data-id="pis" data-state="idle">
             <button class="add" aria-label="افزودن پسته‌ی اکبری به سبد"><span class="lbl inline-flex items-center gap-1.5"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>افزودن</span><span class="ok"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>افزوده شد</span></button>
             <div class="step stepper" role="group" aria-label="تعداد پسته‌ی اکبری در سبد">
@@ -331,23 +344,7 @@
   </div>
 </section>
 
-<!-- ═════════ Weekly offer tiles (4-up, unified white "تخفیف هفته" style) ═════════ -->
-<section class="grid grid-cols-2 gap-3 pb-12 pt-8 sm:gap-4 sm:pb-16 sm:pt-10 lg:grid-cols-4" aria-label="تخفیف‌های هفته">
-  <a href="#products/piarom" class="card card-hover group flex flex-col overflow-hidden">
-    <div class="p-5 sm:p-6"><span class="text-xs font-bold text-cyprus-mid">تخفیف هفته</span><p class="mt-1 font-display text-3xl font-black text-cyprus">۲۰٪</p><p class="mt-1 text-xs text-ink-muted">روی همه‌ی بسته‌های پیارم</p></div>
-  </a>
-  <a href="#products/dried" class="card card-hover group flex flex-col overflow-hidden">
-    <div class="p-5 sm:p-6"><span class="text-xs font-bold text-cyprus-mid">صرفه‌جویی</span><p class="mt-1 font-display text-3xl font-black text-cyprus">۱۵۰<span class="text-base"> هزار</span></p><p class="mt-1 text-xs text-ink-muted">با خرید یک کیلو پسته</p></div>
-  </a>
-  <a href="#products/mazafati" class="card card-hover group flex flex-col overflow-hidden">
-    <div class="p-5 sm:p-6"><span class="text-xs font-bold text-cyprus-mid">بسته‌ی خانواده</span><p class="mt-1 font-display text-3xl font-black text-cyprus">۳+۱</p><p class="mt-1 text-xs text-ink-muted">چهار بسته مضافتی، قیمت سه بسته</p></div>
-  </a>
-  <a href="#products" class="card card-hover group flex flex-col overflow-hidden">
-    <div class="p-5 sm:p-6"><span class="text-xs font-bold text-cyprus-mid">ارسال</span><p class="mt-1 font-display text-3xl font-black text-cyprus">رایگان</p><p class="mt-1 text-xs text-ink-muted">برای سفارش بالای ۲ میلیون</p></div>
-  </a>
-</section>
-<p class="-mt-8 text-xs text-ink-soft sm:-mt-12">تخفیف‌ها نمونه هستند و با کمپین‌های واقعی جایگزین می‌شوند.</p>
-
+<div class="pb-12 sm:pb-16"></div>
 <div aria-hidden="true" class="orn-waves bleed -mb-8 mt-2 h-14 sm:-mb-12 sm:mt-4"></div>
 <!-- ═════════ Cold storage & bulk order panel ═════════ -->
 <section id="storage" class="scroll-mt-28 py-12 sm:py-16">
@@ -360,7 +357,7 @@
         <p class="mt-2 text-sm leading-[2] text-white/75">نگهداری استاندارد خرما و خشکبار با پایش لحظه‌ای دما و رطوبت، برای باغ‌داران، بنکداران و صادرکنندگان.</p>
       </div>
       <dl class="relative grid grid-cols-2 gap-3">
-        <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z" /> <path d="M10 21.9V14L2.1 9.1" /> <path d="m10 14 11.9-6.9" /> <path d="M14 19.8v-8.1" /> <path d="M18 17.5V9.4" /> </svg><dt class="mt-2 text-xs text-white/60">ظرفیت کل</dt><dd class="font-display text-xl font-black">۵٬۰۰۰ تن</dd></div>
+        <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z" /> <path d="M10 21.9V14L2.1 9.1" /> <path d="m10 14 11.9-6.9" /> <path d="M14 19.8v-8.1" /> <path d="M18 17.5V9.4" /> </svg><dt class="mt-2 text-xs text-white/60">ظرفیت کل</dt><dd class="font-display text-xl font-black">۵,۰۰۰ تن</dd></div>
         <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 12h10" /> <path d="M9 4v16" /> <path d="m3 9 3 3-3 3" /> <path d="M12 6 9 9 6 6" /> <path d="m6 18 3-3 1.5 1.5" /> <path d="M20 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /> </svg><dt class="mt-2 text-xs text-white/60">دمای سالن‌ها</dt><dd class="font-display text-xl font-black">۲ تا ۴<span class="text-sm"> درجه</span></dd></div>
         <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z" /> <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97" /> </svg><dt class="mt-2 text-xs text-white/60">رطوبت کنترل‌شده</dt><dd class="font-display text-xl font-black">۸۵٪</dd></div>
         <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /> </svg><dt class="mt-2 text-xs text-white/60">پایش</dt><dd class="font-display text-xl font-black">۲۴ ساعته</dd></div>
@@ -396,7 +393,7 @@
       </div>
       <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p id="formMsg" class="min-h-[1.25rem] text-sm text-ink-muted" role="status" aria-live="polite"></p>
-        <button type="submit" class="btn-cyprus h-12 px-8">ارسال استعلام<svg class="h-4 w-4 -scale-x-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /> </svg></button>
+        <button type="submit" class="btn-cyprus h-12 shrink-0 whitespace-nowrap px-8">ارسال استعلام<svg class="h-4 w-4 -scale-x-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /> </svg></button>
       </div>
     </form>
   </div>
@@ -421,9 +418,9 @@
 <!-- ═════════ Contact (ارتباط با ما) — three identical cards ═════════ -->
 <div aria-hidden="true" class="orn-palm bleed mb-2 h-[96px] opacity-80 sm:h-[110px]"></div>
 <section id="contact" class="scroll-mt-28 pb-10 sm:pb-12" aria-labelledby="contactTitle">
-  <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+  <div class="flex flex-col gap-2">
     <div><span class="eyebrow">ارتباط با ما</span><h2 id="contactTitle" class="mt-1 font-display text-[26px] font-black leading-[1.4] text-[#28622D] sm:text-[36px]">همیشه در دسترس شما هستیم</h2></div>
-    <p class="max-w-xs text-sm text-ink-muted">شنبه تا پنجشنبه، ساعت ۸ تا ۱۸ پاسخگوی شما هستیم.</p>
+    <p class="max-w-lg text-sm text-ink-muted">شنبه تا پنجشنبه، ساعت ۸ تا ۱۸ پاسخگوی شما هستیم.</p>
   </div>
   <div class="mt-6 grid gap-3 sm:grid-cols-3 sm:gap-4">
     <a href="tel:+989931934298" class="card card-hover contact-card group grid grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-0.5 p-4 sm:flex sm:flex-col sm:items-center sm:gap-3 sm:p-6 sm:text-center">
@@ -445,7 +442,7 @@
       <span class="col-start-3 row-span-2 row-start-1 inline-flex items-center gap-1 text-xs font-bold text-cyprus-mid"><span class="max-sm:sr-only">دنبال کنید</span><svg class="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></span>
     </a>
   </div>
-  <div class="card mt-3 flex items-center gap-4 p-5 sm:mt-4">
+  <div class="card mt-3 flex items-center gap-4 p-5 sm:mt-4 addr-card">
     <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-sand text-cyprus"><svg class="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg></span>
     <div><p class="text-xs font-bold text-ink-soft">دفتر مرکزی</p><p class="mt-0.5 font-display font-bold text-cyprus">بندرعباس، خیابان آبسواران، مجتمع علی ابن ابی طالب</p></div>
   </div>
@@ -460,7 +457,7 @@
     <svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
     <span class="text-cyprus" aria-current="page">محصولات</span>
   </nav>
-  <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+  <div class="mt-4 flex flex-col gap-2">
     <div><span class="eyebrow plate">کاتالوگ محصولات</span><h1 id="catalogTitle" class="halo mt-1 font-display text-[28px] font-black leading-[1.4] text-[#28622D] sm:text-[40px]">خرمای جیرفت</h1></div>
     <p id="catalogDesc" class="plate max-w-sm text-sm leading-7 text-ink"></p>
   </div>
@@ -493,7 +490,7 @@
     </button>
   </nav>
   <div class="mt-6 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
-    <span class="plate text-ink-muted">قیمت‌ها نمونه هستند و با قیمت روز جایگزین می‌شوند.</span>
+    <span class="plate text-ink-muted">قیمت‌ها به‌روز و به تومان است.</span>
     <span id="resultInfo" class="plate text-ink-muted" aria-live="polite"></span>
   </div>
 </section>
@@ -521,7 +518,6 @@
         <button class="side-btn" data-tab="storage"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg>درخواست‌های سردخانه</button>
         <button class="side-btn" data-tab="favorites"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /> </svg>علاقه‌مندی‌ها</button>
         <button class="side-btn" data-tab="addresses"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg>آدرس‌های من</button>
-        <button class="side-btn" data-tab="profile"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 21a8 8 0 0 1 10.434-7.62" /> <circle cx="10" cy="8" r="5" /> <circle cx="18" cy="18" r="3" /> <path d="m19.5 14.3-.4.9" /> <path d="m16.9 20.8-.4.9" /> <path d="m21.7 19.5-.9-.4" /> <path d="m15.2 16.9-.9-.4" /> <path d="m21.7 16.5-.9.4" /> <path d="m15.2 19.1-.9.4" /> <path d="m19.5 21.7-.4-.9" /> <path d="m16.9 15.2-.4-.9" /> </svg>اطلاعات حساب</button>
       </nav>
       <button data-logout class="side-btn mt-1.5 w-full text-ink-soft"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج از حساب</button>
     <div aria-hidden="true" class="orn-vase orn-fit mt-4 hidden aspect-[260/96] w-full lg:block"></div>
@@ -541,17 +537,17 @@
           <span id="dashTier" class="inline-flex h-8 items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 font-display text-xs font-bold"></span>
         </div>
         <div class="relative mt-5 grid grid-cols-3 gap-2 sm:gap-4">
-          <div class="glass glass-hover flex flex-col gap-4 rounded-3xl p-4 sm:p-5">
+          <div class="glass glass-hover flex min-w-0 flex-col gap-4 rounded-3xl p-3 sm:p-5">
             <span class="relative grid h-10 w-10 place-items-center rounded-2xl bg-white text-cyprus"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /> </svg><span id="liveDot" hidden class="absolute -right-0.5 -top-0.5 h-3 w-3 rounded-full bg-white ring-2 ring-[#28622D]"><span class="absolute inset-0 animate-ping rounded-full bg-white/70"></span></span></span>
-            <div><p class="text-[11px] font-bold text-white/60 sm:text-xs">سفارش فعال</p><p id="mActive" class="mt-1 font-display text-3xl font-black sm:text-4xl">۰</p></div>
+            <div><p class="text-[11px] font-bold leading-6 text-white/60 sm:text-xs">سفارش فعال</p><p id="mActive" class="mt-1 font-display text-3xl font-black sm:text-4xl">۰</p></div>
           </div>
-          <div class="glass glass-hover flex flex-col gap-4 rounded-3xl p-4 sm:p-5">
+          <div class="glass glass-hover flex min-w-0 flex-col gap-4 rounded-3xl p-3 sm:p-5">
             <span class="grid h-10 w-10 place-items-center rounded-2xl bg-white text-cyprus"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="5" r="3" /> <path d="M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z" /> </svg></span>
-            <div><p class="text-[11px] font-bold text-white/60 sm:text-xs">وزن کل خرید</p><p class="mt-1 flex items-baseline gap-1 font-display"><b id="mKg" class="text-3xl font-black tabular-nums sm:text-4xl">۰</b><span class="text-[11px] text-white/70">کیلوگرم</span></p></div>
+            <div><p class="text-[11px] font-bold leading-6 text-white/60 sm:text-xs">وزن کل خرید</p><p class="mt-1 flex flex-wrap items-baseline gap-1 font-display"><b id="mKg" class="text-3xl font-black tabular-nums sm:text-4xl">۰</b><span class="text-[11px] text-white/70">کیلوگرم</span></p></div>
           </div>
-          <div class="glass glass-hover flex flex-col gap-4 rounded-3xl p-4 sm:p-5">
+          <div class="glass glass-hover flex min-w-0 flex-col gap-4 rounded-3xl p-3 sm:p-5">
             <span class="grid h-10 w-10 place-items-center rounded-2xl bg-white text-cyprus"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m16 16 2 2 4-4" /> <path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14" /> <path d="m7.5 4.27 9 5.15" /> <polyline points="3.29 7 12 12 20.71 7" /> <line x1="12" x2="12" y1="22" y2="12" /> </svg></span>
-            <div><p class="text-[11px] font-bold text-white/60 sm:text-xs">تحویل‌شده</p><p id="mDone" class="mt-1 font-display text-3xl font-black sm:text-4xl">۰</p></div>
+            <div><p class="text-[11px] font-bold leading-6 text-white/60 sm:text-xs">تحویل‌شده</p><p id="mDone" class="mt-1 font-display text-3xl font-black sm:text-4xl">۰</p></div>
           </div>
         </div>
       </div>
@@ -630,15 +626,6 @@
         </form>
       </div>
 
-      <!-- pane: profile -->
-      <div data-pane="profile" hidden class="mt-8">
-        <h2 class="halo font-display text-xl font-black text-cyprus sm:text-2xl">اطلاعات حساب</h2>
-        <form id="profileForm" novalidate class="card mt-4 grid gap-4 p-6 sm:grid-cols-2">
-          <div class="flex flex-col gap-1.5"><label for="profName" class="label">نام و نام خانوادگی</label><input id="profName" class="field" placeholder="مثلاً: علی رضایی" autocomplete="name"></div>
-          <div class="flex flex-col gap-1.5"><label for="profPhone" class="label">شماره‌ی موبایل</label><input id="profPhone" class="field cursor-not-allowed text-right opacity-70" dir="ltr" readonly aria-describedby="profPhoneHint"><span id="profPhoneHint" class="text-xs text-ink-soft">شماره‌ی ورود قابل تغییر نیست.</span></div>
-          <div class="sm:col-span-2"><button class="btn-cyprus h-12 px-6 text-sm"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg>ذخیره‌ی تغییرات</button></div>
-        </form>
-      </div>
     </div>
   </div>
 </section>
@@ -675,7 +662,7 @@
         <button class="side-dark" data-tab="storage"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z" /> <path d="M6 18h12" /> <path d="M6 14h12" /> <rect width="12" height="12" x="6" y="10" /> </svg>وضعیت سردخانه</button>
         <button class="side-dark" data-tab="customers"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /> </svg>مشتریان و پشتیبانی</button>
       </nav>
-      <button data-logout class="side-dark relative mt-1.5 hidden w-full lg:flex"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج مدیر</button>
+      <button data-logout id="admLogout" class="side-dark relative mt-1.5 w-full"><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج مدیر</button>
     <div aria-hidden="true" class="orn-door orn-fit relative mt-4 hidden aspect-[260/96] w-full opacity-55 lg:block"></div>
     </aside>
 
@@ -690,8 +677,8 @@
         <div class="relative overflow-hidden rounded-4xl bg-[#28622D] p-6 text-white shadow-xl xl:col-span-2">
           <div aria-hidden="true" class="pointer-events-none absolute -right-20 -top-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(240,247,241,.14),transparent_70%)]"></div>
           <div class="relative flex flex-wrap items-start justify-between gap-3">
-            <div><p class="text-xs font-bold text-white/60">کل فروش</p><p class="mt-1 flex items-baseline gap-1 font-display"><b id="kRevenue" class="text-3xl font-black tabular-nums sm:text-4xl">۰</b><span class="text-xs text-white/70">تومان</span></p></div>
-            <div class="flex flex-col items-end gap-1"><span id="kGrowth" class="inline-flex h-8 items-center gap-1 rounded-full bg-white px-3 font-display text-xs font-black text-cyprus"></span><span class="text-[11px] text-white/60">نسبت به ۷ روز قبل</span></div>
+            <div><p class="text-xs font-bold text-white/60">فروش تأییدشده</p><p class="mt-1 flex items-baseline gap-1 font-display"><b id="kRevenue" class="text-3xl font-black tabular-nums sm:text-4xl">۰</b><span class="text-xs text-white/70">تومان</span></p><p id="kPending" class="mt-1 text-[11px] text-white/70"></p></div>
+            <div class="flex flex-col items-end gap-1"><span id="kGrowth" class="inline-flex h-8 items-center gap-1 rounded-full bg-white px-3 font-display text-xs font-black text-cyprus"></span><span id="kGrowthL" class="text-[11px] text-white/60">نسبت به ۷ روز قبل</span></div>
           </div>
           <div id="kChart" class="relative mt-6 flex gap-2" aria-label="فروش ۷ روز اخیر"></div>
         </div>
@@ -738,6 +725,7 @@
           </div>
         </section>
 
+        <h3 class="mt-2 font-display text-lg font-black text-cyprus">سفارش‌های تأییدشده</h3>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div id="admFilters" class="no-scrollbar -mx-3 flex gap-2 overflow-x-auto px-3 py-1 sm:mx-0 sm:px-0" role="group" aria-label="فیلتر وضعیت سفارش">
             <button class="chip" data-f="all" aria-pressed="true">همه <span class="c opacity-70"></span></button>
@@ -779,7 +767,7 @@
           <div class="relative grid items-center gap-6 sm:grid-cols-[auto_1fr]">
             <div id="sRing" class="grid h-36 w-36 place-items-center rounded-full"><span class="grid h-28 w-28 place-items-center rounded-full bg-[#28622D] text-center"><b id="sPct" class="font-display text-3xl font-black">۰٪</b></span></div>
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-              <div class="glass rounded-3xl p-4"><p class="text-xs text-white/60">ظرفیت کل</p><p class="mt-1 font-display text-xl font-black">۵٬۰۰۰ تن</p></div>
+              <div class="glass rounded-3xl p-4"><p class="text-xs text-white/60">ظرفیت کل</p><p class="mt-1 font-display text-xl font-black">۵,۰۰۰ تن</p></div>
               <div class="glass rounded-3xl p-4"><p class="text-xs text-white/60">اشغال‌شده</p><p id="sUsed" class="mt-1 font-display text-xl font-black"></p></div>
               <div class="glass col-span-2 rounded-3xl p-4 sm:col-span-1"><p class="text-xs text-white/60">فضای آزاد</p><p id="sFree" class="mt-1 font-display text-xl font-black"></p></div>
             </div>
@@ -860,7 +848,7 @@
         <form id="fpPhoneForm" novalidate class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5"><label for="fpPhone" class="label">شماره موبایل حساب</label><input id="fpPhone" class="field tel text-right" dir="ltr" inputmode="tel" autocomplete="username" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰"></div>
           <p id="fpErr1" class="min-h-[1.25rem] text-sm font-bold text-red-700" role="alert"></p>
-          <button class="btn-cyprus btn-shine h-12 w-full">ارسال کد تأیید</button>
+          <button class="btn-cyprus btn-shine h-12 w-full">ادامه</button>
         </form>
         <form id="fpCodeForm" hidden novalidate class="flex flex-col gap-4">
           <p class="text-sm leading-7 text-ink-muted">کد ۵ رقمی ارسال شده به <b id="fpTo" dir="ltr" class="tel text-cyprus"></b> را وارد کنید.</p>
@@ -886,7 +874,7 @@
       </div>
 
       <div aria-hidden="true" class="orn-boteh mt-8 h-9"></div>
-      <p class="mt-2 text-center text-[11px] leading-6 text-ink-soft">نسخه‌ی نمایشی بدون سرور: حساب‌ها فقط در همین مرورگر ذخیره می‌شوند.</p>
+      <p class="mt-2 text-center text-[11px] leading-6 text-ink-soft">حساب شما روی همین دستگاه و مرورگر ذخیره می‌شود.</p>
     </div>
   </div>
 </section>
@@ -906,7 +894,7 @@
     <!-- success -->
     <div class="mt-6 flex items-center gap-3 rounded-2xl border border-[#28622D] bg-cyprus-soft/60 p-3.5">
       <span class="rc-ok grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-[#28622D] text-[#28622D]"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
-      <div class="min-w-0"><p class="font-display text-sm font-black text-[#28622D]">سفارش شما با موفقیت ثبت شد</p><p id="rcWhen" class="mt-0.5 font-display text-xs text-cyprus-mid"></p></div>
+      <div class="min-w-0"><p class="font-display text-sm font-black text-[#28622D]">سفارش ثبت شد؛ یک قدم مانده</p><p id="rcWhen" class="mt-0.5 font-display text-xs text-cyprus-mid"></p><p class="mt-1.5 text-xs leading-6 text-ink-muted">برای نهایی شدن، سفارش را با دکمه‌ی زیر پیامک کنید. پرداخت بعد از تماس کارشناس انجام می‌شود.</p></div>
     </div>
 
     <!-- buyer -->
@@ -928,7 +916,9 @@
     </div>
 
     <!-- actions -->
-    <div class="no-print mt-5 grid grid-cols-2 gap-3">
+    <a id="rcSms" href="#" class="no-print btn-cyprus mt-5 h-14 w-full text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span id="rcSmsLbl">ارسال سفارش با پیامک</span></a>
+    <p id="rcSmsNote" hidden class="no-print mt-2 text-center text-xs font-bold text-cyprus" role="status"></p>
+    <div class="no-print mt-3 grid grid-cols-2 gap-3">
       <a href="#products" class="ease-ui grid h-12 place-items-center rounded-2xl bg-sand font-display text-sm font-black text-ink shadow-[0_6px_16px_rgba(40,98,45,0.08)] hover:bg-sand-dark active:scale-95">ثبت سفارش جدید</a>
       <button id="rcPrint" class="ease-ui h-12 rounded-2xl border border-[#28622D]/10 bg-white font-display text-sm font-black text-ink shadow-[0_6px_16px_rgba(40,98,45,0.08)] hover:border-[#28622D]/30 active:scale-95">چاپ / ذخیره رسید</button>
     </div>
@@ -1024,7 +1014,7 @@
     <form id="promoForm" novalidate class="ease-ui flex h-12 items-center gap-1 rounded-full bg-sand-light p-1 ring-1 ring-cyprus/10 focus-within:bg-white focus-within:ring-2 focus-within:ring-[#28622D]">
       <svg class="mr-3 h-4 w-4 shrink-0 text-cyprus" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 9a3 3 0 1 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 1 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /> <path d="M9 9h.01" /> <path d="m15 9-6 6" /> <path d="M15 15h.01" /> </svg>
       <label for="promoInput" class="sr-only">کد تخفیف</label>
-      <input id="promoInput" dir="ltr" autocomplete="off" placeholder="کد تخفیف · NAKHL10" class="h-full min-w-0 flex-1 bg-transparent px-2 text-right text-sm font-bold uppercase text-cyprus outline-none placeholder:normal-case placeholder:font-normal placeholder:text-ink-soft">
+      <input id="promoInput" dir="ltr" autocomplete="off" placeholder="کد تخفیف" class="h-full min-w-0 flex-1 bg-transparent px-2 text-right text-sm font-bold uppercase text-cyprus outline-none placeholder:normal-case placeholder:font-normal placeholder:text-ink-soft">
       <button class="btn-cyprus h-full shrink-0 px-5 text-xs focus-visible:ring-offset-white">اعمال</button>
     </form>
     <p id="promoMsg" class="mt-2 min-h-[1rem] text-xs" aria-live="polite"></p>
@@ -1034,10 +1024,19 @@
       <div class="flex justify-between"><dt class="text-ink-muted">هزینه‌ی ارسال</dt><dd id="cartShipping" class="font-display font-bold text-ink">—</dd></div>
       <div class="mt-1 flex items-baseline justify-between border-t border-dashed border-cyprus/15 pt-3"><dt class="font-display font-bold text-ink">مبلغ قابل پرداخت</dt><dd class="font-display text-cyprus"><b id="cartTotal" class="text-2xl font-black tabular-nums">۰</b> <span class="text-xs font-bold">تومان</span></dd></div>
     </dl>
-    <button id="checkout" class="btn-cyprus mt-5 h-14 w-full text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg>پرداخت و تکمیل خرید</button>
+    <button id="checkout" class="btn-cyprus mt-5 h-14 w-full text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg>ثبت سفارش</button>
+    <p class="mt-2 text-center text-xs leading-6 text-ink-muted">بعد از ثبت، متن سفارش در پیامک آماده می‌شود؛ پرداخت پس از تماس کارشناس.</p>
     <p id="loginHint" class="mt-3 text-center text-xs text-ink-soft">حساب کاربری دارید؟ <a href="#auth" class="font-bold text-cyprus underline-offset-4 hover:underline">ورود</a></p>
   </div>
 </aside>
+
+<!-- Quick view (product sheet) -->
+<div id="qvOverlay" class="qv-ov" hidden></div>
+<div id="qv" class="qv" role="dialog" aria-modal="true" aria-label="نمایش سریع محصول" hidden>
+  <span class="qv-grab" aria-hidden="true"></span>
+  <button id="qvClose" type="button" class="qv-x" aria-label="بستن"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div id="qvBody"></div>
+</div>
 
 <!-- Welcome banner (login → redirect) -->
 <div id="welcome" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-4 z-50 flex items-center gap-2 rounded-full border border-white/25 bg-[#28622D] px-6 py-2.5 text-sm font-bold text-white shadow-2xl"></div>
