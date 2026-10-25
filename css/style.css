@@ -361,13 +361,6 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 .skip-link{position:fixed;top:12px;right:12px;z-index:200;padding:10px 18px;border-radius:999px;background:#fff;color:#28622D;font-weight:700;box-shadow:0 8px 24px rgba(17,44,19,.25);transform:translateY(-200%);transition:transform .2s}
 .skip-link:focus{transform:none;outline:2px solid #28622D;outline-offset:2px}
 [data-view]:focus{outline:none}
-/* admin panel on phones: all 5 sections visible as a grid, and the logout button is reachable */
-@media (max-width:1023px){
-  #admTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
-  #admTabs .side-dark{position:relative;flex-direction:column;justify-content:center;gap:4px;height:auto;min-height:64px;padding:8px 4px;font-size:12px;white-space:normal;text-align:center;line-height:1.4}
-  #admTabs #admNewBadge{position:absolute;top:6px;left:6px;margin:0}
-  #admLogout{height:2.5rem;justify-content:center;font-size:12px}
-}
 /* 1024–1279: the header has less room — account shows as an icon, and the menu links step aside while searching */
 @media (min-width:1024px) and (max-width:1279px){
   #userLabel{display:none!important}
@@ -471,7 +464,6 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 .db-oc-img{position:relative;height:108px;overflow:hidden;border-radius:16px;background:#F6FAF6}
 .db-oc-more{position:absolute;bottom:8px;left:8px;height:22px;padding:0 8px;display:grid;place-items:center;border-radius:999px;background:#fff;font:700 11px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-g)}
 .db-link{display:grid;place-items:center;width:34px;height:34px;border-radius:999px;background:#F0F7F1;color:var(--db-g);flex-shrink:0}
-.db-favs > li{width:168px;border-radius:22px!important}
 .db-empty{flex:1 0 100%;padding:22px;border-radius:22px;border:1.5px dashed rgba(40,98,45,.2);text-align:center;font-size:13px;color:var(--db-soft)}
 .db-empty a{font-weight:700;color:var(--db-g)}
 .db-chart > div > div{height:5rem!important}
@@ -516,3 +508,61 @@ body:not([data-view="dashboard"]) #dashDock{display:none}
 .db-note small{display:block;margin-top:2px;font-size:12px;line-height:1.6;color:var(--db-soft)}
 .db-note em{display:block;margin-top:2px;font-style:normal;font-size:10px;color:#9AB09D}
 .db-note-empty{padding:22px 8px;text-align:center;font-size:13px;color:var(--db-soft)}
+
+/* four shortcuts share the row evenly — no sideways scrolling needed */
+.db-chips{overflow:visible;margin-inline:0;padding:0 0 4px}
+.db-chip{flex:1 1 0;width:auto;min-width:0}
+
+/* ══════ Admin panel · same app style ══════ */
+.db-eyebrow{font:700 12px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-soft)}
+.db-count{display:inline-grid;place-items:center;min-width:22px;height:22px;margin-inline-start:4px;padding:0 6px;border-radius:999px;background:#E0782F;color:#fff;font-size:11px;vertical-align:middle}
+.db-count:empty{display:none}
+.db-hero-num{margin-top:2px;font-family:Peyda,Vazirmatn,Tahoma,sans-serif}
+.db-hero-num b{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums}
+.db-hero-num small{font-size:12px;color:rgba(255,255,255,.75)}
+.db-pill-w{display:inline-flex;gap:4px;background:#fff;color:#28622D}
+.adm-me-btn{cursor:pointer;transition:transform .2s}
+.adm-me-btn:active{transform:scale(.94)}
+@media (min-width:1024px){ .adm-me-btn{pointer-events:none} }   /* desktop logs out from the sidebar */
+.adm-me{width:min(280px,calc(100vw - 24px))}
+.adm-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.adm-kpi{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 6px;border-radius:22px;background:#fff;box-shadow:var(--db-sh);text-align:center;transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.adm-kpi:active{transform:scale(.96)}
+.adm-kpi i{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:#F0F7F1;color:var(--db-g)}
+.adm-kpi b{font:900 22px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-ink);font-variant-numeric:tabular-nums;line-height:1}
+.adm-kpi span{font-size:11px;font-weight:700;color:var(--db-soft);line-height:1.5}
+.adm-ring{display:grid;place-items:center;width:58px;height:58px;border-radius:999px}
+.adm-ring span{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:#fff;font:900 13px Peyda,Vazirmatn,Tahoma,sans-serif!important;color:var(--db-g)!important}
+.adm-today{display:grid;gap:10px}
+@media (min-width:768px){ .adm-today{grid-template-columns:repeat(2,minmax(0,1fr))} }
+.adm-task{padding:14px;border-radius:22px;background:#fff;box-shadow:var(--db-sh)}
+.adm-task-top{display:flex;align-items:center;gap:12px}
+.adm-task-av{width:44px;height:44px;flex-shrink:0;font-size:16px}
+.adm-acts{display:flex;gap:6px;flex-shrink:0}
+.adm-ok,.adm-del{display:grid;place-items:center;width:42px;height:42px;border-radius:999px;transition:background .2s,color .2s,transform .2s}
+.adm-ok{background:#E3F2E5;color:#28622D}
+.adm-ok:hover{background:#28622D;color:#fff}
+.adm-del{background:#FDECEC;color:#DC2626}
+.adm-del:hover{background:#DC2626;color:#fff}
+.adm-ok:active,.adm-del:active{transform:scale(.9)}
+.adm-del.confirming{width:auto;padding:0 12px;background:#DC2626;color:#fff;font-size:12px;font-weight:700}
+.adm-task-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:10px 12px;border-radius:14px;background:#F6FAF6;font-size:12px;color:var(--db-soft)}
+.adm-task-foot b{flex-shrink:0;font:900 14px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-g);font-variant-numeric:tabular-nums}
+.adm-task-foot small{font-size:10px;font-weight:700}
+.adm-task-empty{display:flex;align-items:center;gap:12px;padding:18px;border-radius:22px;background:#fff;box-shadow:var(--db-sh);font-size:13px;color:var(--db-soft)}
+.adm-task-empty i{display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:999px;background:#E3F2E5;color:#28622D}
+.adm-hall{width:168px;padding:14px;border-radius:22px;background:#fff;box-shadow:var(--db-sh)}
+@media (min-width:1024px){ .adm-hall{flex:1 1 0;width:auto} #admHalls{flex-wrap:nowrap} }
+.db-dock button{position:relative}
+.db-dock-badge{position:absolute;top:6px;left:8px;min-width:18px;height:18px;padding:0 5px;display:grid;place-items:center;border-radius:999px;background:#E0782F;color:#fff;font:700 10px Peyda,Vazirmatn,Tahoma,sans-serif;font-style:normal;box-shadow:0 0 0 2px #fff}
+.db-dock button[aria-current="page"] .db-dock-badge{position:static;box-shadow:none;background:#fff;color:#28622D}
+body:not([data-view="admin"]) #admDock{display:none}
+@media (min-width:1024px){ #admDock{display:none!important} }
+#adminView nav[aria-label="مسیر صفحه"]{display:none}
+@media (min-width:1024px){ #adminView nav[aria-label="مسیر صفحه"]{display:flex} }
+@media (max-width:1023px){
+  #adminView > section{padding-top:12px;padding-bottom:112px}
+  #adminView .db-pane .card{border-radius:22px;border:0;box-shadow:var(--db-sh)}
+}
+.db-tier{white-space:nowrap}
+@media (min-width:1024px){ #admHalls > li.adm-hall{flex:1 1 0;width:auto} }

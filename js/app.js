@@ -62,7 +62,7 @@
     get: (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } },
     set: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
   };
-  const cart = {}, favs = new Set((store.get('nakhl:favs', []) || []).filter(id => byId[id]));
+  const cart = {};
   Object.entries(store.get('nakhl:cart', {}) || {}).forEach(([id, q]) => { if (byId[id] && q > 0) cart[id] = Math.min(99, q | 0); });
   let user = null, admin = null;            // set from the session in the accounts section
   Object.entries(store.get('nakhl:inv', {}) || {}).forEach(([id, v]) => { if (byId[id]) { byId[id].price = +v.price || byId[id].price; byId[id].stock = Math.max(0, v.stock | 0); } });
@@ -94,7 +94,7 @@
   /* product card — floating 3D image: lifts, grows and tilts on hover with a soft green glow behind it.
      Real photos: set `img: 'img/products/<id>.webp'` on a product (transparent PNG/WebP looks best). */
   const cardHTML = p => {
-    const q = cart[p.id] || 0, fav = favs.has(p.id);
+    const q = cart[p.id] || 0;
     return `
     <article class="p-card group relative flex flex-col rounded-3xl border border-[#28622D]/10 p-4 sm:p-5" data-id="${p.id}">
       <div class="relative">
@@ -105,9 +105,6 @@
         </div>
         <span class="absolute right-2 top-2 rounded-full ${p.badge.includes('ارگانیک') ? 'bg-cyprus-soft text-cyprus ring-1 ring-cyprus/15' : 'bg-white text-cyprus-mid ring-1 ring-cyprus/10'} px-2.5 py-1 font-display text-[11px] font-bold shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)]">${p.stock > 0 ? p.badge : 'ناموجود'}</span>
         <div class="p-tools absolute left-2 top-2 flex flex-col gap-1.5">
-          <button class="fav ease-ui grid h-9 w-9 place-items-center rounded-full bg-white shadow-sm hover:scale-110 hover:text-cyprus active:scale-90 ${fav ? 'text-cyprus' : 'text-ink-soft'}" aria-pressed="${fav}" aria-label="علاقه‌مندی: ${p.name}">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="${fav ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
-          </button>
           <button class="quick ease-ui grid h-9 w-9 place-items-center rounded-full bg-white text-ink-soft shadow-sm hover:scale-110 hover:text-cyprus active:scale-90" aria-label="نمایش سریع ${p.name}">${svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 17, 2)}</button>
         </div>
       </div>
@@ -218,21 +215,12 @@
       if (dec) { setQty(id, q - 1); if (q - 1 === 0) $('.add', buy).focus({ preventScroll: true }); }
       return;
     }
-    const fav = e.target.closest('.fav');
-    if (fav) {
-      const id = fav.closest('.p-card').dataset.id, on = !favs.has(id);
-      on ? favs.add(id) : favs.delete(id);
-      $$(`.p-card[data-id="${id}"] .fav`).forEach(f => { f.setAttribute('aria-pressed', on); f.classList.toggle('text-cyprus', on); f.classList.toggle('text-ink-soft', !on); $('svg', f).setAttribute('fill', on ? 'currentColor' : 'none'); });
-      store.set('nakhl:favs', [...favs]);
-      toast(on ? 'به علاقه‌مندی‌ها اضافه شد' : 'از علاقه‌مندی‌ها حذف شد');
-      return;
-    }
     const quick = e.target.closest('.quick');
     if (quick) openQV(quick.closest('.p-card').dataset.id, quick);
     if (e.target.closest('#qvOverlay, #qvClose')) closeQV();
   });
 
-  /* ── Quick view: bottom sheet on phones, centered card on desktop (same card → add/favourite keep working) ── */
+  /* ── Quick view: bottom sheet on phones, centered card on desktop (same card → add keeps working) ── */
   let qvFrom = null;
   function openQV(id, from) {
     qvFrom = from; $('#qvBody').innerHTML = cardHTML(byId[id]);
@@ -816,17 +804,6 @@
   const TRACK = [['ثبت سفارش', 0], ['تأیید سفارش', 1], ['بسته‌بندی در سالن سرد (۲ تا ۴ درجه)', 6], ['تحویل به کامیون یخچال‌دار', 20], ['در مسیر مقصد', 30], ['تحویل به مشتری', 48]];
   const TRACK_AT = { pending: 1, processing: 2, shipped: 4, delivered: 5 };
   const pm = new Intl.DateTimeFormat('fa-IR-u-nu-latn', { year: 'numeric', month: 'numeric' }), mon = new Intl.DateTimeFormat('fa-IR', { month: 'short' });
-  const favCard = p => `
-      <li class="card card-hover flex flex-col gap-3 p-4">
-        <div class="aspect-square overflow-hidden rounded-2xl bg-white ring-1 ring-[#28622D]/5">${thumb(p)}</div>
-        <div class="min-w-0"><p class="truncate font-display text-sm font-black text-cyprus">${p.name}</p><p class="mt-0.5 text-[11px] text-ink-soft">${p.unit}</p></div>
-        <p class="font-display font-black tabular-nums text-cyprus">${fa(p.price)} <span class="text-[10px] font-bold text-cyprus-mid">تومان</span></p>
-        <div class="mt-auto flex gap-2">
-          <button data-qadd="${p.id}" class="btn-cyprus h-10 flex-1 px-2 text-xs"${p.stock > 0 ? '' : ' disabled'}>${p.stock > 0 ? PLUS_S + 'افزودن' : 'ناموجود'}</button>
-          <button data-unfav="${p.id}" class="ease-ui grid h-10 w-10 shrink-0 place-items-center rounded-full bg-sand text-cyprus hover:bg-cyprus hover:text-white active:scale-90" aria-label="حذف ${p.name} از علاقه‌مندی‌ها"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
-        </div>
-      </li>`;
-  const favEmpty = `<li class="col-span-full rounded-3xl border border-dashed border-cyprus/20 p-6 text-center text-sm text-ink-muted">هنوز محصولی را نشان نکرده‌اید. روی قلبِ کارت محصولات بزنید. <a href="#products" class="font-bold text-cyprus underline-offset-4 hover:underline">مشاهده‌ی محصولات</a></li>`;
 
   function renderDash() {
     $('#dashBody').hidden = !user;
@@ -890,15 +867,6 @@
           <div class="min-w-0 flex-1"><p class="db-hero-t">الان سفارشی در راه ندارید</p><p class="db-hero-s">سفارش بعدی‌تان اینجا مرحله‌به‌مرحله دیده می‌شود.</p></div></div>
         <div class="db-hero-foot"><a href="#products" class="db-ghost db-ghost-w">${svg('<path d="m15 18-6-6 6-6"/>', 14, 2.4)}شروع خرید</a></div>`;
 
-    /* recent orders row */
-    $('#dbRecent').innerHTML = mine.length ? mine.slice(0, 6).map(o => { const p = byId[o.items[0][0]]; return `
-      <li class="db-oc">
-        <div class="db-oc-img">${thumb(p, ' mini')}${o.items.length > 1 ? `<span class="db-oc-more">+${fa(o.items.length - 1)}</span>` : ''}</div>
-        <div class="min-w-0"><p class="truncate font-display text-sm font-black text-cyprus" dir="ltr" style="text-align:right">${o.id}</p><p class="mt-0.5 text-[11px] text-ink-soft">${dateFa(o.date)}</p></div>
-        <p class="font-display font-black tabular-nums text-ink">${fa(o.total)} <small class="text-[11px] font-bold text-cyprus-mid">تومان</small></p>
-        <div class="mt-auto flex items-center justify-between gap-2">${statusPill(o.status)}<a href="#receipt/${o.id}" class="db-link" aria-label="رسید ${o.id}">${svg('<path d="m15 18-6-6 6-6"/>', 16, 2.4)}</a></div>
-      </li>`; }).join('') : '';
-    $('#dbRecentSec').hidden = !mine.length;
 
     /* cold storage / bulk inquiry status */
     const reqs = requests.filter(r => r.phone === user.phone), lastReq = reqs[0];
@@ -937,10 +905,6 @@
       : `<p class="font-display font-black text-cyprus">درخواست سردخانه</p><p class="mt-3 text-sm text-ink-muted">هنوز درخواستی برای رزرو سالن یا خرید عمده ثبت نکرده‌اید.</p><a href="#storage" data-service="storage" class="btn-ghost mt-4 h-11 px-5 text-sm">ثبت درخواست</a>`;
 
     /* wishlist */
-    const fv = products.filter(p => favs.has(p.id));
-    $('#ovFavs').innerHTML = fv.slice(0, 8).map(favCard).join('');
-    $('#dbFavSec').hidden = !fv.length;
-    $('#favGrid').innerHTML = fv.length ? fv.map(favCard).join('') : favEmpty;
 
     $('#dashOrders').innerHTML = mine.length ? mine.map(o => `
       <li class="card p-5 sm:p-6">
@@ -992,8 +956,6 @@
     const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
     const add = e.target.closest('[data-qadd]');
     if (add) { const id = add.dataset.qadd; setQty(id, (cart[id] || 0) + 1); fly(add, () => { bump($('#cartCount')); updateBar(true); }); toast(`${byId[id].name} به سبد اضافه شد`); return; }
-    const un = e.target.closest('[data-unfav]');
-    if (un) { favs.delete(un.dataset.unfav); store.set('nakhl:favs', [...favs]); renderDash(); toast('از علاقه‌مندی‌ها حذف شد'); return; }
     const cp = e.target.closest('[data-copy]');
     if (cp) { try { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('کد رهگیری کپی شد'), () => toast(cp.dataset.copy)); } catch { toast(cp.dataset.copy); } }
   });
@@ -1082,13 +1044,33 @@
   };
 
   function renderAdmin() {
-    $('#admGuest').hidden = !!admin; $('#admBody').hidden = !admin;
+    $('#admGuest').hidden = !!admin; $('#admBody').hidden = !admin; $('#admDock').hidden = !admin;
     if (!admin) return;
     setTab($('#admTabs'), admTab, $('#admBody'));
+    $$('#admDock [data-tab]').forEach(b => b.dataset.tab === admTab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
     $('#admTitle').textContent = TITLES[admTab];
     $('#admPhone').textContent = admin.phone;
+    const ini = (admin.name || 'م').trim()[0];
+    $('#admName').textContent = admin.name; $('#admMeBtn').textContent = ini; $('#admMeAv').textContent = ini;
+    $('#admMeName').textContent = admin.name; $('#admMePhone').textContent = admin.phone;
     const k = s => orders.filter(o => o.status === s).length;
     $('#admNewBadge').textContent = fa(k('awaiting')); $('#admNewBadge').hidden = !k('awaiting');
+    $('#admDockBadge').textContent = fa(k('awaiting')); $('#admDockBadge').hidden = !k('awaiting');
+    /* bell: new orders waiting for ✓ and cold-storage requests still under review */
+    {
+      const waitO = orders.filter(o => o.status === 'awaiting'), waitR = requests.filter(r => r.status === 'review');
+      const notes = [
+        ...waitO.map(o => ({ d: o.date, go: 'orders', ic: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
+          t: `سفارش تازه <span dir="ltr">${o.id}</span>`, s: `${esc(o.name || custName(o.phone))} · ${fa(o.total)} تومان — منتظر تایید شما` })),
+        ...waitR.map(r => ({ d: r.date, go: 'storage', ic: '<path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/>',
+          t: `${REQ_TYPES[r.type] || 'درخواست'} <span dir="ltr">${r.id}</span>`, s: `${esc(r.name)} — در انتظار بررسی` }))
+      ].sort((a, b) => b.d - a.d).slice(0, 8);
+      $('#admDot').hidden = !notes.length;
+      $('#admNotesN').textContent = notes.length ? fa(notes.length) + ' مورد' : '';
+      $('#admNotesList').innerHTML = notes.length ? notes.map(n => `
+        <li><button type="button" data-goto-n="${n.go}" class="db-note new"><i>${svg(n.ic, 16, 2)}</i><span class="min-w-0 flex-1"><b>${n.t}</b><small>${n.s}</small><em>${dateFa(n.d)} · ${clock(n.d)}</em></span></button></li>`).join('')
+        : `<li class="db-note-empty">کار تازه‌ای نیست؛ همه‌چیز تایید شده ✓</li>`;
+    }
     const used = HALLS.reduce((s, h) => s + h.used, 0), cap = HALLS.reduce((s, h) => s + h.cap, 0), occ = Math.round(used / cap * 100);
 
     if (admTab === 'stats') {
@@ -1107,10 +1089,28 @@
       $('#kNew').textContent = fa(k('awaiting')); $('#kProc').textContent = fa(k('processing'));
       $('#kRing').style.background = ring(occ); $('#kOcc').textContent = fa(occ) + '٪';
       $('#kOccText').textContent = `${fa(used)} از ${fa(cap)} تن`;
-      $('#admRecent').innerHTML = !orders.length ? '<li class="card p-8 text-center text-sm font-bold text-cyprus sm:col-span-2">هنوز سفارشی ثبت نشده است.</li>' : orders.slice(0, 4).map(o => `
-        <li class="card flex items-center gap-3 p-4"><div class="flex items-center gap-1">${thumbs(o.items.slice(0, 1))}</div>
-          <div class="min-w-0 flex-1"><p class="font-display text-sm font-black text-cyprus" dir="ltr" style="text-align:right">${o.id}</p><p class="tel text-xs text-ink-soft" dir="ltr" style="text-align:right">${o.phone}</p></div>
-          <div class="flex flex-col items-end gap-1">${statusPill(o.status)}<span class="font-display text-sm font-black tabular-nums text-cyprus">${fa(o.total)}</span></div></li>`).join('');
+      /* today's work: every order still waiting for ✓ (newest first) */
+      const wait = orders.filter(o => o.status === 'awaiting');
+      $('#admTodayN').textContent = wait.length ? fa(wait.length) : '';
+      $('#admToday').innerHTML = wait.length ? wait.slice(0, 6).map(o => { const nm = o.name || custName(o.phone); return `
+        <li class="adm-task">
+          <div class="adm-task-top">
+            <span class="db-avatar adm-task-av" aria-hidden="true">${esc(nm.trim()[0] || 'م')}</span>
+            <div class="min-w-0 flex-1"><p class="truncate font-display font-black text-ink">${esc(nm)}</p><p class="mt-0.5 text-xs text-ink-soft"><span dir="ltr" class="latin">${o.id}</span> · ${clock(o.date)} · ${fa(nItems(o))} کالا</p></div>
+            <div class="adm-acts">
+              <button data-rok="${o.id}" class="adm-ok" aria-label="تایید سفارش و پرداخت ${o.id}">${svg(ICO.ok, 18, 2.6)}</button>
+              <button data-rdel="${o.id}" class="adm-del" aria-label="حذف ${o.id}">${svg(ICO.del, 17, 2.2)}</button>
+            </div>
+          </div>
+          <div class="adm-task-foot"><span class="min-w-0 truncate">${o.items.map(([id, n]) => `${byId[id].name} × ${fa(n)}`).join('، ')}</span><b>${fa(o.total)} <small>تومان</small></b></div>
+        </li>`; }).join('') : `<li class="adm-task-empty"><i>${svg(ICO.ok, 20, 2.6)}</i>کار تازه‌ای نیست؛ همه‌ی سفارش‌ها و پرداخت‌ها تایید شده‌اند.</li>`;
+      $('#admHalls').innerHTML = HALLS.map(h => { const pc = Math.round(h.used / h.cap * 100); return `
+        <li class="adm-hall">
+          <p class="truncate font-display text-sm font-black text-ink">${h.name}</p>
+          <p class="mt-2 font-display text-2xl font-black tabular-nums text-cyprus">${fa(pc)}<small class="text-sm">٪</small></p>
+          <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-cyprus-soft"><div class="h-full w-full origin-right rounded-full bg-[#28622D]" style="transform:scaleX(${pc / 100})"></div></div>
+          <div class="mt-3 flex justify-between text-[11px] text-ink-soft"><span dir="ltr">${h.temp}°C</span><span>رطوبت ${fa(h.hum)}٪</span></div>
+        </li>`; }).join('');
     }
     if (admTab === 'orders') {
       $$('#admFilters .chip').forEach(b => { b.setAttribute('aria-pressed', b.dataset.f === admFilter); $('.c', b).textContent = fa(b.dataset.f === 'all' ? orders.filter(o => o.status !== 'awaiting').length : k(b.dataset.f)); });
@@ -1169,8 +1169,23 @@
         </li>`).join('') : `<li class="card p-8 text-center text-sm text-ink-muted">درخواستی ثبت نشده است.</li>`;
     }
   }
-  $('#admTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b && b.dataset.tab !== admTab) { loadBar(); admTab = b.dataset.tab; renderAdmin(); } });
-  $$('[data-goto]').forEach(b => b.addEventListener('click', () => { loadBar(); admTab = b.dataset.goto; renderAdmin(); }));
+  const goAdmTab = t => { if (t !== admTab) { loadBar(); admTab = t; renderAdmin(); } scrollTo({ top: 0, behavior: smooth }); };
+  $('#admTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goAdmTab(b.dataset.tab); });
+  $('#admDock').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goAdmTab(b.dataset.tab); });
+  $$('[data-goto]').forEach(b => b.addEventListener('click', () => goAdmTab(b.dataset.goto)));
+  /* bell panel + account menu in the admin top bar (one open at a time) */
+  {
+    const pops = [[$('#admBell'), $('#admNotes')], [$('#admMeBtn'), $('#admMe')]];
+    const close = () => pops.forEach(([b, p]) => { p.hidden = true; p.classList.remove('on'); b.setAttribute('aria-expanded', false); });
+    pops.forEach(([b, p]) => b.addEventListener('click', e => {
+      e.stopPropagation(); const open = p.hidden; close();
+      if (open) { p.hidden = false; b.setAttribute('aria-expanded', true); requestAnimationFrame(() => p.classList.add('on')); }
+    }));
+    $('#admNotes').addEventListener('click', e => { const n = e.target.closest('[data-goto-n]'); if (n) { close(); goAdmTab(n.dataset.gotoN); } });
+    document.addEventListener('click', e => { if (!e.target.closest('#admNotes, #admMe')) close(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    addEventListener('hashchange', close);
+  }
   $('#admFilters').addEventListener('click', e => { const b = e.target.closest('.chip'); if (b) { loadBar(); admFilter = b.dataset.f; renderAdmin(); } });
   $('#admBody').addEventListener('click', e => {
     const s = e.target.closest('[data-st]');
