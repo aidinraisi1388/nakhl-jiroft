@@ -309,6 +309,9 @@
   bar.addEventListener('click', openCart);
   $('#closeCart').addEventListener('click', () => closeCart());
   overlay.addEventListener('click', () => closeCart());
+  /* iPhone: the page behind an open sheet must not scroll, and a tap on the dark backdrop must always close it */
+  [overlay, $('#qvOverlay')].forEach(o => o.addEventListener('touchmove', e => e.preventDefault(), { passive: false }));
+  $('#qvOverlay').addEventListener('click', () => closeQV());
   drawer.addEventListener('click', e => {
     const b = e.target.closest('[data-act]');
     if (b) {
@@ -386,7 +389,7 @@
     name === 'home' ? play() : clearInterval(timer);
     return true;
   };
-  const toTop = () => window.scrollTo({ top: 0, behavior: 'instant' });
+  const toTop = () => { const r = document.documentElement.style; r.scrollBehavior = 'auto'; window.scrollTo(0, 0); r.scrollBehavior = ''; };   // jump, not glide (works in every Safari)
   const route = () => {
     lastHash = location.hash;
     const h = decodeURIComponent(location.hash.slice(1));
@@ -453,6 +456,7 @@
   const openSearch = open => { ns.classList.toggle('open', open); header.classList.toggle('searching', open); st.setAttribute('aria-expanded', open); si.tabIndex = open ? 0 : -1; if (open) si.focus(); };
   st.addEventListener('click', () => openSearch(!ns.classList.contains('open')));
   si.addEventListener('blur', () => { if (!si.value) openSearch(false); });
+  addEventListener('hashchange', () => { if (!location.hash.startsWith('#products') && ns.classList.contains('open')) { si.value = ''; query = ''; openSearch(false); si.blur(); } });   // leaving the catalog closes the search
   const menuBtn = $('#menuBtn'), menu = $('#mobileMenu');
   const shade = $('#menuShade');
   const setMenu = open => {
@@ -483,7 +487,7 @@
   function play() { clearInterval(timer); if (!reduce && current === 'home') timer = setInterval(() => go(cur + 1), 6000); }
   dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.to); play(); }));
   const hero = slides[0].closest('section');
-  hero.addEventListener('mouseenter', () => clearInterval(timer)); hero.addEventListener('mouseleave', play);
+  if (matchMedia('(hover:hover)').matches) { hero.addEventListener('mouseenter', () => clearInterval(timer)); hero.addEventListener('mouseleave', play); }   // iPhone fires mouseenter on tap and never mouseleave → autoplay would stop for good
   hero.addEventListener('focusin', () => clearInterval(timer));
   let rz = 0; addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { measure(); paintTrack(cur * step, false); }); });
   go(0, false);
@@ -947,11 +951,18 @@
     };
     bell.addEventListener('click', e => { e.stopPropagation(); setNotes(box.hidden); });
     box.addEventListener('click', e => { if (e.target.closest('a,button')) { $$('.db-note.new', box).forEach(n => n.classList.remove('new')); setNotes(false); } });
-    document.addEventListener('click', e => { if (!box.hidden && !e.target.closest('#dbNotes')) setNotes(false); });
+    document.addEventListener('pointerdown', e => { if (!box.hidden && !e.target.closest('#dbNotes, #dbBell')) setNotes(false); });
     addEventListener('keydown', e => { if (e.key === 'Escape' && !box.hidden) setNotes(false); });
     addEventListener('hashchange', () => { if (!box.hidden) setNotes(false); });
   }
-  $('#dbSearch').addEventListener('click', () => { location.hash = '#products'; setTimeout(() => { if (!$('#navSearch').classList.contains('open')) $('#searchToggle').click(); }, 620); });
+  /* phones: hide the bottom bars while the keyboard is up */
+  if (matchMedia('(pointer:coarse)').matches) {
+    const typing = el => el && el.matches && el.matches('input:not([type=checkbox]):not([type=radio]),textarea,select');
+    document.addEventListener('focusin', e => { if (typing(e.target)) document.documentElement.classList.add('typing'); });
+    document.addEventListener('focusout', () => setTimeout(() => { if (!typing(document.activeElement)) document.documentElement.classList.remove('typing'); }, 60));
+  }
+  /* open the header search inside the tap itself, so iPhone shows the keyboard (it refuses focus() from a timer) */
+  $('#dbSearch').addEventListener('click', () => { scrollTo({ top: 0, behavior: smooth }); if (!$('#navSearch').classList.contains('open')) $('#searchToggle').click(); else $('#search').focus(); });
   $('#dashBody').addEventListener('click', e => {
     const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
     const add = e.target.closest('[data-qadd]');
@@ -1182,7 +1193,7 @@
       if (open) { p.hidden = false; b.setAttribute('aria-expanded', true); requestAnimationFrame(() => p.classList.add('on')); }
     }));
     $('#admNotes').addEventListener('click', e => { const n = e.target.closest('[data-goto-n]'); if (n) { close(); goAdmTab(n.dataset.gotoN); } });
-    document.addEventListener('click', e => { if (!e.target.closest('#admNotes, #admMe')) close(); });
+    document.addEventListener('pointerdown', e => { if (!e.target.closest('#admNotes, #admMe, #admBell, #admMeBtn')) close(); });
     addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     addEventListener('hashchange', close);
   }

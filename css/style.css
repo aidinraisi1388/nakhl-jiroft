@@ -31,8 +31,7 @@ h1,h2,h3{text-wrap:balance}
 @media (hover:hover){
   .hdr-pill:hover::after{animation:none}
   #userBtn:hover .hp-ic{animation:icNod .6s cubic-bezier(.16,1,.3,1)}
-  #cartPill:hover .hp-ic{animation:icSwing .7s cubic-bezier(.16,1,.3,1)}
-}
+  #cartPill:hover .hp-ic{animation:icSwing .7s cubic-bezier(.16,1,.3,1)}}
 .hdr-pill:active{transform:scale(.95)}
 @keyframes icNod{40%{transform:translateY(-3px) scale(1.12)}}
 @keyframes icSwing{25%{transform:rotate(-14deg) translateY(-1px)}55%{transform:rotate(10deg)}80%{transform:rotate(-4deg)}}
@@ -54,15 +53,14 @@ h1,h2,h3{text-wrap:balance}
   .c-chk{grid-area:chk;padding-top:2px!important}.c-id{grid-area:id}.c-date{grid-area:date}.c-cust{grid-area:cust;margin-top:.6rem}
   .c-items{grid-area:items;margin-top:.25rem}.c-amt{grid-area:amt;margin-top:.35rem}.c-act{grid-area:act;align-self:center}
   .c-date span{display:inline!important}
-  .rev-tbl td[colspan]{display:block;padding:2.5rem 1rem!important}
-}
+  .rev-tbl td[colspan]{display:block;padding:2.5rem 1rem!important}}
 /* grids without an explicit column count get one shrinkable column (no sideways overflow on phones);
    :where() has zero specificity, so every grid-cols-* utility still wins */
 :where(.grid){grid-template-columns:minmax(0,1fr)}
 /* the floating cart capsule belongs to the shop pages only */
 body:not([data-view="home"]):not([data-view="catalog"]) #cartBar{display:none}
 /* product tools (♥, 🔍) are always visible on touch screens — there is no hover there */
-@media (hover:none){ .p-card .p-tools{opacity:1;transform:none} }
+@media (hover:none){ .p-card .p-tools{opacity:1;transform:none}}
 .chk{width:18px;height:18px;accent-color:#28622D;cursor:pointer;vertical-align:middle}
 
 /* ── Mobile side menu: one transform + one opacity, GPU only ── */
@@ -72,7 +70,8 @@ html.menu-open .m-drawer{box-shadow:16px 0 48px rgba(15,36,17,.28)!important}
 html.menu-open .m-drawer{transform:none}
 html.menu-open .m-shade{opacity:1;pointer-events:auto}
 .m-link{display:flex;align-items:center;gap:.75rem;height:3.25rem;padding:0 .85rem;border-radius:1rem;font-family:Peyda,Vazirmatn,Tahoma,sans-serif;font-weight:700;color:#14301A;transition:background-color .2s}
-.m-link:active,.m-link:hover{background:#F0F7F1}
+.m-link:active{background:#F0F7F1}
+@media (hover:hover){.m-link:hover{background:#F0F7F1}}
 html.menu-open .m-link{animation:mIn .6s cubic-bezier(.22,1,.36,1) .08s both}
 html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:nth-child(3){animation-delay:.18s}html.menu-open .m-link:nth-child(4){animation-delay:.23s}html.menu-open .m-link:nth-child(5){animation-delay:.28s}
 @keyframes mIn{from{opacity:0;transform:translate3d(-22px,0,0)}}
@@ -81,8 +80,7 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 @media (max-width:1023px){
   #navCapsule{-webkit-backdrop-filter:none;backdrop-filter:none;background:#28622D}   /* a blurred sticky bar repaints every scroll frame on iPhone */
   .rv.rv-in{animation-duration:.5s}
-  @keyframes rvIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}
-}
+  @keyframes rvIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}}
 
 /* ── Scroll reveal ── */
 .rv{opacity:0}
@@ -122,8 +120,7 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 .a-list > :nth-child(2){animation-delay:.12s}.a-list > :nth-child(3){animation-delay:.24s}
 @media (prefers-reduced-motion:no-preference){
   .a-drift{animation:aDrift 14s ease-in-out infinite alternate}
-  .a-drift2{animation:aDrift2 18s ease-in-out infinite alternate}
-}
+  .a-drift2{animation:aDrift2 18s ease-in-out infinite alternate}}
 @keyframes aDrift{to{transform:translate3d(60px,50px,0) scale(1.15)}}
 @keyframes aDrift2{to{transform:translate3d(-50px,-40px,0) scale(.9)}}
 @keyframes aMark{to{transform:translate3d(0,-14px,0) rotate(-4deg)}}
@@ -144,9 +141,8 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
   .p-card:hover .render .orb.duo + .orb{transform:translate3d(0,-14%,0) scale(1.1) rotate(-3deg)}
   .p-card:hover .render .ground{transform:translateX(-50%) scale(.72);opacity:.5}
   .p-card:hover .p-img img{transform:translate3d(0,-6px,0) scale(1.1) rotate(3deg)}
-  .p-card:hover .p-tools{opacity:1;transform:none}
-}
-@media (hover:none){ .p-card .p-tools{opacity:1;transform:none} }
+  .p-card:hover .p-tools{opacity:1;transform:none}}
+@media (hover:none){ .p-card .p-tools{opacity:1;transform:none}}
 .p-card.enter{animation:cardIn .3s var(--ease) both}
 @keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(.98)}}
 
@@ -178,7 +174,7 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 .buy .add,.buy .step{position:absolute;inset:0;border-radius:999px;transition:all .25s var(--ease)}
 .buy .add{display:flex;align-items:center;justify-content:center;gap:6px;background:#28622D;color:#fff;
   font:800 14px/1 Peyda,Vazirmatn,sans-serif;box-shadow:0 8px 18px -8px rgba(40,98,45,.6)}
-.buy .add:hover{background:#377B3D;transform:translateY(-1px)}
+@media (hover:hover){.buy .add:hover{background:#377B3D;transform:translateY(-1px)}}
 .buy .add:active{transform:scale(.97)}
 .buy .add:focus-visible{outline:2px solid #28622D;outline-offset:2px}
 .buy .add .ok{display:none}
@@ -192,7 +188,7 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 .buy[data-state="open"] .add{opacity:0;visibility:hidden;transform:scale(.96)}
 .stepper button{display:grid;place-items:center;width:36px;height:36px;border-radius:999px;background:#fff;color:#28622D;
   box-shadow:0 2px 6px rgba(40,98,45,.1);transition:all .2s var(--ease)}
-.stepper button:hover{background:#28622D;color:#fff}
+@media (hover:hover){.stepper button:hover{background:#28622D;color:#fff}}
 .stepper button:active{transform:scale(.88)}
 .stepper button:focus-visible{outline:2px solid #28622D;outline-offset:1px}
 .stepper .num{min-width:24px;text-align:center;font:900 16px/1 Peyda,Vazirmatn,sans-serif;color:#28622D}
@@ -213,12 +209,11 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 /* ── Cart drawer: bottom sheet on phones, side panel on larger screens ── */
 #cartOverlay{opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s}
 #cartOverlay.open{opacity:1;visibility:visible}
-.drawer{left:0;right:0;bottom:0;max-height:88vh;border-radius:32px 32px 0 0;transform:translateY(105%);visibility:hidden;
+.drawer{left:0;right:0;bottom:0;max-height:88vh;max-height:88dvh;border-radius:32px 32px 0 0;transform:translateY(105%);visibility:hidden;
   transition:transform .4s var(--ease),visibility .4s;will-change:transform}
 .drawer.open{transform:none;visibility:visible}
 @media (min-width:640px){
-  .drawer{top:12px;bottom:12px;left:12px;right:auto;width:420px;max-height:none;border-radius:32px;transform:translateX(-110%)}
-}
+  .drawer{top:12px;bottom:12px;left:12px;right:auto;width:420px;max-height:none;border-radius:32px;transform:translateX(-110%)}}
 #shipBar{transform-origin:right;transition:transform .5s var(--ease)}
 
 /* ── Top loading bar: one scaleX animation (GPU), ~300ms fill then fade ── */
@@ -255,14 +250,13 @@ main.leaving{opacity:.45;transition:opacity .3s ease}
   body.print-receipt .rc-ok{animation:none}
   body.print-receipt .no-print{display:none!important}
   body.print-receipt #receiptCard{box-shadow:none;border-color:#E1EAE2}
-  body.print-receipt{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-}
+  body.print-receipt{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
 /* ── "Alive" frost sheen on cards: one transform per hover, no blur ── */
 .card-hover,.p-card{position:relative;overflow:hidden}
 .card-hover::after,.p-card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:1;
   background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);transform:translateX(110%);transition:transform .8s var(--ease)}
-@media (hover:hover){ .card-hover:hover::after,.p-card:hover::after{transform:translateX(-110%)} }
+@media (hover:hover){ .card-hover:hover::after,.p-card:hover::after{transform:translateX(-110%)}}
 
 /* ── Two-tone full-bleed section bands (Sand ⇄ Cyprus) — static paint, no JS ── */
 html,body{overflow-x:clip}
@@ -279,7 +273,7 @@ body.cart-on #footer{padding-bottom:5.5rem}
 .band-b::after{top:calc(54% - 1px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath d='M0 50.1 L15 49.2 L30 48.3 L45 47.2 L60 46.1 L75 44.8 L90 43.6 L105 42.3 L120 40.9 L135 39.7 L150 38.4 L165 37.2 L180 36.1 L195 35.1 L210 34.2 L225 33.5 L240 32.9 L255 32.4 L270 32.1 L285 32.0 L300 32.1 L315 32.3 L330 32.7 L345 33.2 L360 33.9 L375 34.8 L390 35.7 L405 36.8 L420 37.9 L435 39.2 L450 40.4 L465 41.7 L480 43.1 L495 44.3 L510 45.6 L525 46.8 L540 47.9 L555 48.9 L570 49.8 L585 50.5 L600 51.1 L615 51.6 L630 51.9 L645 52.0 L660 51.9 L675 51.7 L690 51.3 L705 50.8 L720 50.1 L735 49.2 L750 48.3 L765 47.2 L780 46.1 L795 44.8 L810 43.6 L825 42.3 L840 40.9 L855 39.7 L870 38.4 L885 37.2 L900 36.1 L915 35.1 L930 34.2 L945 33.5 L960 32.9 L975 32.4 L990 32.1 L1005 32.0 L1020 32.1 L1035 32.3 L1050 32.7 L1065 33.2 L1080 33.9 L1095 34.8 L1110 35.7 L1125 36.8 L1140 37.9 L1155 39.2 L1170 40.4 L1185 41.7 L1200 43.1 L1215 44.3 L1230 45.6 L1245 46.8 L1260 47.9 L1275 48.9 L1290 49.8 L1305 50.5 L1320 51.1 L1335 51.6 L1350 51.9 L1365 52.0 L1380 51.9 L1395 51.7 L1410 51.3 L1425 50.8 L1440 50.1 L1440 0 L0 0Z' fill='%23377B3D' fill-opacity='.45'/%3E%3Cpath d='M0 43.8 L15 44.0 L30 43.7 L45 43.0 L60 41.8 L75 40.3 L90 38.4 L105 36.3 L120 34.0 L135 31.7 L150 29.4 L165 27.1 L180 25.1 L195 23.3 L210 21.9 L225 20.8 L240 20.2 L255 20.0 L270 20.3 L285 21.0 L300 22.2 L315 23.7 L330 25.6 L345 27.7 L360 30.0 L375 32.3 L390 34.6 L405 36.9 L420 38.9 L435 40.7 L450 42.1 L465 43.2 L480 43.8 L495 44.0 L510 43.7 L525 43.0 L540 41.8 L555 40.3 L570 38.4 L585 36.3 L600 34.0 L615 31.7 L630 29.4 L645 27.1 L660 25.1 L675 23.3 L690 21.9 L705 20.8 L720 20.2 L735 20.0 L750 20.3 L765 21.0 L780 22.2 L795 23.7 L810 25.6 L825 27.7 L840 30.0 L855 32.3 L870 34.6 L885 36.9 L900 38.9 L915 40.7 L930 42.1 L945 43.2 L960 43.8 L975 44.0 L990 43.7 L1005 43.0 L1020 41.8 L1035 40.3 L1050 38.4 L1065 36.3 L1080 34.0 L1095 31.7 L1110 29.4 L1125 27.1 L1140 25.1 L1155 23.3 L1170 21.9 L1185 20.8 L1200 20.2 L1215 20.0 L1230 20.3 L1245 21.0 L1260 22.2 L1275 23.7 L1290 25.6 L1305 27.7 L1320 30.0 L1335 32.3 L1350 34.6 L1365 36.9 L1380 38.9 L1395 40.7 L1410 42.1 L1425 43.2 L1440 43.8 L1440 0 L0 0Z' fill='%2328622D'/%3E%3C/svg%3E");background-position:center top}
 /* cards that sit across a band edge get a deeper shadow so they "pop" */
 .pop,.band-b .p-card{box-shadow:0 1px 2px rgba(17,44,19,.06),0 10px 24px -10px rgba(17,44,19,.22),0 28px 52px -20px rgba(17,44,19,.42)}
-@media (hover:hover){ .pop:hover,.band-b .p-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 34px 60px -18px rgba(17,44,19,.5)} }
+@media (hover:hover){ .pop:hover,.band-b .p-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 34px 60px -18px rgba(17,44,19,.5)}}
 
 /* hero slides */
 #heroTrack{transform:translate3d(0,0,0);will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
@@ -294,30 +288,28 @@ body.cart-on #footer{padding-bottom:5.5rem}
 #navSearch.open{width:min(260px,48vw);background:rgba(255,255,255,.12)}
 #navSearch input{opacity:0;width:0;transform:translate3d(8px,0,0);transition:opacity .25s ease,transform .45s cubic-bezier(.22,1,.36,1)}
 #navSearch.open input{opacity:1;width:100%;transform:none;transition-delay:.12s}
-@media (max-width:639px){ #header.searching .brand-text{display:none} }
-@media (max-width:374px){ #header .brand-text{display:none} }          /* very small phones: logo only, so every button fits */
+@media (max-width:639px){ #header.searching .brand-text{display:none}}
+@media (max-width:374px){ #header .brand-text{display:none}}          /* very small phones: logo only, so every button fits */
 
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-}
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* ══════ Mobile review fixes (1405/08) ══════ */
 /* search open on phones: search takes the free space, account + menu step aside so the cart never gets pushed out */
 @media (max-width:639px){
   #header.searching #userBtn{display:none}   /* account stays reachable from the menu */
   #header.searching #navCapsule>.ms-auto{flex:1 1 auto;min-width:0}
-  #header.searching #navSearch.open{flex:1 1 auto;width:auto;min-width:0}
-}
+  #header.searching #navSearch.open{flex:1 1 auto;width:auto;min-width:0}}
 /* iOS Safari zooms into any field under 16px — keep all inputs at 16px on touch screens */
-@media (max-width:1023px){ #search,#promoInput,#custSearch,.field:not(.otp){font-size:16px} }
+@media (max-width:1023px){ #search,#promoInput,#custSearch,.field:not(.otp){font-size:16px}}
 /* quick view sheet */
-.qv-ov{position:fixed;inset:0;z-index:60;background:rgba(17,44,19,.45);backdrop-filter:blur(2px)}
-.qv{position:fixed;z-index:61;inset:auto 0 0 0;max-height:90vh;overflow-y:auto;overscroll-behavior:contain;background:#fff;border-radius:28px 28px 0 0;padding:28px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -20px 50px rgba(17,44,19,.25);animation:qvUp .32s cubic-bezier(.16,1,.3,1)}
+.qv-ov{position:fixed;inset:0;z-index:60;background:rgba(17,44,19,.45);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px)}
+.qv{position:fixed;z-index:61;inset:auto 0 0 0;max-height:90vh;max-height:90dvh;overflow-y:auto;overscroll-behavior:contain;background:#fff;border-radius:28px 28px 0 0;padding:28px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -20px 50px rgba(17,44,19,.25);animation:qvUp .32s cubic-bezier(.16,1,.3,1)}
 .qv[hidden],.qv-ov[hidden]{display:none}
 .qv-grab{position:absolute;top:10px;left:50%;width:44px;height:5px;margin-left:-22px;border-radius:9px;background:rgba(40,98,45,.18)}
 .qv-x{position:absolute;top:14px;left:14px;z-index:2;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:#F0F7F1;color:#28622D}
 .qv .p-card{border:0;padding:0;box-shadow:none;background:none}
-.qv .p-card:hover{transform:none}
+@media (hover:hover){.qv .p-card:hover{transform:none}}
 .qv .quick{display:none}
 .qv .aspect-square{aspect-ratio:auto;height:min(38vh,280px)}
 .qv .line-clamp-2{display:block;-webkit-line-clamp:unset;overflow:visible}
@@ -326,37 +318,33 @@ html.qv-lock{overflow:hidden}
 @keyframes qvUp{from{transform:translateY(100%)}to{transform:none}}
 @media (min-width:640px){
   .qv{inset:50% auto auto 50%;width:420px;border-radius:28px;transform:translate(-50%,-50%);animation:none}
-  .qv-grab{display:none}
-}
-@media (prefers-reduced-motion:reduce){ .qv{animation:none} }
+  .qv-grab{display:none}}
+@media (prefers-reduced-motion:reduce){ .qv{animation:none}}
 /* product cards on narrow phones: the pack-size pill stays on one line */
 .unit-pill{max-width:100%;white-space:nowrap}
-@media (max-width:420px){ .p-card .unit-pill svg{display:none} .p-card .unit-pill{padding-inline:8px} }
+@media (max-width:420px){ .p-card .unit-pill svg{display:none} .p-card .unit-pill{padding-inline:8px}}
 /* customer dashboard on phones: all 6 sections visible as a 3×2 grid instead of a hidden side-scroll */
 @media (max-width:1023px){
   #dashTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
   #dashTabs .side-btn{position:relative;flex-direction:column;justify-content:center;gap:4px;height:auto;min-height:64px;padding:8px 4px;font-size:12px;white-space:normal;text-align:center;line-height:1.4}
   #dashTabs .side-btn #dashBadge{position:absolute;top:6px;left:6px;margin:0}
-  #dashTabs + [data-logout]{height:2.5rem;justify-content:center;font-size:12px}
-}
+  #dashTabs + [data-logout]{height:2.5rem;justify-content:center;font-size:12px}}
 /* legibility on phones: nothing below 11px, most small labels at 12px */
 @media (max-width:639px){
   .text-\[9px\],.text-\[10px\]{font-size:11px}
-  .text-\[11px\]:not(.unit-pill){font-size:12px}
-}
+  .text-\[11px\]:not(.unit-pill){font-size:12px}}
 /* hero: button labels never break; 1024–1279 (small laptops / tablets landscape) gets a calmer headline and padding */
 .slide .btn-light,.slide .btn-line{white-space:nowrap}
 @media (min-width:1024px) and (max-width:1279px){
   .slide{padding:2.5rem!important}
   .slide h1,.slide h2{font-size:42px!important}
-  .slide .btn-light,.slide .btn-line{padding-inline:1.5rem}
-}
+  .slide .btn-light,.slide .btn-line{padding-inline:1.5rem}}
 /* Persian placeholders inside left-to-right fields (postal code, passwords) read in the right order */
 input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 /* desktop: the header already shows the cart with its count — the floating bar would only cover product buttons */
-@media (min-width:1024px){ #cartBar{display:none!important} }
-@media (max-width:1023px){ #catalogView{padding-bottom:88px} }
-@media (min-width:640px){ .addr-card{justify-content:center} }
+@media (min-width:1024px){ #cartBar{display:none!important}}
+@media (max-width:1023px){ #catalogView{padding-bottom:88px}}
+@media (min-width:640px){ .addr-card{justify-content:center}}
 /* keyboard users: skip straight to the page content */
 .skip-link{position:fixed;top:12px;right:12px;z-index:200;padding:10px 18px;border-radius:999px;background:#fff;color:#28622D;font-weight:700;box-shadow:0 8px 24px rgba(17,44,19,.25);transform:translateY(-200%);transition:transform .2s}
 .skip-link:focus{transform:none;outline:2px solid #28622D;outline-offset:2px}
@@ -364,21 +352,19 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 /* 1024–1279: the header has less room — account shows as an icon, and the menu links step aside while searching */
 @media (min-width:1024px) and (max-width:1279px){
   #userLabel{display:none!important}
-  #userBtn{width:2.5rem;padding:0}
-}
-@media (min-width:1024px) and (max-width:1279px){ #navSearch.open{width:170px} #navCapsule .nav-link{padding-inline:.6rem} }
+  #userBtn{width:2.5rem;padding:0}}
+@media (min-width:1024px) and (max-width:1279px){ #navSearch.open{width:170px} #navCapsule .nav-link{padding-inline:.6rem}}
 /* legibility everywhere: no text below 11px */
 .text-\[9px\],.text-\[10px\],.sm\:text-\[10px\]{font-size:11px!important}
 /* phones: a more compact cart footer so at least two items stay visible above it */
 @media (max-width:639px){
-  .drawer{height:88vh}
+  .drawer{height:88vh;height:88dvh}
   #cartFoot{padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
   #cartFoot #promoForm{height:2.75rem}
   #cartFoot dl{gap:6px;margin-top:4px}
   #cartFoot #checkout{height:3.25rem;margin-top:12px}
-  #cartFoot #promoMsg{min-height:0}
-}
-@media (max-width:639px){ #loginHint{display:none} }
+  #cartFoot #promoMsg{min-height:0}}
+@media (max-width:639px){ #loginHint{display:none}}
 
 /* ══════ Softer header search: neighbours glide out of the way instead of popping ══════ */
 #searchToggle svg{transition:transform .5s cubic-bezier(.22,1,.36,1)}
@@ -387,15 +373,14 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 @media (max-width:639px){
   #header.searching .brand-text{display:inline-block;max-width:0;opacity:0}
   #header #userBtn{max-width:40px;transition:max-width .5s cubic-bezier(.22,1,.36,1),opacity .3s ease,margin .5s cubic-bezier(.22,1,.36,1)}
-  #header.searching #userBtn{display:inline-flex;max-width:0;opacity:0;margin-inline-start:-6px;pointer-events:none;overflow:hidden;box-shadow:none}
-}
-@media (max-width:374px){ #header .brand-text{display:none} }
+  #header.searching #userBtn{display:inline-flex;max-width:0;opacity:0;margin-inline-start:-6px;pointer-events:none;overflow:hidden;box-shadow:none}}
+@media (max-width:374px){ #header .brand-text{display:none}}
 
 /* ══════ Customer dashboard · app style (1405/08) ══════
    white rounded cards on the calm page colour, one green highlight card, rows that slide sideways, a bottom dock on phones */
 .db{--db-g:#28622D;--db-g2:#377B3D;--db-ink:#14301A;--db-soft:#6B8A6F;--db-line:rgba(40,98,45,.08);--db-r:24px;--db-sh:0 1px 2px rgba(17,44,19,.04),0 10px 28px -14px rgba(17,44,19,.22)}
 #dashboardView nav[aria-label="مسیر صفحه"]{display:none}
-@media (min-width:1024px){ #dashboardView nav[aria-label="مسیر صفحه"]{display:flex} }
+@media (min-width:1024px){ #dashboardView nav[aria-label="مسیر صفحه"]{display:flex}}
 .db-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 2px 2px}
 .db-name{font-family:Peyda,Vazirmatn,Tahoma,sans-serif;font-weight:900;font-size:26px;line-height:1.35;color:var(--db-ink)}
 .db-tier{display:inline-flex;align-items:center;gap:5px;margin-top:4px;height:26px;padding:0 10px;border-radius:999px;background:#E3F2E5;color:var(--db-g);font:700 11px Peyda,Vazirmatn,Tahoma,sans-serif}
@@ -406,20 +391,20 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 .db-avatar{display:grid;place-items:center;width:42px;height:42px;border-radius:999px;background:linear-gradient(135deg,#377B3D,#28622D);color:#fff;font:900 17px Peyda,Vazirmatn,Tahoma,sans-serif}
 .db-avatar-lg{width:56px;height:56px;font-size:22px;flex-shrink:0}
 .db-stack{display:flex;flex-direction:column;gap:22px;margin-top:18px}
-@media (min-width:1024px){ .db-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start} .db-wide{grid-column:1/-1} }
+@media (min-width:1024px){ .db-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start} .db-wide{grid-column:1/-1}}
 .db-search{display:flex;align-items:center;gap:10px;height:52px;padding:0 18px;border-radius:18px;background:#fff;color:var(--db-soft);font-size:14px;box-shadow:var(--db-sh);text-align:right;transition:transform .2s}
 .db-search:active{transform:scale(.985)}
 .db-chips{display:flex;gap:10px;overflow-x:auto;margin-inline:-12px;padding:2px 12px 6px;scroll-snap-type:x proximity}
 .db-chip{flex:0 0 auto;width:92px;display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 12px;border-radius:20px;background:#fff;box-shadow:var(--db-sh);font:700 12px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-ink);scroll-snap-align:start;transition:transform .25s cubic-bezier(.22,1,.36,1)}
 .db-chip i{display:grid;place-items:center;width:44px;height:44px;border-radius:15px;background:#F0F7F1;color:var(--db-g)}
 .db-chip:active{transform:scale(.95)}
-@media (hover:hover){ .db-chip:hover{transform:translateY(-3px)} }
+@media (hover:hover){ .db-chip:hover{transform:translateY(-3px)}}
 .db-sec{display:flex;flex-direction:column;gap:12px;min-width:0}
 .db-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .db-h h2,.db-title{font-family:Peyda,Vazirmatn,Tahoma,sans-serif;font-weight:900;font-size:18px;color:var(--db-ink)}
 .db-title{font-size:20px}
 .db-all{font-size:13px;font-weight:700;color:var(--db-soft);padding:4px 2px}
-.db-all:hover{color:var(--db-g)}
+@media (hover:hover){.db-all:hover{color:var(--db-g)}}
 /* green highlight card */
 .db-hero{position:relative;overflow:hidden;border-radius:var(--db-r);background:linear-gradient(150deg,#377B3D 0%,#28622D 55%,#1F4F24 100%);color:#fff;padding:18px;box-shadow:0 18px 36px -18px rgba(25,67,29,.6)}
 .db-hero::after{content:"";position:absolute;width:220px;height:220px;left:-70px;top:-90px;border-radius:999px;background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);pointer-events:none}
@@ -470,8 +455,7 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 @media (min-width:1024px){
   .db-row{flex-wrap:wrap;overflow:visible;margin:0;padding:0}
   .db-chips{margin:0;padding:0;overflow:visible}
-  .db-chip{flex:1 1 0}
-}
+  .db-chip{flex:1 1 0}}
 /* other sections */
 .db-pane{margin-top:18px;display:flex;flex-direction:column}
 .db-pane > p.plate{margin-top:6px}
@@ -485,11 +469,10 @@ input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
 .db-dock button[aria-current="page"] span{max-width:6.5rem;opacity:1}
 .db-dock button:active{transform:scale(.94)}
 body:not([data-view="dashboard"]) #dashDock{display:none}
-@media (min-width:1024px){ #dashDock{display:none!important} }
+@media (min-width:1024px){ #dashDock{display:none!important}}
 @media (max-width:1023px){
   #dashboardView > section{padding-top:12px;padding-bottom:112px}
-  #dashboardView .db-pane .card{border-radius:22px;border:0;box-shadow:var(--db-sh)}
-}
+  #dashboardView .db-pane .card{border-radius:22px;border:0;box-shadow:var(--db-sh)}}
 .db-chart > div:nth-child(even) > span:last-child{visibility:hidden}
 
 /* notifications panel under the bell */
@@ -501,7 +484,8 @@ body:not([data-view="dashboard"]) #dashDock{display:none}
 .db-notes-h span{font:700 11px Peyda,Vazirmatn,Tahoma,sans-serif;color:#fff;background:#E0782F;border-radius:999px;padding:2px 8px}
 .db-notes-h span:empty{display:none}
 .db-note{display:flex;gap:10px;width:100%;padding:10px;border-radius:16px;text-align:right;transition:background .2s}
-.db-note:active,.db-note:hover{background:#F6FAF6}
+.db-note:active{background:#F6FAF6}
+@media (hover:hover){.db-note:hover{background:#F6FAF6}}
 .db-note i{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:12px;background:#F0F7F1;color:var(--db-g)}
 .db-note.new i{background:#28622D;color:#fff}
 .db-note b{display:block;font:700 13px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-ink)}
@@ -523,7 +507,7 @@ body:not([data-view="dashboard"]) #dashDock{display:none}
 .db-pill-w{display:inline-flex;gap:4px;background:#fff;color:#28622D}
 .adm-me-btn{cursor:pointer;transition:transform .2s}
 .adm-me-btn:active{transform:scale(.94)}
-@media (min-width:1024px){ .adm-me-btn{pointer-events:none} }   /* desktop logs out from the sidebar */
+@media (min-width:1024px){ .adm-me-btn{pointer-events:none}}   /* desktop logs out from the sidebar */
 .adm-me{width:min(280px,calc(100vw - 24px))}
 .adm-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .adm-kpi{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 6px;border-radius:22px;background:#fff;box-shadow:var(--db-sh);text-align:center;transition:transform .25s cubic-bezier(.22,1,.36,1)}
@@ -534,16 +518,16 @@ body:not([data-view="dashboard"]) #dashDock{display:none}
 .adm-ring{display:grid;place-items:center;width:58px;height:58px;border-radius:999px}
 .adm-ring span{display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:#fff;font:900 13px Peyda,Vazirmatn,Tahoma,sans-serif!important;color:var(--db-g)!important}
 .adm-today{display:grid;gap:10px}
-@media (min-width:768px){ .adm-today{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (min-width:768px){ .adm-today{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .adm-task{padding:14px;border-radius:22px;background:#fff;box-shadow:var(--db-sh)}
 .adm-task-top{display:flex;align-items:center;gap:12px}
 .adm-task-av{width:44px;height:44px;flex-shrink:0;font-size:16px}
 .adm-acts{display:flex;gap:6px;flex-shrink:0}
 .adm-ok,.adm-del{display:grid;place-items:center;width:42px;height:42px;border-radius:999px;transition:background .2s,color .2s,transform .2s}
 .adm-ok{background:#E3F2E5;color:#28622D}
-.adm-ok:hover{background:#28622D;color:#fff}
+@media (hover:hover){.adm-ok:hover{background:#28622D;color:#fff}}
 .adm-del{background:#FDECEC;color:#DC2626}
-.adm-del:hover{background:#DC2626;color:#fff}
+@media (hover:hover){.adm-del:hover{background:#DC2626;color:#fff}}
 .adm-ok:active,.adm-del:active{transform:scale(.9)}
 .adm-del.confirming{width:auto;padding:0 12px;background:#DC2626;color:#fff;font-size:12px;font-weight:700}
 .adm-task-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:10px 12px;border-radius:14px;background:#F6FAF6;font-size:12px;color:var(--db-soft)}
@@ -552,17 +536,31 @@ body:not([data-view="dashboard"]) #dashDock{display:none}
 .adm-task-empty{display:flex;align-items:center;gap:12px;padding:18px;border-radius:22px;background:#fff;box-shadow:var(--db-sh);font-size:13px;color:var(--db-soft)}
 .adm-task-empty i{display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:999px;background:#E3F2E5;color:#28622D}
 .adm-hall{width:168px;padding:14px;border-radius:22px;background:#fff;box-shadow:var(--db-sh)}
-@media (min-width:1024px){ .adm-hall{flex:1 1 0;width:auto} #admHalls{flex-wrap:nowrap} }
+@media (min-width:1024px){ .adm-hall{flex:1 1 0;width:auto} #admHalls{flex-wrap:nowrap}}
 .db-dock button{position:relative}
 .db-dock-badge{position:absolute;top:6px;left:8px;min-width:18px;height:18px;padding:0 5px;display:grid;place-items:center;border-radius:999px;background:#E0782F;color:#fff;font:700 10px Peyda,Vazirmatn,Tahoma,sans-serif;font-style:normal;box-shadow:0 0 0 2px #fff}
 .db-dock button[aria-current="page"] .db-dock-badge{position:static;box-shadow:none;background:#fff;color:#28622D}
 body:not([data-view="admin"]) #admDock{display:none}
-@media (min-width:1024px){ #admDock{display:none!important} }
+@media (min-width:1024px){ #admDock{display:none!important}}
 #adminView nav[aria-label="مسیر صفحه"]{display:none}
-@media (min-width:1024px){ #adminView nav[aria-label="مسیر صفحه"]{display:flex} }
+@media (min-width:1024px){ #adminView nav[aria-label="مسیر صفحه"]{display:flex}}
 @media (max-width:1023px){
   #adminView > section{padding-top:12px;padding-bottom:112px}
-  #adminView .db-pane .card{border-radius:22px;border:0;box-shadow:var(--db-sh)}
-}
+  #adminView .db-pane .card{border-radius:22px;border:0;box-shadow:var(--db-sh)}}
 .db-tier{white-space:nowrap}
-@media (min-width:1024px){ #admHalls > li.adm-hall{flex:1 1 0;width:auto} }
+@media (min-width:1024px){ #admHalls > li.adm-hall{flex:1 1 0;width:auto}}
+
+/* ══════ Safari / iPhone fixes ══════ */
+/* while the keyboard is open the bottom bars step aside, so they never cover the field being typed in */
+html.typing .db-dock,html.typing #cartBar{opacity:0;pointer-events:none;transform:translateY(140%)}
+html.typing #cartBar{transform:translate(-50%,180%)}
+.db-dock{transition:opacity .25s,transform .35s cubic-bezier(.22,1,.36,1)}
+/* no grey flash and no long-press callout on buttons */
+a,button,[role="button"]{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+.adm-today{grid-template-columns:minmax(0,1fr)}
+@media (min-width:768px){ .adm-today{grid-template-columns:repeat(2,minmax(0,1fr))} }
+/* iPhone only sends taps to elements that look clickable */
+#cartOverlay,#qvOverlay,#menuShade{cursor:pointer}
+/* landscape iPhone: keep content clear of the notch */
+@supports (padding:env(safe-area-inset-left)){ body{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)} }
+.drawer #cartItems,.qv,.m-drawer,.db-notes{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
