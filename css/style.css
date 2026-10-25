@@ -2,13 +2,13 @@
    Palette: logo greens #87C28C · #377B3D · #28622D · White #FFFFFF
    Utility classes come from tailwind.css; everything hand-written lives here. */
 
-@font-face{font-family:"Peyda";src:local("Peyda Bold"),local("Peyda-Bold"),url("../fonts/vazirmatn/Vazirmatn-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
-@font-face{font-family:"Peyda";src:local("Peyda Extra Bold"),local("Peyda-ExtraBold"),url("../fonts/vazirmatn/Vazirmatn-ExtraBold.woff2") format("woff2");font-weight:800;font-display:swap}
-@font-face{font-family:"Peyda";src:local("Peyda Black"),local("Peyda-Black"),url("../fonts/vazirmatn/Vazirmatn-Black.woff2") format("woff2");font-weight:900;font-display:swap}
-@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum Regular"),local("YekanBakhFaNum-Regular"),url("../fonts/vazirmatn/Vazirmatn-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum SemiBold"),local("YekanBakhFaNum-SemiBold"),url("../fonts/vazirmatn/Vazirmatn-Medium.woff2") format("woff2");font-weight:500 600;font-display:swap}
-@font-face{font-family:"Yekan Bakh EN";src:local("Yekan Bakh Bold"),local("YekanBakh-Bold"),url("../fonts/vazirmatn/Vazirmatn-Bold.woff2") format("woff2");font-weight:700;font-display:swap}   /* Latin digits: IDs, codes */
-@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum Bold"),local("YekanBakhFaNum-Bold"),url("../fonts/vazirmatn/Vazirmatn-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Peyda";src:local("Peyda Bold"),local("Peyda-Bold"),url("../fonts/PeydaWeb-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Peyda";src:local("Peyda Extra Bold"),local("Peyda-ExtraBold"),url("../fonts/PeydaWeb-ExtraBold.woff2") format("woff2");font-weight:800;font-display:swap}
+@font-face{font-family:"Peyda";src:local("Peyda Black"),local("Peyda-Black"),url("../fonts/PeydaWeb-Black.woff2") format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum Regular"),local("YekanBakhFaNum-Regular"),url("../fonts/YekanBakhFaNum-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum SemiBold"),local("YekanBakhFaNum-SemiBold"),url("../fonts/YekanBakhFaNum-SemiBold.woff2") format("woff2");font-weight:500 600;font-display:swap}
+@font-face{font-family:"Yekan Bakh EN";src:local("Yekan Bakh Bold"),local("YekanBakh-Bold"),url("../fonts/YekanBakh-Bold.woff2") format("woff2");font-weight:700;font-display:swap}   /* Latin digits: IDs, codes */
+@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum Bold"),local("YekanBakhFaNum-Bold"),url("../fonts/YekanBakhFaNum-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
 
 :root{--ease:cubic-bezier(0.16,1,0.3,1)}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -84,11 +84,7 @@ body:not([data-view="home"]):not([data-view="catalog"]) #cartBar{display:none}
 .bleed{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}   /* ornament strips run edge to edge of the screen */
 .orn-fit{background-repeat:no-repeat!important;background-position:center bottom!important;background-size:100% 100%!important}
 .orn-land{background:url("../img/orn/landscape-light.svg") no-repeat center bottom/100% auto;aspect-ratio:1200/110}
-/* page backgrounds, one motif per page (bold line art like a printed wallpaper; colour/opacity baked into each SVG) */
-body[data-view="auth"]{background-image:url("../img/orn/bg-palms.svg");background-size:260px}
-body[data-view="dashboard"]{background-image:url("../img/orn/bg-sun.svg");background-size:300px}
-body[data-view="admin"]{background-image:url("../img/orn/bg-south.svg");background-size:320px}
-body[data-view="catalog"]{background-image:url("../img/orn/bg-dates.svg");background-size:220px}
+/* page backgrounds (all plain for speed), one motif per page (bold line art like a printed wallpaper; colour/opacity baked into each SVG) */
 
 /* ── Auth page: light motion, transform/opacity only; loops run only while the page is visible ── */
 #authPill{transition:transform .45s var(--ease)}
@@ -282,3 +278,89 @@ html,body{overflow-x:clip}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* ══════ Mobile review fixes (1405/08) ══════ */
+/* search open on phones: search takes the free space, account + menu step aside so the cart never gets pushed out */
+@media (max-width:639px){
+  #header.searching #userBtn{display:none}   /* account stays reachable from the menu */
+  #header.searching #navCapsule>.ms-auto{flex:1 1 auto;min-width:0}
+  #header.searching #navSearch.open{flex:1 1 auto;width:auto;min-width:0}
+}
+/* iOS Safari zooms into any field under 16px — keep all inputs at 16px on touch screens */
+@media (max-width:1023px){ #search,#promoInput,#custSearch,.field:not(.otp){font-size:16px} }
+/* quick view sheet */
+.qv-ov{position:fixed;inset:0;z-index:60;background:rgba(17,44,19,.45);backdrop-filter:blur(2px)}
+.qv{position:fixed;z-index:61;inset:auto 0 0 0;max-height:90vh;overflow-y:auto;overscroll-behavior:contain;background:#fff;border-radius:28px 28px 0 0;padding:28px 16px calc(16px + env(safe-area-inset-bottom));box-shadow:0 -20px 50px rgba(17,44,19,.25);animation:qvUp .32s cubic-bezier(.16,1,.3,1)}
+.qv[hidden],.qv-ov[hidden]{display:none}
+.qv-grab{position:absolute;top:10px;left:50%;width:44px;height:5px;margin-left:-22px;border-radius:9px;background:rgba(40,98,45,.18)}
+.qv-x{position:absolute;top:14px;left:14px;z-index:2;display:grid;place-items:center;width:44px;height:44px;border-radius:999px;background:#F0F7F1;color:#28622D}
+.qv .p-card{border:0;padding:0;box-shadow:none;background:none}
+.qv .p-card:hover{transform:none}
+.qv .quick{display:none}
+.qv .aspect-square{aspect-ratio:auto;height:min(38vh,280px)}
+.qv .line-clamp-2{display:block;-webkit-line-clamp:unset;overflow:visible}
+.qv .p-tools{opacity:1;transform:none;top:auto;bottom:8px}
+html.qv-lock{overflow:hidden}
+@keyframes qvUp{from{transform:translateY(100%)}to{transform:none}}
+@media (min-width:640px){
+  .qv{inset:50% auto auto 50%;width:420px;border-radius:28px;transform:translate(-50%,-50%);animation:none}
+  .qv-grab{display:none}
+}
+@media (prefers-reduced-motion:reduce){ .qv{animation:none} }
+/* product cards on narrow phones: the pack-size pill stays on one line */
+.unit-pill{max-width:100%;white-space:nowrap}
+@media (max-width:420px){ .p-card .unit-pill svg{display:none} .p-card .unit-pill{padding-inline:8px} }
+/* customer dashboard on phones: all 6 sections visible as a 3×2 grid instead of a hidden side-scroll */
+@media (max-width:1023px){
+  #dashTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
+  #dashTabs .side-btn{position:relative;flex-direction:column;justify-content:center;gap:4px;height:auto;min-height:64px;padding:8px 4px;font-size:12px;white-space:normal;text-align:center;line-height:1.4}
+  #dashTabs .side-btn #dashBadge{position:absolute;top:6px;left:6px;margin:0}
+  #dashTabs + [data-logout]{height:2.5rem;justify-content:center;font-size:12px}
+}
+/* legibility on phones: nothing below 11px, most small labels at 12px */
+@media (max-width:639px){
+  .text-\[9px\],.text-\[10px\]{font-size:11px}
+  .text-\[11px\]:not(.unit-pill){font-size:12px}
+}
+/* hero: button labels never break; 1024–1279 (small laptops / tablets landscape) gets a calmer headline and padding */
+.slide .btn-light,.slide .btn-line{white-space:nowrap}
+@media (min-width:1024px) and (max-width:1279px){
+  .slide{padding:2.5rem!important}
+  .slide h1,.slide h2{font-size:42px!important}
+  .slide .btn-light,.slide .btn-line{padding-inline:1.5rem}
+}
+/* Persian placeholders inside left-to-right fields (postal code, passwords) read in the right order */
+input[dir="ltr"]:not(.tel):placeholder-shown{direction:rtl}
+/* desktop: the header already shows the cart with its count — the floating bar would only cover product buttons */
+@media (min-width:1024px){ #cartBar{display:none!important} }
+@media (max-width:1023px){ #catalogView{padding-bottom:88px} }
+@media (min-width:640px){ .addr-card{justify-content:center} }
+/* keyboard users: skip straight to the page content */
+.skip-link{position:fixed;top:12px;right:12px;z-index:200;padding:10px 18px;border-radius:999px;background:#fff;color:#28622D;font-weight:700;box-shadow:0 8px 24px rgba(17,44,19,.25);transform:translateY(-200%);transition:transform .2s}
+.skip-link:focus{transform:none;outline:2px solid #28622D;outline-offset:2px}
+[data-view]:focus{outline:none}
+/* admin panel on phones: all 5 sections visible as a grid, and the logout button is reachable */
+@media (max-width:1023px){
+  #admTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible}
+  #admTabs .side-dark{position:relative;flex-direction:column;justify-content:center;gap:4px;height:auto;min-height:64px;padding:8px 4px;font-size:12px;white-space:normal;text-align:center;line-height:1.4}
+  #admTabs #admNewBadge{position:absolute;top:6px;left:6px;margin:0}
+  #admLogout{height:2.5rem;justify-content:center;font-size:12px}
+}
+/* 1024–1279: the header has less room — account shows as an icon, and the menu links step aside while searching */
+@media (min-width:1024px) and (max-width:1279px){
+  #userLabel{display:none!important}
+  #userBtn{width:2.5rem;padding:0}
+}
+@media (min-width:1024px) and (max-width:1279px){ #navSearch.open{width:170px} #navCapsule .nav-link{padding-inline:.6rem} }
+/* legibility everywhere: no text below 11px */
+.text-\[9px\],.text-\[10px\],.sm\:text-\[10px\]{font-size:11px!important}
+/* phones: a more compact cart footer so at least two items stay visible above it */
+@media (max-width:639px){
+  .drawer{height:88vh}
+  #cartFoot{padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
+  #cartFoot #promoForm{height:2.75rem}
+  #cartFoot dl{gap:6px;margin-top:4px}
+  #cartFoot #checkout{height:3.25rem;margin-top:12px}
+  #cartFoot #promoMsg{min-height:0}
+}
+@media (max-width:639px){ #loginHint{display:none} }
