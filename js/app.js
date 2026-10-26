@@ -45,7 +45,7 @@
     kaluteh:  '--hi:#F0F7F1;--mid:#6EAA73;--lo:#377B3D;--glow:rgba(55,123,61,.16)',
     dried:    '--hi:#FFFFFF;--mid:#BCD2BE;--lo:#87C28C;--glow:rgba(135,194,140,.2)'
   };
-  const renderArt = (p, extra = '') => `<div class="render${extra}" style="${TONE[p.cat]}"><span class="ground"></span>${p.cat === 'dried' ? '<span class="orb duo"></span><span class="orb"></span>' : '<span class="orb"></span>'}<span class="tag">${p.tag}</span></div>`;
+  const renderArt = (p, extra = '') => `<div class="render${extra}" style="${TONE[p.cat]}"><span class="ground"></span>${p.cat === 'dried' ? '<span class="orb duo"></span><span class="orb"></span>' : '<span class="orb"></span>'}</div>`;
   const thumb = (p, extra) => p.img ? `<img src="${p.img}" alt="" class="ph h-full w-full object-contain p-2" loading="lazy" decoding="async">` : renderArt(p, extra);
 
   /* per-browser demo storage (wrapped: private mode / blocked storage just falls back) */
@@ -93,7 +93,7 @@
           <div class="p-glow pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true"></div>
           <div class="p-img relative grid h-full w-full place-items-center" role="img" aria-label="${p.name}">${p.img ? `<img src="${p.img}" alt="${p.name}" class="ph max-h-full w-auto object-contain p-3" loading="lazy" decoding="async">` : renderArt(p)}</div>
         </div>
-        <span class="absolute right-2 top-2 rounded-full ${p.badge.includes('ارگانیک') ? 'bg-cyprus-soft text-cyprus ring-1 ring-cyprus/15' : 'bg-white text-cyprus-mid ring-1 ring-cyprus/10'} px-2.5 py-1 font-display text-[11px] font-bold shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)]">${p.stock > 0 ? p.badge : 'ناموجود'}</span>
+        ${p.stock > 0 ? '' : `<span class="absolute right-2 top-2 rounded-full bg-white px-2.5 py-1 font-display text-[11px] font-bold text-cyprus-mid shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)] ring-1 ring-cyprus/10">ناموجود</span>`}
         <div class="p-tools absolute left-2 top-2 flex flex-col gap-1.5">
           <button class="quick ease-ui grid h-9 w-9 place-items-center rounded-full bg-white text-ink-soft shadow-sm hover:scale-110 hover:text-cyprus active:scale-90" aria-label="نمایش سریع ${p.name}">${svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 17, 2)}</button>
         </div>
