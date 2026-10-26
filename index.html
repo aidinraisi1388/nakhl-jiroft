@@ -25,8 +25,8 @@
 <link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/tailwind.css?v=20261027e">
-<link rel="stylesheet" href="css/style.css?v=20261027e">
+<link rel="stylesheet" href="css/tailwind.css?v=20261027f">
+<link rel="stylesheet" href="css/style.css?v=20261027f">
 
 
 </head>
@@ -596,6 +596,7 @@
           </div>
           <div id="yChart" class="db-chart mt-5 flex flex-1 items-end gap-1.5" aria-label="نمودار حجم خرید ماهانه"></div>
         </div>
+        <button data-logout class="db-logout adm-out lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج از حساب</button>
       </div>
 
       <!-- pane: my orders -->
@@ -617,7 +618,7 @@
         <div class="db-card db-profile">
           <span id="dbPAvatar" class="db-avatar db-avatar-lg" aria-hidden="true"></span>
           <div class="min-w-0 flex-1"><p id="dbPName" class="truncate font-display text-lg font-black text-ink"></p><p id="dbPPhone" dir="ltr" class="tel text-right text-sm text-ink-soft"></p></div>
-          <button data-logout class="db-logout lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج</button>
+
         </div>
         <div id="addrNeed" hidden class="db-need" role="status"><b>یک قدم تا پرداخت</b>آدرس تحویل را ثبت کنید؛ بعد از ذخیره، خودکار به صفحه‌ی تکمیل خرید و پرداخت می‌روید.</div>
         <h2 class="db-title mt-6">آدرس‌های من</h2>
@@ -1116,6 +1117,6 @@
 <!-- Toast (top, so it never collides with the cart capsule) -->
 <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
 
-<script src="js/app.js?v=20261027e"></script>
+<script src="js/app.js?v=20261027f"></script>
 </body>
 </html>

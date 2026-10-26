@@ -659,3 +659,11 @@ a.db-bell{display:grid;place-items:center}
 .bl.bl-in{opacity:1;filter:blur(0);transform:none;
   transition:opacity .6s ease var(--bl-d,0ms),filter .9s cubic-bezier(.22,1,.36,1) var(--bl-d,0ms),transform .9s cubic-bezier(.22,1,.36,1) var(--bl-d,0ms)}
 @media (prefers-reduced-motion:reduce){ .bl{opacity:1;filter:none;transform:none} }
+
+/* Safari: nothing invisible may sit at the bottom edge (Safari tints its toolbar / under-page area from what is there) */
+.m-shade{visibility:hidden;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility 0s linear .5s}
+html.menu-open .m-shade{visibility:visible;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility 0s}
+.m-drawer{visibility:hidden;transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s,visibility 0s linear .55s}
+html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s,visibility 0s}
+#footer{padding-bottom:env(safe-area-inset-bottom)}
+.adm-out{background:#fff;padding:0 20px;height:44px;box-shadow:0 1px 2px rgba(17,44,19,.04),0 10px 28px -14px rgba(17,44,19,.22)}
