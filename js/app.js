@@ -362,6 +362,9 @@
     + (on ? 'bg-[#28622D] text-white shadow-[0_6px_14px_-4px_rgba(40,98,45,.55)]' : 'text-cyprus hover:bg-sand');
 
   const renderCatalog = (animate = true) => {
+    const svc = cat === 'storage';                     // cold-storage services: not a product list
+    $('#storage').hidden = !svc; $('#grid').hidden = svc; $('.cat-search').hidden = svc;
+    if (svc) { $('#catalogTitle').textContent = 'خدمات سردخانه'; $('#empty').hidden = true; $('#pager').hidden = true; return; }
     const matches = products.filter(p => inCat(p.cat) && (!query || norm(p.name).includes(query) || norm(p.tag).includes(query)));
     const pages = Math.max(1, Math.ceil(matches.length / PAGE_SIZE));
     page = Math.min(Math.max(1, page), pages);
@@ -388,7 +391,7 @@
   let lastHash = location.hash;
   const setHash = h => { if (location.hash !== h) history.pushState(null, '', h); lastHash = location.hash; };
   $$('#cats .chip').forEach(b => b.addEventListener('click', () => {
-    if (b.dataset.cat === 'storage') { location.hash = '#storage'; selectService('storage'); return; }
+    if (b.dataset.cat === 'storage') { loadBar(); cat = 'storage'; query = ''; clearSearchFields(); history.replaceState(null, '', '#storage'); lastHash = location.hash; selectService('storage'); syncPills(); renderCatalog(); return; }
     loadBar(); cat = b.dataset.cat; page = 1; query = ''; clearSearchFields();
     history.replaceState(null, '', '#products/' + cat); lastHash = location.hash;
     syncPills(); renderCatalog();
@@ -412,6 +415,11 @@
   const route = () => {
     lastHash = location.hash;
     const h = decodeURIComponent(location.hash.slice(1));
+    if (h === 'storage') {                                         // cold-storage services live in the catalog's «خدمات سردخانه» tab
+      const changed = show('catalog'); cat = 'storage'; query = ''; clearSearchFields(); syncPills(); renderCatalog();
+      if (changed) toTop();
+      return;
+    }
     if (h.startsWith('products')) {
       const c = h.split('/')[1];
       const changed = show('catalog');
