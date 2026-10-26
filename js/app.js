@@ -46,7 +46,7 @@
     dried:    '--hi:#FFFFFF;--mid:#BCD2BE;--lo:#87C28C;--glow:rgba(135,194,140,.2)'
   };
   const renderArt = (p, extra = '') => `<div class="render${extra}" style="${TONE[p.cat]}"><span class="ground"></span>${p.cat === 'dried' ? '<span class="orb duo"></span><span class="orb"></span>' : '<span class="orb"></span>'}</div>`;
-  const thumb = (p, extra) => p.img ? `<img src="${p.img}" alt="" class="ph h-full w-full object-contain p-2" loading="lazy" decoding="async">` : renderArt(p, extra);
+  const thumb = (p, extra) => p.img ? `<img src="${p.img.replace('.webp', '-400.webp')}" alt="" class="ph h-full w-full object-contain p-2" loading="lazy" decoding="async">` : renderArt(p, extra);
 
   /* per-browser demo storage (wrapped: private mode / blocked storage just falls back) */
   const store = {
@@ -91,7 +91,7 @@
         <!-- IMAGE SLOT · ${p.name} -->
         <div class="relative grid aspect-square place-items-center overflow-hidden rounded-2xl">
           <div class="p-glow pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true"></div>
-          <div class="p-img relative grid h-full w-full place-items-center" role="img" aria-label="${p.name}">${p.img ? `<img src="${p.img}" alt="${p.name}" class="ph max-h-full w-auto object-contain p-3" loading="lazy" decoding="async">` : renderArt(p)}</div>
+          <div class="p-img relative grid h-full w-full place-items-center" role="img" aria-label="${p.name}">${p.img ? `<img src="${p.img}" srcset="${p.img.replace('.webp', '-400.webp')} 400w, ${p.img} 800w" sizes="(min-width:1024px) 290px, 46vw" width="800" height="800" alt="${p.name}" class="ph max-h-full w-auto object-contain p-3" loading="lazy" decoding="async">` : renderArt(p)}</div>
         </div>
         ${p.stock > 0 ? '' : `<span class="absolute right-2 top-2 rounded-full bg-white px-2.5 py-1 font-display text-[11px] font-bold text-cyprus-mid shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)] ring-1 ring-cyprus/10">ناموجود</span>`}
       </div>
@@ -200,7 +200,7 @@
     const x0 = a.left + a.width / 2 - h, y0 = a.top + a.height / 2 - h;
     const dx = b.left + b.width / 2 - h - x0, dy = b.top + b.height / 2 - h - y0;
     const dot = document.createElement(img ? 'img' : 'span'); dot.className = img ? 'fly im ph' : 'fly';
-    if (img) { dot.src = img; dot.alt = ''; dot.decoding = 'async'; }
+    if (img) { dot.src = img.replace('.webp', '-400.webp'); dot.alt = ''; dot.decoding = 'async'; }
     dot.style.left = x0 + 'px'; dot.style.top = y0 + 'px';
     document.body.appendChild(dot);
     dot.animate([

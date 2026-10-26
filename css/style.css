@@ -654,7 +654,7 @@ html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezi
 /* footer: floating rounded card */
 #footer{margin:1.5rem 0 0;border-radius:28px 28px 0 0}
 @media (min-width:640px){#footer{border-radius:44px 44px 0 0}}
-html.at-foot{background:#fff}
+html.at-foot{background:#1D3B20}
 
 /* wavy green bands */
 .band{position:relative;isolation:isolate}
