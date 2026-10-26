@@ -11,11 +11,14 @@
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
     { id:'maz5',  cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
-    { id:'maz20', cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی خانواده',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
+    { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی خانواده',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
+    { id:'mazc',  cat:'mazafati', name:'خرمای مضافتی کارتن مادر',  unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:2970000, badge:'', tag:'مضافتی' },
     { id:'pia5',  cat:'piarom', img:'img/p/pia.webp',   name:'خرمای پیارم',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:345000,  badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
     { id:'pia2k', cat:'piarom', img:'img/p/pia2.webp',   name:'خرمای پیارم خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم' },
+    { id:'piac',  cat:'piarom',   name:'خرمای پیارم کارتن مادر',   unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:7740000, badge:'', tag:'پیارم' },
     { id:'kal5',  cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:120000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
     { id:'kal20', cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته' },
+    { id:'kalc',  cat:'kaluteh',  name:'خرمای کلوته کارتن مادر',   unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:2580000, badge:'', tag:'کلوته' },
     { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
     { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
     { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
@@ -75,9 +78,9 @@
   /* ── Product card ── */
   /* short line under each product name (edit freely) */
   const DESC = {
-    maz5: 'نرم و شیرین، برداشت تازه‌ی جیرفت', maz20: 'بسته‌ی اقتصادی برای مصرف خانواده',
-    pia5: 'خشک و کم‌شیرین، ماندگاری بالا', pia2k: 'بسته‌ی بزرگ برای مصرف خانواده',
-    kal5: 'نیمه‌خشک با طعم اصیل جنوب', kal20: 'بسته‌ی اقتصادی خانواده',
+    maz5: 'نرم و شیرین، برداشت تازه‌ی جیرفت', maz20: 'بسته‌ی اقتصادی برای مصرف خانواده', mazc: 'شش جعبه‌ی خانواده، مناسب خرید عمده و هدیه',
+    pia5: 'خشک و کم‌شیرین، ماندگاری بالا', pia2k: 'بسته‌ی بزرگ برای مصرف خانواده', piac: 'شش جعبه‌ی خانواده، مناسب خرید عمده و هدیه',
+    kal5: 'نیمه‌خشک با طعم اصیل جنوب', kal20: 'بسته‌ی اقتصادی خانواده', kalc: 'شش جعبه‌ی خانواده، مناسب خرید عمده و هدیه',
     pis: 'مغز درشت و خندان، تازه‌برشته', fig: 'نرم و شیرین، خشک‌شده در آفتاب', alm: 'مغز کامل و ترد',
     wal: 'مغز روشن و تازه، بدون تلخی', hzl: 'برشته‌ی ملایم با عطر دلپذیر', apr: 'ترش و شیرین، بدون شکر افزوده', rai: 'دانه‌ی سبز و شیرین قزوین'
   };
