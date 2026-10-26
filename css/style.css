@@ -622,3 +622,7 @@ a,button,[role="button"]{-webkit-tap-highlight-color:transparent;-webkit-touch-c
 .adm-ship{display:flex;gap:8px;padding:10px 12px;border-radius:14px;background:#F6FAF6;font-size:12px;line-height:1.9;color:var(--db-soft)}
 .adm-ship svg{flex-shrink:0;margin-top:4px;color:var(--db-g)}
 .adm-ship b{color:var(--db-ink);font-weight:700}
+.ck-add{width:100%;margin-top:10px;height:48px;border-radius:16px;border:1.5px dashed rgba(40,98,45,.3);font:700 13px Peyda,Vazirmatn,Tahoma,sans-serif;color:var(--db-g);transition:background .2s}
+.ck-add:active{background:#F0F7F1}
+.db-need{margin-top:16px;padding:14px 16px;border-radius:18px;background:#28622D;color:#fff;font-size:13px;line-height:1.9;box-shadow:0 14px 30px -16px rgba(25,67,29,.6)}
+.db-need b{display:block;font:900 15px Peyda,Vazirmatn,Tahoma,sans-serif}

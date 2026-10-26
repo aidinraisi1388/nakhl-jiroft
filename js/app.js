@@ -332,7 +332,16 @@
     renderCart(); updateBar();
   });
   /* checkout: log in with OTP first (if needed), then the order is registered */
-  $('#checkout').addEventListener('click', () => { if (!count()) return; closeCart(false); openLogin(() => { location.hash = '#checkout'; }); });
+  /* checkout needs: 1) signed in  2) at least one saved address — only then the checkout page (and the gateway) */
+  let wantCheckout = false;
+  const hasAddr = () => user && (addrBook[user.phone] || []).length > 0;
+  function goCheckout() {
+    if (hasAddr()) { location.hash = '#checkout'; return; }
+    wantCheckout = true; dashTab = 'addresses';
+    if (location.hash === '#dashboard') { renderDash(); scrollTo({ top: 0, behavior: smooth }); } else location.hash = '#dashboard';
+    toast('برای ادامه‌ی خرید، اول آدرس تحویل را ثبت کنید');
+  }
+  $('#checkout').addEventListener('click', () => { if (!count()) return; closeCart(false); openLogin(goCheckout); });
 
   /* ── Catalog: category tabs + search + pagination ── */
   let cat = 'dates', query = '', page = 1;
@@ -401,8 +410,9 @@
       return;
     }
     if (h === 'checkout') {                                          // address · delivery · pay
-      if (!user) { openLogin(() => { location.hash = '#checkout'; }); if (!location.hash.startsWith('#auth') && !location.hash.startsWith('#admin')) history.replaceState(null, '', '#top'); return; }
+      if (!user) { openLogin(goCheckout); if (!location.hash.startsWith('#auth') && !location.hash.startsWith('#admin')) history.replaceState(null, '', '#top'); return; }
       if (!count()) { history.replaceState(null, '', '#products'); return route(); }
+      if (!hasAddr()) { wantCheckout = true; dashTab = 'addresses'; history.replaceState(null, '', '#dashboard'); toast('برای ادامه‌ی خرید، اول آدرس تحویل را ثبت کنید'); return route(); }
       const changed = show('checkout'); renderCheckout(); if (changed) toTop();
       return;
     }
@@ -613,11 +623,10 @@
     const t = totals(), book = addrBook[user.phone] || [], ship = ($('input[name="ckShip"]:checked') || {}).value || 'cold';
     if (!$('#ckName').value) $('#ckName').value = user.name || '';
     if (!$('#ckPhone').value) $('#ckPhone').value = user.phone || '';
-    if (ckAddr >= book.length) ckAddr = book.length ? 0 : -1;
+    if (ckAddr < 0 || ckAddr >= book.length) ckAddr = 0;
     $('#ckAddrList').innerHTML = book.map((a, i) => `
       <label class="ck-opt"><input type="radio" name="ckAddr" value="${i}" ${i === ckAddr ? 'checked' : ''}><span class="min-w-0 flex-1"><b>${esc(a.title || 'آدرس ' + fa(i + 1))}</b><small>${esc(a.city)}، ${esc(a.text)}${a.postal ? ' · کد پستی ' + faD(a.postal) : ''}</small></span></label>`).join('')
-      + (book.length ? `<label class="ck-opt"><input type="radio" name="ckAddr" value="-1" ${ckAddr === -1 ? 'checked' : ''}><span class="min-w-0 flex-1"><b>آدرس تازه</b><small>نشانی دیگری وارد می‌کنم</small></span></label>` : '');
-    $('#ckNewAddr').hidden = ckAddr !== -1;
+      ;
     $('#ckAddrBox').hidden = ship === 'pickup';
     $('#ckShipCost').textContent = t.free ? 'رایگان' : 'پس‌کرایه';
     $('#ckCount').textContent = fa(count());
@@ -631,9 +640,10 @@
     $('#ckErr').textContent = '';
   }
   $('#ckForm').addEventListener('change', e => {
-    if (e.target.name === 'ckAddr') { ckAddr = +e.target.value; renderCheckout(); if (ckAddr === -1) $('#ckCity').focus(); }
+    if (e.target.name === 'ckAddr') { ckAddr = +e.target.value; renderCheckout(); }
     if (e.target.name === 'ckShip') renderCheckout();
   });
+  $('#ckAddAddr').addEventListener('click', () => { wantCheckout = true; dashTab = 'addresses'; location.hash = '#dashboard'; });
   $('#ckForm').addEventListener('submit', e => {
     e.preventDefault();
     const t = totals(); if (!t.sub || !user) return;
@@ -644,15 +654,9 @@
     if (!/^09\d{9}$/.test(rph)) return err('شماره موبایل گیرنده درست نیست (مثل ۰۹۱۲۳۴۵۶۷۸۹).', $('#ckPhone'));
     let addr = 'تحویل حضوری از سردخانه‌ی نخل، جیرفت';
     if (ship === 'cold') {
-      if (ckAddr >= 0 && book[ckAddr]) { const a = book[ckAddr]; addr = `${a.city}، ${a.text}${a.postal ? ' · کد پستی ' + faD(a.postal) : ''}`; }
-      else {
-        const city = $('#ckCity').value.trim(), text = $('#ckText').value.trim(), postal = toLatinD($('#ckPostal').value).replace(/\D/g, '');
-        if (city.length < 2) return err('استان و شهر را بنویسید.', $('#ckCity'));
-        if (text.length < 8) return err('نشانی کامل را بنویسید (خیابان، کوچه، پلاک).', $('#ckText'));
-        if (postal && postal.length !== 10) return err('کد پستی باید ۱۰ رقم باشد.', $('#ckPostal'));
-        addr = `${city}، ${text}${postal ? ' · کد پستی ' + faD(postal) : ''}`;
-        if ($('#ckSave').checked) { (addrBook[user.phone] = book).push({ title: 'آدرس ' + fa(book.length + 1), city, text, postal }); store.set('nakhl:addr:v2', addrBook); ckAddr = book.length - 1; }
-      }
+      const a = book[ckAddr];
+      if (!a) { err('یک آدرس تحویل انتخاب کنید.'); return goCheckout(); }
+      addr = `${a.city}، ${a.text}${a.postal ? ' · کد پستی ' + faD(a.postal) : ''}`;
     }
     // one unpaid order per customer: starting a new checkout replaces the unfinished one
     orders = orders.filter(o => !(o.phone === user.phone && o.status === 'unpaid'));
@@ -931,7 +935,7 @@
   $$('[data-logout]').forEach(b => b.addEventListener('click', () => {
     if (user && user.viaAdmin && !b.closest('#adminView')) return endAct();   // the admin panel's own button always signs the manager out            // in support mode "exit" just leaves the customer's account
     // TODO: also invalidate the session on the server
-    session = null; store.set('nakhl:session', null); store.set('nakhl:actAs:v2', null); syncSession(); updateUserUI();
+    session = null; wantCheckout = false; store.set('nakhl:session', null); store.set('nakhl:actAs:v2', null); syncSession(); updateUserUI();
     toast('از حساب خارج شدید'); location.hash = '#top';
   }));
   $$('[data-endact]').forEach(b => b.addEventListener('click', endAct));
@@ -964,6 +968,8 @@
     $('#dbPName').textContent = user.name; $('#dbPPhone').textContent = user.phone;
     const mine = orders.filter(o => o.phone === user.phone), active = mine.filter(o => o.status !== 'delivered' && o.status !== 'unpaid');
     $('#dashTitle').textContent = user.name;
+    $('#addrNeed').hidden = !(wantCheckout && dashTab === 'addresses');
+    if (wantCheckout && dashTab === 'addresses' && matchMedia('(pointer:fine)').matches) setTimeout(() => $('#addrTitle').focus({ preventScroll: true }), 400);
     $('#dashName').textContent = user.name; $('#dashPhone').textContent = user.phone;
     $('#mActive').textContent = fa(active.length);
     $('#mKg').textContent = kgFa(mine.reduce((s, o) => s + kgOf(o), 0));
@@ -1121,6 +1127,7 @@
     (addrBook[user.phone] = addrBook[user.phone] || []).push({ title: t, city: c, text: x, postal: pc });
     store.set('nakhl:addr:v2', addrBook); e.target.reset();
     m.textContent = 'آدرس ذخیره شد.'; m.className = 'min-h-[1.25rem] text-sm font-bold text-cyprus'; renderDash();
+    if (wantCheckout && count()) { wantCheckout = false; toast('آدرس ذخیره شد؛ برویم برای پرداخت'); setTimeout(() => { location.hash = '#checkout'; }, 350); }
   });
   $('#addrList').addEventListener('click', e => {
     const b = e.target.closest('[data-del-addr]'); if (!b) return;

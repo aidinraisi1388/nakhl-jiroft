@@ -25,8 +25,8 @@
 <link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/tailwind.css?v=20261027b">
-<link rel="stylesheet" href="css/style.css?v=20261027b">
+<link rel="stylesheet" href="css/tailwind.css?v=20261027c">
+<link rel="stylesheet" href="css/style.css?v=20261027c">
 
 
 </head>
@@ -618,6 +618,7 @@
           <div class="min-w-0 flex-1"><p id="dbPName" class="truncate font-display text-lg font-black text-ink"></p><p id="dbPPhone" dir="ltr" class="tel text-right text-sm text-ink-soft"></p></div>
           <button data-logout class="db-logout lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج</button>
         </div>
+        <div id="addrNeed" hidden class="db-need" role="status"><b>یک قدم تا پرداخت</b>آدرس تحویل را ثبت کنید؛ بعد از ذخیره، خودکار به صفحه‌ی تکمیل خرید و پرداخت می‌روید.</div>
         <h2 class="db-title mt-6">آدرس‌های من</h2>
         <ul id="addrList" class="mt-4 grid gap-3 sm:grid-cols-2"></ul>
         <form id="addrForm" novalidate class="card mt-4 grid gap-4 p-6 sm:grid-cols-2">
@@ -912,12 +913,7 @@
       <section id="ckAddrBox" class="db-card">
         <h2 class="ck-h"><i><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg></i>آدرس تحویل</h2>
         <div id="ckAddrList" class="ck-opts" role="radiogroup" aria-label="آدرس‌های ذخیره‌شده"></div>
-        <div id="ckNewAddr" class="mt-4 grid gap-4 sm:grid-cols-2">
-          <div class="flex flex-col gap-1.5"><label for="ckCity" class="label">استان و شهر</label><input id="ckCity" class="field" placeholder="مثلاً: کرمان، جیرفت" autocomplete="address-level2"></div>
-          <div class="flex flex-col gap-1.5"><label for="ckPostal" class="label">کد پستی <span class="font-normal text-ink-soft">(اختیاری)</span></label><input id="ckPostal" class="field tel text-right" dir="ltr" inputmode="numeric" maxlength="10" placeholder="۱۰ رقم" autocomplete="postal-code"></div>
-          <div class="flex flex-col gap-1.5 sm:col-span-2"><label for="ckText" class="label">نشانی کامل</label><textarea id="ckText" rows="2" class="field h-auto py-3 leading-7" placeholder="خیابان، کوچه، پلاک، واحد" autocomplete="street-address"></textarea></div>
-          <label class="flex items-center gap-2 text-sm text-ink sm:col-span-2"><input id="ckSave" type="checkbox" class="chk" checked>این آدرس در «آدرس‌های من» ذخیره شود</label>
-        </div>
+        <button type="button" id="ckAddAddr" class="ck-add">+ افزودن آدرس تازه در حساب من</button>
       </section>
 
       <section class="db-card">
@@ -1121,6 +1117,6 @@
 <!-- Toast (top, so it never collides with the cart capsule) -->
 <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
 
-<script src="js/app.js?v=20261027b"></script>
+<script src="js/app.js?v=20261027c"></script>
 </body>
 </html>
