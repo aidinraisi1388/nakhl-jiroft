@@ -332,7 +332,7 @@
     renderCart(); updateBar();
   });
   /* checkout: log in with OTP first (if needed), then the order is registered */
-  $('#checkout').addEventListener('click', () => { if (count()) openLogin(placeOrder); });
+  $('#checkout').addEventListener('click', () => { if (!count()) return; closeCart(false); openLogin(() => { location.hash = '#checkout'; }); });
 
   /* ── Catalog: category tabs + search + pagination ── */
   let cat = 'dates', query = '', page = 1;
@@ -349,7 +349,7 @@
     $('#grid').innerHTML = slice.map(cardHTML).join('');
     if (animate) $$('#grid .p-card').forEach((c, i) => { c.style.animationDelay = i * 30 + 'ms'; c.classList.add('enter'); });
     const [title, desc] = query ? [`نتیجه‌ی جستجو برای «${query}»`, 'در همه‌ی دسته‌ها جستجو شد.'] : CATS[cat];
-    $('#catalogTitle').textContent = title; $('#catalogDesc').textContent = desc;
+    $('#catalogTitle').textContent = title;
     $('#empty').hidden = matches.length > 0;
     $('#emptyText').textContent = query ? `محصولی با «${query}» پیدا نشد` : 'فعلاً محصولی در این دسته نیست';
     $('#clearSearch').hidden = !query;
@@ -358,7 +358,6 @@
       `<button class="${btnCls(i + 1 === page)}" data-page="${i + 1}" aria-label="صفحه‌ی ${fa(i + 1)}"${i + 1 === page ? ' aria-current="page"' : ''}>${fa(i + 1)}</button>`).join('');
     $('#prevPage').disabled = page === 1;
     $('#nextPage').disabled = page === pages;
-    $('#resultInfo').textContent = matches.length ? `نمایش ${fa(from + 1)}–${fa(from + slice.length)} از ${fa(matches.length)} محصول` : '';
   };
   const goPage = n => { loadBar(); page = n; renderCatalog(); $('#catalogTop').scrollIntoView({ behavior: smooth, block: 'start' }); };
   $('#pageNums').addEventListener('click', e => { const b = e.target.closest('[data-page]'); if (b) goPage(+b.dataset.page); });
@@ -376,7 +375,7 @@
   }));
 
   /* ── Views: Home ↔ Products catalog (hash based: #products, #products/piarom …) ── */
-  const views = { home: $('#top'), catalog: $('#catalogView'), dashboard: $('#dashboardView'), admin: $('#adminView'), auth: $('#authView'), receipt: $('#receiptView') };
+  const views = { home: $('#top'), catalog: $('#catalogView'), dashboard: $('#dashboardView'), admin: $('#adminView'), auth: $('#authView'), receipt: $('#receiptView'), checkout: $('#checkoutView'), pay: $('#payView') };
   let current = 'home';
   const show = name => {
     if (current === name) return false;
@@ -399,6 +398,18 @@
       cat = CATS[c] ? c : 'dates'; page = 1; query = ''; $('#search').value = '';
       syncPills(); renderCatalog();
       if (changed) toTop(); else { loadBar(); $('#catalogTop').scrollIntoView({ behavior: smooth }); }
+      return;
+    }
+    if (h === 'checkout') {                                          // address · delivery · pay
+      if (!user) { openLogin(() => { location.hash = '#checkout'; }); if (!location.hash.startsWith('#auth') && !location.hash.startsWith('#admin')) history.replaceState(null, '', '#top'); return; }
+      if (!count()) { history.replaceState(null, '', '#products'); return route(); }
+      const changed = show('checkout'); renderCheckout(); if (changed) toTop();
+      return;
+    }
+    if (h.startsWith('pay/')) {                                       // payment: connecting / test gateway / result
+      const [, a, b] = h.split('/'), test = a === 'test', o = orders.find(x => x.id === (test ? b : a));
+      if (!o || !(admin || (user && user.phone === o.phone))) { history.replaceState(null, '', '#top'); return route(); }
+      const changed = show('pay'); renderPay(o, test ? 'test' : null); if (changed) toTop();
       return;
     }
     if (h.startsWith('receipt/')) {                                   // order receipt (owner or manager only)
@@ -424,12 +435,12 @@
     const el = h && document.getElementById(h);
     if (el && !el.closest('[data-view]')) { el.scrollIntoView({ behavior: smooth }); return; }   // shared footer
     const changed = show('home');
-    if (el && el !== views.home) requestAnimationFrame(() => el.scrollIntoView({ behavior: changed ? 'instant' : smooth }));
+    if (el && el !== views.home) requestAnimationFrame(() => { if (changed) { const r = document.documentElement.style; r.scrollBehavior = 'auto'; el.scrollIntoView(); r.scrollBehavior = ''; } else el.scrollIntoView({ behavior: smooth }); });
     else if (changed) toTop();
   };
   /* switching to another page: the bar runs and pauses, the old page dims, ~0.45s later the new page shows */
   const NAV_DELAY = 450;
-  const viewOf = h => { h = decodeURIComponent(h.slice(1)); return h.startsWith('products') ? 'catalog' : h.startsWith('receipt/') ? 'receipt' : /^auth/.test(h) ? 'auth' : /^(dashboard|account)/.test(h) ? 'dashboard' : /^admin/.test(h) ? 'admin' : 'home'; };
+  const viewOf = h => { h = decodeURIComponent(h.slice(1)); return h.startsWith('products') ? 'catalog' : h === 'checkout' ? 'checkout' : h.startsWith('pay/') ? 'pay' : h.startsWith('receipt/') ? 'receipt' : /^auth/.test(h) ? 'auth' : /^(dashboard|account)/.test(h) ? 'dashboard' : /^admin/.test(h) ? 'admin' : 'home'; };
   let navT;
   const onNav = () => {
     if (location.hash === lastHash) return;
@@ -547,7 +558,7 @@
     ['تحویل',         '<path d="M3 11 12 4l9 7v9H3z"/><path d="M9 20v-6h6v6"/>']
   ];
   const sIdx = s => Math.max(0, STATUS.findIndex(x => x[0] === s));
-  const AWAIT = ['awaiting', 'در انتظار تایید', 'bg-sand text-cyprus-mid ring-1 ring-cyprus/15'];   // new orders wait for the manager's ✓
+  const UNPAID = ['unpaid', 'در انتظار پرداخت', 'bg-sand text-cyprus-mid ring-1 ring-cyprus/15'];   // created at checkout, becomes «در حال بسته‌بندی» the moment the bank confirms payment
   const dateFa = d => new Intl.DateTimeFormat('fa-IR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(d));
   const timeFa = d => new Intl.DateTimeFormat('fa-IR', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(d));
   const DAY = 864e5, now0 = Date.now();
@@ -555,6 +566,7 @@
   const seed = () => [];                 // real orders start from zero
   let orders = store.get('nakhl:orders:v5', null);
   if (!Array.isArray(orders)) { orders = seed(); store.set('nakhl:orders:v5', orders); }
+  orders.forEach(o => { if (o.status === 'awaiting') o.status = 'unpaid'; });
   orders = orders.filter(o => o.items.every(([id]) => byId[id]));
   const saveOrders = () => store.set('nakhl:orders:v5', orders);
 
@@ -573,10 +585,10 @@
   const kgFa = v => fa(Math.round(v * 10) / 10);
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const pill = ([, l, c]) => `<span class="inline-flex h-7 w-fit shrink-0 items-center rounded-full px-3 font-display text-[11px] font-bold ${c}">${l}</span>`;
-  const statusPill = s => pill(s === 'awaiting' ? AWAIT : STATUS[sIdx(s)]);
+  const statusPill = s => pill(s === 'unpaid' ? UNPAID : STATUS[sIdx(s)]);
   const reqPill = r => pill(REQ_STATUS.find(x => x[0] === r.status) || REQ_STATUS[0]);
   const thumbs = items => items.slice(0, 3).map(([id]) => `<span class="h-11 w-11 shrink-0 overflow-hidden rounded-xl bg-sand-light ring-2 ring-white">${thumb(byId[id], ' mini')}</span>`).join('');
-  const chain = s => { const i = s === 'awaiting' ? -1 : sIdx(s); return `
+  const chain = s => { const i = s === 'unpaid' ? -1 : sIdx(s); return `
     <ol class="relative mt-5 grid grid-cols-4" aria-label="مراحل زنجیره‌ی سرد">
       <span class="absolute left-[12.5%] right-[12.5%] top-4 h-0.5 rounded-full bg-cyprus/10" aria-hidden="true"></span>
       <span class="absolute left-[12.5%] right-[12.5%] top-4 h-0.5 origin-right rounded-full bg-[#28622D] transition-transform duration-500" style="transform:scaleX(${Math.max(0, i) / 3})" aria-hidden="true"></span>
@@ -586,20 +598,153 @@
     </ol>`; };
   const empty = (msg, href, cta) => `<li class="card flex flex-col items-center gap-3 p-10 text-center sm:col-span-2 md:col-span-full"><p class="font-display font-bold text-cyprus">${msg}</p>${href ? `<a href="${href}" class="btn-cyprus h-11 px-6 text-sm">${cta}</a>` : ''}</li>`;
 
-  function placeOrder() {
+  /* ════════ CHECKOUT → PAYMENT ════════
+     Flow: cart → #checkout (receiver, delivery, address) → order saved as «unpaid» → Zibal gateway →
+     bank sends the buyer back here → payment verified → order becomes «در حال بسته‌بندی» by itself (no manager approval). */
+  const PAY = {
+    api: '',            // your own server, e.g. 'https://nakhljiroft.ir/api' (pay-request.php / pay-verify.php). Empty = Zibal test mode
+    merchant: 'zibal'   // Zibal's public test merchant. The REAL merchant code lives only on your server, never in this file
+  };
+  const toLatinD = s => String(s || '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+  const faD = s => String(s).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);   // digits only, no thousands separator (postal codes)
+  const shipCost = (ship, t) => ship === 'pickup' || t.free ? 'رایگان' : 'پس‌کرایه (هنگام تحویل)';
+  let ckAddr = 0;                                 // index of the chosen saved address, -1 = new address
+  function renderCheckout() {
+    const t = totals(), book = addrBook[user.phone] || [], ship = ($('input[name="ckShip"]:checked') || {}).value || 'cold';
+    if (!$('#ckName').value) $('#ckName').value = user.name || '';
+    if (!$('#ckPhone').value) $('#ckPhone').value = user.phone || '';
+    if (ckAddr >= book.length) ckAddr = book.length ? 0 : -1;
+    $('#ckAddrList').innerHTML = book.map((a, i) => `
+      <label class="ck-opt"><input type="radio" name="ckAddr" value="${i}" ${i === ckAddr ? 'checked' : ''}><span class="min-w-0 flex-1"><b>${esc(a.title || 'آدرس ' + fa(i + 1))}</b><small>${esc(a.city)}، ${esc(a.text)}${a.postal ? ' · کد پستی ' + faD(a.postal) : ''}</small></span></label>`).join('')
+      + (book.length ? `<label class="ck-opt"><input type="radio" name="ckAddr" value="-1" ${ckAddr === -1 ? 'checked' : ''}><span class="min-w-0 flex-1"><b>آدرس تازه</b><small>نشانی دیگری وارد می‌کنم</small></span></label>` : '');
+    $('#ckNewAddr').hidden = ckAddr !== -1;
+    $('#ckAddrBox').hidden = ship === 'pickup';
+    $('#ckShipCost').textContent = t.free ? 'رایگان' : 'پس‌کرایه';
+    $('#ckCount').textContent = fa(count());
+    $('#ckItems').innerHTML = Object.entries(cart).map(([id, q]) => { const p = byId[id]; return `
+      <li><span class="ck-thumb">${thumb(p, ' mini')}<em>${fa(q)}</em></span><span class="min-w-0 flex-1"><b>${p.name}</b><small>${p.unit}</small></span><span class="ck-pr">${fa(p.price * q)}</span></li>`; }).join('');
+    $('#ckSub').textContent = fa(t.sub) + ' تومان';
+    $('#ckDiscRow').hidden = !t.disc; $('#ckDisc').textContent = '− ' + fa(t.disc) + ' تومان'; $('#ckDiscL').textContent = promo ? `تخفیف (${promo.code})` : 'تخفیف';
+    $('#ckShipSum').textContent = shipCost(ship, t);
+    $('#ckTotal').textContent = fa(t.total);
+    $('#ckPay span').textContent = `پرداخت ${fa(t.total)} تومان`;
+    $('#ckErr').textContent = '';
+  }
+  $('#ckForm').addEventListener('change', e => {
+    if (e.target.name === 'ckAddr') { ckAddr = +e.target.value; renderCheckout(); if (ckAddr === -1) $('#ckCity').focus(); }
+    if (e.target.name === 'ckShip') renderCheckout();
+  });
+  $('#ckForm').addEventListener('submit', e => {
+    e.preventDefault();
     const t = totals(); if (!t.sub || !user) return;
+    const err = (m, f) => { $('#ckErr').textContent = m; if (f) { f.focus(); f.classList.add('shake'); setTimeout(() => f.classList.remove('shake'), 500); } };
+    const name = $('#ckName').value.trim(), rph = toLatinD($('#ckPhone').value).replace(/\D/g, '');
+    const ship = $('input[name="ckShip"]:checked').value, book = addrBook[user.phone] || [];
+    if (name.length < 3) return err('نام و نام خانوادگی گیرنده را بنویسید.', $('#ckName'));
+    if (!/^09\d{9}$/.test(rph)) return err('شماره موبایل گیرنده درست نیست (مثل ۰۹۱۲۳۴۵۶۷۸۹).', $('#ckPhone'));
+    let addr = 'تحویل حضوری از سردخانه‌ی نخل، جیرفت';
+    if (ship === 'cold') {
+      if (ckAddr >= 0 && book[ckAddr]) { const a = book[ckAddr]; addr = `${a.city}، ${a.text}${a.postal ? ' · کد پستی ' + faD(a.postal) : ''}`; }
+      else {
+        const city = $('#ckCity').value.trim(), text = $('#ckText').value.trim(), postal = toLatinD($('#ckPostal').value).replace(/\D/g, '');
+        if (city.length < 2) return err('استان و شهر را بنویسید.', $('#ckCity'));
+        if (text.length < 8) return err('نشانی کامل را بنویسید (خیابان، کوچه، پلاک).', $('#ckText'));
+        if (postal && postal.length !== 10) return err('کد پستی باید ۱۰ رقم باشد.', $('#ckPostal'));
+        addr = `${city}، ${text}${postal ? ' · کد پستی ' + faD(postal) : ''}`;
+        if ($('#ckSave').checked) { (addrBook[user.phone] = book).push({ title: 'آدرس ' + fa(book.length + 1), city, text, postal }); store.set('nakhl:addr:v2', addrBook); ckAddr = book.length - 1; }
+      }
+    }
+    // one unpaid order per customer: starting a new checkout replaces the unfinished one
+    orders = orders.filter(o => !(o.phone === user.phone && o.status === 'unpaid'));
     const id = 'NKH-' + (Math.max(1046, ...orders.map(o => +o.id.split('-')[1] || 0)) + 1);
     const items = Object.entries(cart).map(([pid, q]) => [pid, q, byId[pid].price]);
-    const a = (addrBook[user.phone] || [])[0];
-    orders.unshift({ id, phone: user.phone, name: user.name, addr: a ? `${a.city}، ${a.text}${a.postal ? ' · کد پستی ' + a.postal : ''}` : '', items, sub: t.sub, disc: t.disc, free: t.free, total: t.total, date: Date.now(), status: 'awaiting' });
-    items.forEach(([pid, q]) => { byId[pid].stock = Math.max(0, byId[pid].stock - q); });
-    saveOrders(); saveInv();
-    // TODO: send the order to your backend, then redirect to the payment gateway
-    Object.keys(cart).forEach(k => setQty(k, 0));
-    promo = null; $('#promoInput').value = ''; $('#promoMsg').textContent = '';
-    renderHome(); closeCart(false); dashTab = 'overview';
-    location.hash = '#receipt/' + id;                      // standalone receipt page
+    const o = { id, phone: user.phone, name, rphone: rph, addr, ship, note: $('#ckNote').value.trim(), items, sub: t.sub, disc: t.disc, promo: promo && promo.code, free: t.free || ship === 'pickup', total: t.total, date: Date.now(), status: 'unpaid', tries: 0 };
+    orders.unshift(o); saveOrders(); store.set('nakhl:cartOrder', id);
+    // TODO (server): save the order in your database here — the server must re-check prices, stock and the promo code
+    startPay(o);
+  });
+
+  /* ── Zibal: request → bank page → callback → verify ── */
+  const payBase = () => location.origin + location.pathname;          // Zibal adds ?success=&status=&trackId=&orderId= to this
+  async function startPay(o) {
+    o.tries = (o.tries || 0) + 1; saveOrders();
+    location.hash = '#pay/' + o.id; renderPay(o, 'wait');
+    const body = { amount: o.total * 10, callbackUrl: payBase(), orderId: `${o.id}_${o.tries}`, mobile: o.rphone || o.phone, description: `سفارش ${o.id} · نخل جیرفت` };   // amount in Rial
+    try {
+      const r = PAY.api
+        ? await fetch(PAY.api + '/pay-request.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        : await fetch('https://gateway.zibal.ir/v1/request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merchant: PAY.merchant, ...body }) });
+      const j = await r.json();
+      if (!j.trackId || (j.result && j.result !== 100)) throw new Error(j.message || 'request failed');
+      o.trackId = j.trackId; saveOrders();
+      location.href = 'https://gateway.zibal.ir/start/' + j.trackId;                // off to the bank
+    } catch (err) {
+      if (!PAY.api) { location.hash = '#pay/test/' + o.id; return; }                // test mode without network access → built-in test gateway
+      renderPay(o, 'fail', 'اتصال به درگاه برقرار نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.');
+    }
   }
+  /* the bank sends the buyer back to payBase()?success=1&status=2&trackId=…&orderId=NKH-1047_1 */
+  function handlePayReturn() {
+    const q = new URLSearchParams(location.search); if (!q.has('trackId')) return false;
+    const oid = (q.get('orderId') || '').split('_')[0], o = orders.find(x => x.id === oid), track = q.get('trackId');
+    history.replaceState(null, '', payBase() + (o ? '#pay/' + o.id : '#top'));
+    if (!o) { route(); return true; }
+    route(); renderPay(o, 'wait', 'در حال تأیید پرداخت با بانک…');
+    if (o.status !== 'unpaid') { renderPay(o); return true; }                      // already verified (page refreshed)
+    if (q.get('success') !== '1') { renderPay(o, 'fail', 'پرداخت انجام نشد یا لغو شد. مبلغی از حساب شما کم نشده؛ اگر کم شده باشد تا ۷۲ ساعت به حساب برمی‌گردد.'); return true; }
+    verifyPay(o, track);
+    return true;
+  }
+  async function verifyPay(o, trackId) {
+    try {
+      const r = PAY.api
+        ? await fetch(PAY.api + '/pay-verify.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ trackId, orderId: o.id }) })
+        : await fetch('https://gateway.zibal.ir/v1/verify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merchant: PAY.merchant, trackId: +trackId }) });
+      const j = await r.json();
+      const ok = PAY.api ? j.paid : (j.result === 100 || j.result === 201) && (!j.amount || j.amount === o.total * 10);
+      if (!ok) throw new Error(j.message || 'not verified');
+      markPaid(o, j.refNumber || j.refId || trackId);
+    } catch (err) { renderPay(o, 'fail', 'بانک پرداخت را تأیید نکرد. اگر مبلغ از حسابتان کم شده، تا ۷۲ ساعت برمی‌گردد.'); }
+  }
+  function markPaid(o, ref) {
+    if (o.status !== 'unpaid') return renderPay(o);
+    Object.assign(o, { status: 'processing', paid: true, paidAt: Date.now(), ref: String(ref) });   // ← registered automatically, straight to cold packing
+    o.items.forEach(([pid, q]) => { if (byId[pid]) byId[pid].stock = Math.max(0, byId[pid].stock - q); });
+    saveOrders(); saveInv();
+    if (store.get('nakhl:cartOrder', null) === o.id) {                            // empty the cart this order came from
+      Object.keys(cart).forEach(k => setQty(k, 0)); store.set('nakhl:cartOrder', null);
+      promo = null; $('#promoInput').value = ''; $('#promoMsg').textContent = '';
+    }
+    renderHome(); dashTab = 'overview';
+    renderPay(o);
+  }
+  function renderPay(o, state, msg) {
+    state = state || (o.status === 'unpaid' ? 'fail' : 'ok');
+    const IC = { ok: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', fail: '<path d="M18 6 6 18M6 6l12 12"/>', wait: '<path d="M21 12a9 9 0 1 1-6.2-8.6"/>', test: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>' };
+    $('#payIc').className = 'pay-ic ' + state; $('#payIc').innerHTML = svg(IC[state], 30, 2.4);
+    const row = (k, v, ltr) => `<div><dt>${k}</dt><dd${ltr ? ' dir="ltr"' : ''}>${v}</dd></div>`;
+    $('#payInfo').innerHTML = row('شماره سفارش', o.id, true) + row('مبلغ', `${fa(o.total)} تومان`) + (o.ref ? row('کد پیگیری بانک', esc(o.ref), true) : '');
+    const T = {
+      wait: ['در حال اتصال به درگاه…', msg || 'چند لحظه صبر کنید؛ به صفحه‌ی امن بانک منتقل می‌شوید.'],
+      ok:   ['پرداخت موفق بود', 'سفارش شما ثبت شد و برای بسته‌بندی سرد به سردخانه رفت. وضعیت ارسال را از داشبورد ببینید.'],
+      fail: ['پرداخت انجام نشد', msg || 'سفارش هنوز پرداخت نشده است. می‌توانید دوباره تلاش کنید.'],
+      test: ['درگاه پرداخت آزمایشی', 'این صفحه جای درگاه بانک را در حالت آزمایشی می‌گیرد و هیچ پولی جابه‌جا نمی‌شود. بعد از وصل شدن سرور و مرچنت واقعی زیبال، خریدار به درگاه بانک می‌رود.']
+    }[state];
+    $('#payTitle').textContent = T[0]; $('#payText').textContent = T[1];
+    $('#payActions').innerHTML = {
+      wait: '',
+      ok: `<a href="#receipt/${o.id}" class="btn-cyprus h-14 w-full text-base">مشاهده‌ی رسید</a><a href="#dashboard" class="btn-ghost h-12 w-full text-sm">پیگیری در داشبورد</a>`,
+      fail: `<button data-pay-again="${o.id}" class="btn-cyprus h-14 w-full text-base">تلاش دوباره برای پرداخت</button><a href="#checkout" class="btn-ghost h-12 w-full text-sm">بازگشت و ویرایش سفارش</a>`,
+      test: `<button data-pay-test="ok" data-oid="${o.id}" class="btn-cyprus h-14 w-full text-base">پرداخت موفق (آزمایشی)</button><button data-pay-test="no" data-oid="${o.id}" class="btn-ghost h-12 w-full text-sm">انصراف از پرداخت</button>`
+    }[state];
+  }
+  $('#payActions').addEventListener('click', e => {
+    const again = e.target.closest('[data-pay-again]'); if (again) { const o = orders.find(x => x.id === again.dataset.payAgain); if (o) startPay(o); return; }
+    const t = e.target.closest('[data-pay-test]'); if (!t) return;
+    const o = orders.find(x => x.id === t.dataset.oid); if (!o) return;
+    history.replaceState(null, '', '#pay/' + o.id); lastHash = location.hash;
+    t.dataset.payTest === 'ok' ? markPaid(o, 'TEST-' + Date.now().toString().slice(-8)) : renderPay(o, 'fail', 'پرداخت را لغو کردید. سفارش هنوز پرداخت نشده است.');
+  });
 
   /* ════════ ACCOUNTS & AUTH (standalone #auth page) ════════
      Demo only, no server: passwords are kept as salted SHA-256 hashes, never as plain text,
@@ -778,9 +923,6 @@
     const label = session ? session.name : 'ورود / ثبت‌نام', target = session ? (admin ? '#admin' : '#dashboard') : '#auth';
     $('#userBtn').setAttribute('aria-label', session ? `حساب ${session.name}` : 'ورود / ثبت‌نام');
     $('#userLabel').textContent = label;
-    $('#userDot').hidden = !session;
-    $('#mAccount').textContent = session ? (admin ? 'پنل مدیریت' : 'داشبورد من') : 'ورود / ثبت‌نام';
-    $('#mAccount').setAttribute('href', target);
     $('#loginHint').hidden = !!session;
   }
   $('#userBtn').addEventListener('click', () => { location.hash = session ? (admin ? '#admin' : '#dashboard') : '#auth'; });
@@ -820,7 +962,7 @@
     const ini = (user.name || 'م').trim()[0];
     $('#dbAvatar').textContent = ini; $('#dbPAvatar').textContent = ini;
     $('#dbPName').textContent = user.name; $('#dbPPhone').textContent = user.phone;
-    const mine = orders.filter(o => o.phone === user.phone), active = mine.filter(o => o.status !== 'delivered');
+    const mine = orders.filter(o => o.phone === user.phone), active = mine.filter(o => o.status !== 'delivered' && o.status !== 'unpaid');
     $('#dashTitle').textContent = user.name;
     $('#dashName').textContent = user.name; $('#dashPhone').textContent = user.phone;
     $('#mActive').textContent = fa(active.length);
@@ -850,8 +992,8 @@
 
     /* green "order on the way" card (latest active order) */
     const live = active[0];
-    const STEP4 = ['ثبت', 'بسته‌بندی سرد', 'ارسال', 'تحویل'], AT4 = { awaiting: 0, pending: 0, processing: 1, shipped: 2, delivered: 3 };
-    const stName = s => (s === 'awaiting' ? AWAIT : STATUS[sIdx(s)])[1];
+    const STEP4 = ['پرداخت', 'بسته‌بندی سرد', 'ارسال', 'تحویل'], AT4 = { unpaid: 0, pending: 0, processing: 1, shipped: 2, delivered: 3 };
+    const stName = s => (s === 'unpaid' ? UNPAID : STATUS[sIdx(s)])[1];
     if (live) {
       const at = AT4[live.status] ?? 0, code = `JRF-${live.id.split('-')[1]}-${live.phone.slice(-4)}`;
       $('#trackCard').innerHTML = `
@@ -876,9 +1018,9 @@
     const reqs = requests.filter(r => r.phone === user.phone), lastReq = reqs[0];
     {
       const NOTE = {
-        awaiting:   ['ثبت شد', 'منتظر تایید سفارش و پرداخت توسط مدیر است.'],
-        pending:    ['تایید شد', 'پرداخت تایید شد و به‌زودی بسته‌بندی می‌شود.'],
-        processing: ['در حال بسته‌بندی سرد', 'در سالن سرد بسته‌بندی و آماده‌ی ارسال می‌شود.'],
+        unpaid:     ['پرداخت نشده', 'پرداخت را کامل کنید تا سفارش ثبت شود.'],
+        pending:    ['پرداخت شد', 'به‌زودی بسته‌بندی می‌شود.'],
+        processing: ['پرداخت و ثبت شد', 'در سالن سرد بسته‌بندی و آماده‌ی ارسال می‌شود.'],
         shipped:    ['ارسال شد', 'با کامیون یخچال‌دار در راه شماست.'],
         delivered:  ['تحویل داده شد', 'امیدواریم از خرمای تازه لذت ببرید.']
       };
@@ -916,7 +1058,7 @@
           <div><p class="font-display font-black text-cyprus">سفارش <span dir="ltr">${o.id}</span></p><p class="mt-1 text-xs text-ink-soft">${dateFa(o.date)} · ${fa(nItems(o))} کالا · ${kgFa(kgOf(o))} کیلوگرم</p></div>
           <div class="flex items-center gap-3">${statusPill(o.status)}<p class="font-display text-lg font-black tabular-nums text-cyprus">${fa(o.total)} <span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p></div>
         </div>
-        <div class="mt-3 flex items-center gap-1.5">${thumbs(o.items)}<a href="#receipt/${o.id}" class="ease-ui ms-auto inline-flex h-9 items-center gap-1 rounded-full border border-cyprus/15 px-3 text-xs font-bold text-cyprus hover:border-cyprus hover:bg-cyprus hover:text-white active:scale-95">${svg('<path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6"/>', 14, 2)}رسید</a></div>
+        <div class="mt-3 flex items-center gap-1.5">${thumbs(o.items)}${o.status === 'unpaid' ? `<button data-pay="${o.id}" class="btn-cyprus ms-auto h-9 px-4 text-xs">پرداخت</button>` : ''}<a href="#receipt/${o.id}" class="ease-ui ${o.status === 'unpaid' ? '' : 'ms-auto '} inline-flex h-9 items-center gap-1 rounded-full border border-cyprus/15 px-3 text-xs font-bold text-cyprus hover:border-cyprus hover:bg-cyprus hover:text-white active:scale-95">${svg('<path d="M6 2h12v20l-3-2-3 2-3-2-3 2z"/><path d="M9 7h6M9 11h6"/>', 14, 2)}رسید</a></div>
         ${chain(o.status)}
       </li>`).join('') : empty('هنوز سفارشی ثبت نکرده‌اید', '#products', 'شروع خرید');
 
@@ -964,6 +1106,7 @@
   /* open the header search inside the tap itself, so iPhone shows the keyboard (it refuses focus() from a timer) */
   $('#dbSearch').addEventListener('click', () => { scrollTo({ top: 0, behavior: smooth }); if (!$('#navSearch').classList.contains('open')) $('#searchToggle').click(); else $('#search').focus(); });
   $('#dashBody').addEventListener('click', e => {
+    const pz = e.target.closest('[data-pay]'); if (pz) { const o = orders.find(x => x.id === pz.dataset.pay); if (o) startPay(o); return; }
     const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
     const add = e.target.closest('[data-qadd]');
     if (add) { const id = add.dataset.qadd; setQty(id, (cart[id] || 0) + 1); fly(add, () => { bump($('#cartCount')); updateBar(true); }); toast(`${byId[id].name} به سبد اضافه شد`); return; }
@@ -1001,59 +1144,14 @@
   const orderRow = o => `
       <li class="card grid gap-4 p-5 lg:grid-cols-[1fr_1.4fr_1fr_300px] lg:items-center lg:gap-5">
         <div><p class="font-display font-black text-cyprus" dir="ltr" style="text-align:right">${o.id}</p><p class="mt-1 text-xs text-ink-soft">${dateFa(o.date)} · ${kgFa(kgOf(o))} کیلوگرم</p></div>
-        <div class="min-w-0 text-sm"><p class="tel font-bold text-ink" dir="ltr" style="text-align:right">${o.phone}</p><p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-soft">${o.items.map(([id, q]) => `<span class="whitespace-nowrap">${byId[id].name} × ${fa(q)}</span>`).join('، ')}</p></div>
+        <div class="min-w-0 text-sm"><p class="font-display font-bold text-ink">${esc(o.name || custName(o.phone))} <span class="tel text-xs font-normal text-ink-soft" dir="ltr">${o.rphone || o.phone}</span></p><p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-soft">${o.items.map(([id, q]) => `<span class="whitespace-nowrap">${byId[id].name} × ${fa(q)}</span>`).join('، ')}</p></div>
         <div class="flex items-center gap-2"><p class="font-display text-lg font-black tabular-nums text-cyprus">${fa(o.total)} <span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           <button data-print="${o.id}" class="ease-ui ms-auto inline-flex h-9 items-center gap-1.5 rounded-full border border-cyprus/15 bg-white px-3 text-xs font-bold text-cyprus hover:border-cyprus hover:bg-cyprus hover:text-white active:scale-95 lg:ms-0" aria-label="چاپ فاکتور ${o.id}">${svg('<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>', 15, 2)}فاکتور</button></div>
         ${seg(o)}
+        <div class="adm-ship lg:col-span-4">${svg(o.ship === 'pickup' ? '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/>' : '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>', 15, 2)}<span class="min-w-0"><b>${o.ship === 'pickup' ? 'تحویل حضوری' : 'ارسال به'}:</b> ${esc(o.addr || 'هماهنگی تلفنی')}${o.note ? `<br><b>توضیح مشتری:</b> ${esc(o.note)}` : ''}${o.ref ? `<br><b>کد پیگیری بانک:</b> <span dir="ltr">${esc(o.ref)}</span>` : ''}</span></div>
       </li>`;
 
-  /* ── review queue · corrections ── */
-  const revSel = new Set(); let revRange = 7;
   const clock = d => new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' }).format(new Date(d));
-  const dShort = d => new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(d));
-  const ICO = { ok: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', del: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/>', undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-1"/>', st: '<path d="M4 12h16M14 6l6 6-6 6"/>' };
-  function renderReview() {
-    const lim = revRange ? Date.now() - revRange * DAY : 0;
-    const q = orders.filter(o => o.status === 'awaiting' && o.date >= lim);
-    [...revSel].forEach(id => { if (!q.some(o => o.id === id)) revSel.delete(id); });
-    $('#revCount').textContent = fa(q.length) + ' سفارش';
-    $('#revRows').innerHTML = q.length ? q.map(o => `
-      <tr class="ease-ui ${revSel.has(o.id) ? 'bg-cyprus-soft/50' : 'hover:bg-sand-light'}">
-        <td class="c-chk px-4 py-3.5"><input type="checkbox" class="chk" data-rsel="${o.id}" ${revSel.has(o.id) ? 'checked' : ''} aria-label="انتخاب ${o.id}"></td>
-        <td class="c-id px-3 py-3.5"><b class="latin text-cyprus" dir="ltr">${o.id}</b></td>
-        <td class="c-date px-3 py-3.5 text-xs text-ink-muted"><span class="block font-bold text-ink">${dShort(o.date)}</span> ${clock(o.date)}</td>
-        <td class="c-cust px-3 py-3.5"><span class="block font-display font-bold text-ink">${esc(o.name || custName(o.phone))}</span><span class="tel text-xs text-ink-soft" dir="ltr">${o.phone}</span></td>
-        <td class="c-items max-w-[220px] px-3 py-3.5 text-xs leading-6 text-ink-muted">${o.items.map(([id, n]) => `<span class="whitespace-nowrap">${byId[id].name} × ${fa(n)}</span>`).join('، ')}</td>
-        <td class="c-amt px-3 py-3.5 font-display font-black tabular-nums text-cyprus">${fa(o.total)} <span class="md:hidden text-[11px] font-bold text-cyprus-mid">تومان</span></td>
-        <td class="c-act px-4 py-3.5"><div class="flex justify-center gap-2">
-          <button data-rok="${o.id}" class="ease-ui grid h-9 w-9 place-items-center rounded-xl bg-cyprus-soft text-cyprus hover:bg-[#28622D] hover:text-white active:scale-90" aria-label="تأیید سفارش ${o.id}" title="تایید سفارش و پرداخت">${svg(ICO.ok, 17, 2.6)}</button>
-          <button data-rdel="${o.id}" class="ease-ui grid h-9 w-9 place-items-center rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white active:scale-90" aria-label="حذف ${o.id}" title="حذف سفارش">${svg(ICO.del, 16, 2.2)}</button>
-        </div></td>
-      </tr>`).join('') : `<tr><td colspan="7" class="px-4 py-10 text-center font-display font-bold text-cyprus">سفارش تازه‌ای برای بررسی نیست ✓</td></tr>`;
-    const all = $('#revAll'); all.checked = q.length > 0 && revSel.size === q.length; all.indeterminate = revSel.size > 0 && revSel.size < q.length; all.disabled = !q.length;
-    const n = revSel.size;
-    $('#revApprove').disabled = !n; $('#revDelete').disabled = !n;
-    $('#revApprove').lastChild.textContent = n ? `تایید ${fa(n)} سفارش` : 'تایید انتخاب‌شده‌ها';
-    $('#revDelete').lastChild.textContent = n ? `حذف ${fa(n)} سفارش` : 'حذف انتخاب‌شده‌ها';
-  }
-
-  function approveOrders(ids) {
-    // ✓ = order and payment confirmed → it goes straight to cold packing. TODO: POST to your backend (admin role checked server-side)
-    let n = 0; ids.forEach(id => { const o = orders.find(x => x.id === id); if (o && o.status === 'awaiting') { o.status = 'processing'; o.paid = true; n++; } });
-    saveOrders(); ids.forEach(id => revSel.delete(id)); return n;
-  }
-  function deleteOrders(ids) {
-    // TODO: delete on your backend
-    const before = orders.length; orders = orders.filter(o => !ids.includes(o.id));
-    saveOrders(); ids.forEach(id => revSel.delete(id)); return before - orders.length;
-  }
-  /* deleting is permanent, so it takes two taps: the first one asks «مطمئنید؟», the second deletes */
-  const armed = (b, label) => {
-    if (b.dataset.sure === '1') return true;
-    b.dataset.sure = '1'; b._old = b.innerHTML; b.classList.add('confirming'); b.innerHTML = label;
-    return false;
-  };
-
   function renderAdmin() {
     $('#admGuest').hidden = !!admin; $('#admBody').hidden = !admin; $('#admDock').hidden = !admin;
     if (!admin) return;
@@ -1065,56 +1163,44 @@
     $('#admName').textContent = admin.name; $('#admMeBtn').textContent = ini; $('#admMeAv').textContent = ini;
     $('#admMeName').textContent = admin.name; $('#admMePhone').textContent = admin.phone;
     const k = s => orders.filter(o => o.status === s).length;
-    $('#admNewBadge').textContent = fa(k('awaiting')); $('#admNewBadge').hidden = !k('awaiting');
-    $('#admDockBadge').textContent = fa(k('awaiting')); $('#admDockBadge').hidden = !k('awaiting');
-    /* bell: new orders waiting for ✓ and cold-storage requests still under review */
+    $('#admNewBadge').textContent = fa(k('processing')); $('#admNewBadge').hidden = !k('processing');
+    $('#admDockBadge').textContent = fa(k('processing')); $('#admDockBadge').hidden = !k('processing');
+    /* bell: newly paid orders (ready to pack) and cold-storage requests still under review */
     {
-      const waitO = orders.filter(o => o.status === 'awaiting'), waitR = requests.filter(r => r.status === 'review');
+      const seen = new Set(store.get('nakhl:admSeen', []) || []);
       const notes = [
-        ...waitO.map(o => ({ d: o.date, go: 'orders', ic: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/>',
-          t: `سفارش تازه <span dir="ltr">${o.id}</span>`, s: `${esc(o.name || custName(o.phone))} · ${fa(o.total)} تومان — منتظر تایید شما` })),
-        ...waitR.map(r => ({ d: r.date, go: 'storage', ic: '<path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/>',
+        ...orders.filter(o => o.status === 'processing').map(o => ({ d: o.paidAt || o.date, go: 'orders', k: o.id, ic: '<path d="m16 16 2 2 4-4"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="M3.3 7 12 12l8.7-5M12 22V12"/>',
+          t: `سفارش پرداخت‌شده <span dir="ltr">${o.id}</span>`, s: `${esc(o.name || custName(o.phone))} · ${fa(o.total)} تومان — آماده‌ی بسته‌بندی` })),
+        ...requests.filter(r => r.status === 'review').map(r => ({ d: r.date, go: 'storage', k: r.id, ic: '<path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/>',
           t: `${REQ_TYPES[r.type] || 'درخواست'} <span dir="ltr">${r.id}</span>`, s: `${esc(r.name)} — در انتظار بررسی` }))
-      ].sort((a, b) => b.d - a.d).slice(0, 8);
-      $('#admDot').hidden = !notes.length;
-      $('#admNotesN').textContent = notes.length ? fa(notes.length) + ' مورد' : '';
+      ].sort((a, b) => b.d - a.d).slice(0, 10);
+      const fresh = notes.filter(n => !seen.has(n.k)).length;
+      $('#admDot').hidden = !fresh;
+      $('#admNotesN').textContent = fresh ? fa(fresh) + ' تازه' : '';
       $('#admNotesList').innerHTML = notes.length ? notes.map(n => `
-        <li><button type="button" data-goto-n="${n.go}" class="db-note new"><i>${svg(n.ic, 16, 2)}</i><span class="min-w-0 flex-1"><b>${n.t}</b><small>${n.s}</small><em>${dateFa(n.d)} · ${clock(n.d)}</em></span></button></li>`).join('')
-        : `<li class="db-note-empty">کار تازه‌ای نیست؛ همه‌چیز تایید شده ✓</li>`;
+        <li><button type="button" data-goto-n="${n.go}" class="db-note${seen.has(n.k) ? '' : ' new'}"><i>${svg(n.ic, 16, 2)}</i><span class="min-w-0 flex-1"><b>${n.t}</b><small>${n.s}</small><em>${dateFa(n.d)} · ${clock(n.d)}</em></span></button></li>`).join('')
+        : `<li class="db-note-empty">سفارش تازه‌ای نیست ✓</li>`;
+      $('#admBell').dataset.keys = JSON.stringify(notes.map(n => n.k));
     }
+
     const used = HALLS.reduce((s, h) => s + h.used, 0), cap = HALLS.reduce((s, h) => s + h.cap, 0), occ = Math.round(used / cap * 100);
 
     if (admTab === 'stats') {
-      const sold = orders.filter(o => o.status !== 'awaiting');           // only approved orders count as sales
+      const sold = orders.filter(o => o.status !== 'unpaid');             // only paid orders count as sales
       const now = Date.now(), sum = (a, b) => sold.filter(o => now - o.date >= a * DAY && now - o.date < b * DAY).reduce((s, o) => s + o.total, 0);
       const last = sum(0, 7), prev = sum(7, 14), g = prev ? (last - prev) / prev * 100 : null;
-      const pend = orders.filter(o => o.status === 'awaiting').reduce((s, o) => s + o.total, 0);
       $('#kRevenue').textContent = fa(sold.reduce((s, o) => s + o.total, 0));
-      $('#kPending').textContent = pend ? `${fa(pend)} تومان در انتظار تأیید` : '';
+      const d00 = new Date(); d00.setHours(0, 0, 0, 0); const today = sold.filter(o => (o.paidAt || o.date) >= d00.getTime()).reduce((s, o) => s + o.total, 0);
+      $('#kPending').textContent = today ? `امروز ${fa(today)} تومان` : 'امروز هنوز فروشی ثبت نشده';
       $('#kGrowth').innerHTML = g === null ? 'بدون مقایسه' : `${svg(g >= 0 ? '<path d="m3 17 6-6 4 4 8-8"/><path d="M14 7h7v7"/>' : '<path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/>', 14, 2.4)}${g >= 0 ? '+' : '−'}${fa(Math.abs(Math.round(g * 10) / 10))}٪`;
       $('#kGrowthL').textContent = g === null ? 'هفته‌ی قبل فروشی نبوده' : 'نسبت به ۷ روز قبل';
       const d0 = new Date(); d0.setHours(0, 0, 0, 0);
       const days = Array.from({ length: 7 }, (_, i) => { const st = d0.getTime() - (6 - i) * DAY; return { l: new Intl.DateTimeFormat('fa-IR', { weekday: 'short' }).format(st), v: sold.filter(o => o.date >= st && o.date < st + DAY).reduce((s, o) => s + o.total, 0) }; });
       const max = Math.max(1, ...days.map(d => d.v));
       $('#kChart').innerHTML = days.map((d, i) => `<div class="flex flex-1 flex-col items-center gap-1.5"><div class="flex h-24 w-full items-end"><span class="block w-full rounded-lg ${i === 6 ? 'bg-white' : 'bg-white/35'}" style="height:${Math.max(6, d.v / max * 100)}%" title="${fa(d.v)} تومان"></span></div><span class="text-[10px] text-white/60">${d.l}</span></div>`).join('');
-      $('#kNew').textContent = fa(k('awaiting')); $('#kProc').textContent = fa(k('processing'));
+      $('#kNew').textContent = fa(k('processing')); $('#kProc').textContent = fa(k('shipped'));
       $('#kRing').style.background = ring(occ); $('#kOcc').textContent = fa(occ) + '٪';
       $('#kOccText').textContent = `${fa(used)} از ${fa(cap)} تن`;
-      /* today's work: every order still waiting for ✓ (newest first) */
-      const wait = orders.filter(o => o.status === 'awaiting');
-      $('#admTodayN').textContent = wait.length ? fa(wait.length) : '';
-      $('#admToday').innerHTML = wait.length ? wait.slice(0, 6).map(o => { const nm = o.name || custName(o.phone); return `
-        <li class="adm-task">
-          <div class="adm-task-top">
-            <span class="db-avatar adm-task-av" aria-hidden="true">${esc(nm.trim()[0] || 'م')}</span>
-            <div class="min-w-0 flex-1"><p class="truncate font-display font-black text-ink">${esc(nm)}</p><p class="mt-0.5 text-xs text-ink-soft"><span dir="ltr" class="latin">${o.id}</span> · ${clock(o.date)} · ${fa(nItems(o))} کالا</p></div>
-            <div class="adm-acts">
-              <button data-rok="${o.id}" class="adm-ok" aria-label="تایید سفارش و پرداخت ${o.id}">${svg(ICO.ok, 18, 2.6)}</button>
-              <button data-rdel="${o.id}" class="adm-del" aria-label="حذف ${o.id}">${svg(ICO.del, 17, 2.2)}</button>
-            </div>
-          </div>
-          <div class="adm-task-foot"><span class="min-w-0 truncate">${o.items.map(([id, n]) => `${byId[id].name} × ${fa(n)}`).join('، ')}</span><b>${fa(o.total)} <small>تومان</small></b></div>
-        </li>`; }).join('') : `<li class="adm-task-empty"><i>${svg(ICO.ok, 20, 2.6)}</i>کار تازه‌ای نیست؛ همه‌ی سفارش‌ها و پرداخت‌ها تایید شده‌اند.</li>`;
       $('#admHalls').innerHTML = HALLS.map(h => { const pc = Math.round(h.used / h.cap * 100); return `
         <li class="adm-hall">
           <p class="truncate font-display text-sm font-black text-ink">${h.name}</p>
@@ -1124,10 +1210,9 @@
         </li>`; }).join('');
     }
     if (admTab === 'orders') {
-      $$('#admFilters .chip').forEach(b => { b.setAttribute('aria-pressed', b.dataset.f === admFilter); $('.c', b).textContent = fa(b.dataset.f === 'all' ? orders.filter(o => o.status !== 'awaiting').length : k(b.dataset.f)); });
-      renderReview();
-      const list = orders.filter(o => o.status !== 'awaiting' && (admFilter === 'all' || o.status === admFilter));
-      $('#admOrders').innerHTML = list.length ? list.map(orderRow).join('') : `<li class="card p-10 text-center font-display font-bold text-cyprus">${orders.some(o => o.status !== 'awaiting') ? 'سفارشی با این وضعیت نیست' : 'هنوز سفارشی تأیید نشده؛ سفارش‌های جدید در بخش «بررسی و تأیید» بالا هستند.'}</li>`;
+      $$('#admFilters .chip').forEach(b => { b.setAttribute('aria-pressed', b.dataset.f === admFilter); $('.c', b).textContent = fa(b.dataset.f === 'all' ? orders.filter(o => o.status !== 'unpaid').length : k(b.dataset.f)); });
+      const list = orders.filter(o => o.status !== 'unpaid' && (admFilter === 'all' || o.status === admFilter));
+      $('#admOrders').innerHTML = list.length ? list.map(orderRow).join('') : `<li class="card p-10 text-center font-display font-bold text-cyprus">${orders.some(o => o.status !== 'unpaid') ? 'سفارشی با این وضعیت نیست' : 'هنوز سفارش پرداخت‌شده‌ای نیست؛ هر پرداخت موفق خودکار اینجا می‌آید.'}</li>`;
     }
     if (admTab === 'inventory') {
       $('#invList').innerHTML = products.map(p => `
@@ -1190,7 +1275,8 @@
     const close = () => pops.forEach(([b, p]) => { p.hidden = true; p.classList.remove('on'); b.setAttribute('aria-expanded', false); });
     pops.forEach(([b, p]) => b.addEventListener('click', e => {
       e.stopPropagation(); const open = p.hidden; close();
-      if (open) { p.hidden = false; b.setAttribute('aria-expanded', true); requestAnimationFrame(() => p.classList.add('on')); }
+      if (open) { p.hidden = false; b.setAttribute('aria-expanded', true); requestAnimationFrame(() => p.classList.add('on'));
+        if (p.id === 'admNotes') { store.set('nakhl:admSeen', JSON.parse(b.dataset.keys || '[]')); $('#admDot').hidden = true; $('#admNotesN').textContent = ''; } }
     }));
     $('#admNotes').addEventListener('click', e => { const n = e.target.closest('[data-goto-n]'); if (n) { close(); goAdmTab(n.dataset.gotoN); } });
     document.addEventListener('pointerdown', e => { if (!e.target.closest('#admNotes, #admMe, #admBell, #admMeBtn')) close(); });
@@ -1205,22 +1291,10 @@
       // TODO: PATCH the status on your backend (admin role checked server-side)
       o.status = s.dataset.st; saveOrders(); renderAdmin(); toast(`وضعیت ${o.id}: ${STATUS[sIdx(o.status)][1]}`); return;
     }
-    const ok = e.target.closest('[data-rok]');
-    if (ok) { approveOrders([ok.dataset.rok]); renderAdmin(); toast(`سفارش ${ok.dataset.rok} و پرداختش تایید شد`); return; }
-    const del = e.target.closest('[data-rdel]');
-    if (del) { if (!armed(del, '<span class="px-1 text-[11px] font-bold">مطمئنید؟</span>')) return; deleteOrders([del.dataset.rdel]); renderAdmin(); toast(`سفارش ${del.dataset.rdel} حذف شد`); return; }
-    if (e.target.closest('#revApprove')) { const n = approveOrders([...revSel]); renderAdmin(); toast(`${fa(n)} سفارش و پرداختشان تایید شد`); return; }
-    const bd = e.target.closest('#revDelete');
-    if (bd) { if (!armed(bd, 'مطمئنید؟')) return; bd.dataset.sure = ''; bd.classList.remove('confirming'); bd.innerHTML = bd._old; const n = deleteOrders([...revSel]); renderAdmin(); toast(`${fa(n)} سفارش حذف شد`); return; }
     const r = e.target.closest('[data-rst]');
     if (r) { const q = requests.find(x => x.id === r.dataset.rid); if (q) { q.status = r.dataset.rst; saveRequests(); renderAdmin(); toast(`درخواست ${q.id}: ${REQ_STATUS.find(x => x[0] === q.status)[1]}`); } return; }
     const pr = e.target.closest('[data-print]');
     if (pr) printInvoice(orders.find(x => x.id === pr.dataset.print));
-  });
-  $('#revBox').addEventListener('change', e => {
-    if (e.target.id === 'revRange') { revRange = +e.target.value; revSel.clear(); return renderReview(); }
-    if (e.target.id === 'revAll') { const lim = revRange ? Date.now() - revRange * DAY : 0; revSel.clear(); if (e.target.checked) orders.filter(o => o.status === 'awaiting' && o.date >= lim).forEach(o => revSel.add(o.id)); return renderReview(); }
-    const c = e.target.closest('[data-rsel]'); if (c) { c.checked ? revSel.add(c.dataset.rsel) : revSel.delete(c.dataset.rsel); renderReview(); }
   });
   $('#invList').addEventListener('input', e => {
     const inp = e.target.closest('[data-inv="price"]'); if (!inp) return;
@@ -1263,7 +1337,7 @@
     const b = e.currentTarget, t = $('span', b);
     if (b.dataset.sure !== '1') { b.dataset.sure = '1'; t.textContent = 'مطمئنید؟'; return; }
     b.dataset.sure = ''; t.textContent = 'پاک کردن همه‌ی سفارش‌ها';
-    orders = seed(); saveOrders(); revSel.clear(); requests = seedReq(); saveRequests(); admFilter = 'all'; renderAdmin(); toast('همه‌ی سفارش‌ها و درخواست‌ها پاک شد'); });
+    orders = seed(); saveOrders(); requests = seedReq(); saveRequests(); admFilter = 'all'; renderAdmin(); toast('همه‌ی سفارش‌ها و درخواست‌ها پاک شد'); });
 
   /* admin "فاکتور" prints the same receipt card customers get */
   function printInvoice(o) {
@@ -1282,7 +1356,9 @@
     $('#rcWhen').textContent = `${new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' }).format(d)} - ${new Intl.DateTimeFormat('fa-IR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(d)}`;
     $('#rcBuyer').innerHTML = row('نام و نام خانوادگی', esc(o.name || custName(o.phone)))
       + row('شماره تماس', o.phone, true)
-      + row('آدرس تحویل', esc(o.addr || 'هماهنگی تلفنی'));
+      + (o.rphone && o.rphone !== o.phone ? row('موبایل گیرنده', o.rphone, true) : '')
+      + row(o.ship === 'pickup' ? 'تحویل' : 'آدرس تحویل', esc(o.addr || 'هماهنگی تلفنی'))
+      + (o.note ? row('توضیحات', esc(o.note)) : '');
     const sub = o.sub ?? o.items.reduce((s, [id, q, pr]) => s + q * (pr ?? byId[id].price), 0), disc = o.disc ?? Math.max(0, sub - o.total);
     $('#rcOrder').innerHTML = o.items.map(([id, q, pr]) => { const p = byId[id], u = pr ?? p.price;
         return `<div class="flex items-start justify-between gap-4"><dt class="min-w-0 text-ink"><b class="font-bold">${p.name}</b><span class="block text-xs text-ink-soft">${p.unit} · ${fa(q)} عدد، هر عدد ${fa(u)} تومان</span></dt><dd class="shrink-0 whitespace-nowrap text-left font-bold leading-6 text-ink">${fa(q * u)} تومان</dd></div>`; }).join('')
@@ -1291,22 +1367,19 @@
       + row('وزن کل', `${kgFa(o.items.reduce((s, [id, q]) => s + byId[id].kg * q, 0))} کیلوگرم`)
       + row('شماره سفارش', o.id, true)
       + row('کد رهگیری', trackCode(o), true)
-      + row('ارسال', (o.free ?? sub >= FREE_SHIP) ? 'رایگان (یخچال‌دار)' : 'پس‌کرایه (یخچال‌دار)');
+      + row('ارسال', o.ship === 'pickup' ? 'تحویل حضوری (رایگان)' : (o.free ?? sub >= FREE_SHIP) ? 'رایگان (یخچال‌دار)' : 'پس‌کرایه (یخچال‌دار)');
     $('#rcTotal').textContent = fa(o.total);
     $('#rcToman').textContent = `معادل ${fa(o.total * 10)} ریال`;
     $('#rcDash').hidden = !(user && user.phone === o.phone);
-    $('#rcSms').href = smsHref(orderSms(o)); rcOrder = o;
-    $('#rcSmsLbl').textContent = canSMS ? 'ارسال سفارش با پیامک' : 'کپی متن سفارش برای پیامک'; $('#rcSmsNote').hidden = true;
+    const paid = o.status !== 'unpaid'; rcOrder = o;
+    $('#rcState').classList.toggle('unpaid', !paid);
+    $('#rcIc').innerHTML = svg(paid ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : '<path d="M12 8v5M12 16.5v.5"/><circle cx="12" cy="12" r="9"/>', 20, 2.6);
+    $('#rcStateT').textContent = paid ? 'پرداخت موفق؛ سفارش ثبت شد' : 'سفارش هنوز پرداخت نشده';
+    $('#rcStateS').textContent = paid ? (o.ref ? `کد پیگیری بانک: ${o.ref}` : 'سفارش برای بسته‌بندی سرد به سردخانه رفت.') : 'برای ثبت نهایی، پرداخت آنلاین را کامل کنید.';
+    $('#rcPay').hidden = paid || !(user && user.phone === o.phone);
   }
   let rcOrder = null;
-  $('#rcSms').addEventListener('click', e => {
-    if (canSMS || !rcOrder) return;
-    e.preventDefault();
-    copyText(orderSms(rcOrder)).then(ok => {
-      const n = $('#rcSmsNote'); n.hidden = false;
-      n.textContent = ok ? `متن سفارش کپی شد. آن را از گوشی به ${SHOP_SMS_FA} پیامک کنید.` : `لطفاً شماره‌ی سفارش را به ${SHOP_SMS_FA} پیامک کنید.`;
-    });
-  });
+  $('#rcPay').addEventListener('click', () => { if (rcOrder) startPay(rcOrder); });
   const orderSms = o => {
     const lines = [`سفارش ${o.id} · نخل جیرفت`, `نام: ${o.name || custName(o.phone)}`, `موبایل: ${o.phone}`, `آدرس: ${o.addr || 'هماهنگی تلفنی'}`, '—'];
     o.items.forEach(([id, q, pr]) => { const p = byId[id]; lines.push(`${p.name} (${p.unit}) × ${fa(q)} = ${fa(q * (pr ?? p.price))}`); });
@@ -1387,5 +1460,5 @@
   $('#cartCount').textContent = fa(count());
   updateUserUI();
   updateBar();
-  if (/^#(products|dashboard|account|admin|auth|receipt)/.test(location.hash)) route(); else play();
+  if (!handlePayReturn()) { if (/^#(products|dashboard|account|admin|auth|receipt|checkout|pay)/.test(location.hash)) route(); else play(); }
 })();
