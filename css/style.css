@@ -652,8 +652,8 @@ html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezi
 #admBody:not([data-tab="stats"]) [data-pane]{margin-top:14px}
 
 /* footer: floating rounded card */
-#footer{margin-inline:12px;margin-bottom:12px}
-@media (min-width:640px){#footer{margin-inline:24px;margin-bottom:20px}}
+#footer{margin:1.5rem 0 0;border-radius:28px 28px 0 0}
+@media (min-width:640px){#footer{border-radius:44px 44px 0 0}}
 html.at-foot{background:#fff}
 
 /* wavy green bands */

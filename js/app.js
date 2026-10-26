@@ -10,11 +10,11 @@
   /* ── Products: set `img` to a PNG path when your photos are ready. Prices are samples.
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
-    { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی خانواده',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
+    { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
     { id:'mazc',  cat:'mazafati', img:'img/p/maz-carton.webp', name:'کارتن مادر مضافتی',  unit:'کارتن مادر ۱۲ کیلویی', price:2970000, badge:'', tag:'مضافتی' },
-    { id:'pia2k', cat:'piarom', img:'img/p/pia-box.webp',   name:'خرمای پیارم خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
+    { id:'pia2k', cat:'piarom', img:'img/p/pia-box.webp',   name:'خرمای پیارم',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
     { id:'piac',  cat:'piarom', img:'img/p/pia-carton.webp',   name:'کارتن مادر پیارم',   unit:'کارتن مادر ۱۲ کیلویی', price:7740000, badge:'', tag:'پیارم' },
-    { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
+    { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
     { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'کارتن مادر کلوته',   unit:'کارتن مادر ۱۲ کیلویی', price:2580000, badge:'', tag:'کلوته' },
     { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
     { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
@@ -383,7 +383,7 @@
   $('#pageNums').addEventListener('click', e => { const b = e.target.closest('[data-page]'); if (b) goPage(+b.dataset.page); });
   $('#prevPage').addEventListener('click', () => goPage(page - 1));
   $('#nextPage').addEventListener('click', () => goPage(page + 1));
-  const syncPills = () => $$('#cats .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === cat));
+  const syncPills = () => $$('#cats .chip').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === (DATE_CATS.includes(cat) ? 'dates' : cat)));
 
   let lastHash = location.hash;
   const setHash = h => { if (location.hash !== h) history.pushState(null, '', h); lastHash = location.hash; };
