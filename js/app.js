@@ -440,7 +440,7 @@
     if (h.startsWith('pay/')) {                                       // payment: connecting / test gateway / result
       const [, a, b] = h.split('/'), test = a === 'test', o = orders.find(x => x.id === (test ? b : a));
       if (!o || !(admin || (user && user.phone === o.phone))) { history.replaceState(null, '', '#top'); return route(); }
-      const changed = show('pay'); renderPay(o, test ? 'test' : null); if (changed) toTop();
+      const changed = show('pay'); renderPay(o, test ? 'test' : (paying === o.id ? 'wait' : null)); if (changed) toTop();
       return;
     }
     if (h.startsWith('receipt/')) {                                   // order receipt (owner or manager only)
@@ -699,20 +699,25 @@
 
   /* ── Zibal: request → bank page → callback → verify ── */
   const payBase = () => location.origin + location.pathname;          // Zibal adds ?success=&status=&trackId=&orderId= to this
+  let paying = null;                                                  // id of the order whose payment is in flight → its pay screen shows «در حال اتصال», never «ناموفق»
   async function startPay(o) {
     o.tries = (o.tries || 0) + 1; saveOrders();
-    location.hash = '#pay/' + o.id; renderPay(o, 'wait');
-    const body = { amount: o.total * 10, callbackUrl: payBase(), orderId: `${o.id}_${o.tries}`, mobile: o.rphone || o.phone, description: `سفارش ${o.id} · نخل جیرفت` };   // amount in Rial
+    if (!PAY.api) {                                                   // no server yet → straight to the built-in test gateway, no flash, no network call
+      paying = null;
+      if (location.hash === '#pay/test/' + o.id) renderPay(o, 'test'); else location.hash = '#pay/test/' + o.id;
+      return;
+    }
+    paying = o.id;
+    if (location.hash === '#pay/' + o.id) renderPay(o, 'wait'); else location.hash = '#pay/' + o.id;   // the router renders 'wait' too while paying === o.id
+    const body = { amount: o.total * 10, callbackUrl: payBase(), orderId: o.id, attempt: o.tries, mobile: o.rphone || o.phone, items: o.items, addr: o.addr, name: o.name, description: `سفارش ${o.id} · نخل جیرفت` };   // amount in Rial; orderId is the stable id, attempt makes Zibal's id unique per try
     try {
-      const r = PAY.api
-        ? await fetch(PAY.api + '/pay-request.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
-        : await fetch('https://gateway.zibal.ir/v1/request', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ merchant: PAY.merchant, ...body }) });
+      const r = await fetch(PAY.api + '/pay-request.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const j = await r.json();
       if (!j.trackId || (j.result && j.result !== 100)) throw new Error(j.message || 'request failed');
       o.trackId = j.trackId; saveOrders();
-      location.href = 'https://gateway.zibal.ir/start/' + j.trackId;                // off to the bank
+      location.href = j.startUrl || ('https://gateway.zibal.ir/start/' + j.trackId);                // off to the bank's own secure page
     } catch (err) {
-      if (!PAY.api) { history.replaceState(null, '', '#pay/test/' + o.id); lastHash = location.hash; route(); return; }                // test mode without network access → built-in test gateway
+      paying = null;
       renderPay(o, 'fail', 'اتصال به درگاه برقرار نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.');
     }
   }
