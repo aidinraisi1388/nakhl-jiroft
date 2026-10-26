@@ -358,8 +358,8 @@
   const hasAddr = () => user && (addrBook[user.phone] || []).length > 0;
   function goCheckout() {
     if (hasAddr()) { location.hash = '#checkout'; return; }
-    wantCheckout = true; dashTab = 'addresses';
-    if (location.hash === '#dashboard') { renderDash(); scrollTo({ top: 0, behavior: smooth }); } else location.hash = '#dashboard';
+    wantCheckout = true;
+    if (location.hash === '#dashboard/addresses') { renderDash(); scrollTo({ top: 0, behavior: smooth }); } else location.hash = '#dashboard/addresses';
     toast('برای ادامه‌ی خرید، اول آدرس تحویل را ثبت کنید');
   }
   $('#checkout').addEventListener('click', () => { if (!count()) return; closeCart(false); openLogin(goCheckout); });
@@ -433,7 +433,7 @@
     if (h === 'checkout') {                                          // address · delivery · pay
       if (!user) { openLogin(goCheckout); if (!location.hash.startsWith('#auth') && !location.hash.startsWith('#admin')) history.replaceState(null, '', '#top'); return; }
       if (!count()) { history.replaceState(null, '', '#products'); return route(); }
-      if (!hasAddr()) { wantCheckout = true; dashTab = 'addresses'; history.replaceState(null, '', '#dashboard'); toast('برای ادامه‌ی خرید، اول آدرس تحویل را ثبت کنید'); return route(); }
+      if (!hasAddr()) { wantCheckout = true; history.replaceState(null, '', '#dashboard/addresses'); toast('برای ادامه‌ی خرید، اول آدرس تحویل را ثبت کنید'); return route(); }
       const changed = show('checkout'); renderCheckout(); if (changed) toTop();
       return;
     }
@@ -459,8 +459,10 @@
       }
       const isAdm = base === 'admin';
       if (!session) { authReturn = isAdm ? 'admin' : 'dashboard'; return redirect('#auth'); }
-      if (!isAdm && admin && !user) { admTab = 'customers'; return redirect('#admin'); }   // pick a customer first
-      const changed = show(isAdm ? 'admin' : 'dashboard'); (isAdm ? renderAdmin : renderDash)(); if (changed) toTop();
+      if (!isAdm && admin && !user) return redirect('#admin/customers');   // pick a customer first
+      if (isAdm) admTab = TITLES[sub] ? sub : 'stats'; else dashTab = DASH_TABS.includes(sub) ? sub : 'overview';
+      const changed = show(isAdm ? 'admin' : 'dashboard'); (isAdm ? renderAdmin : renderDash)();
+      if (changed) toTop(); else { loadBar(); scrollTo({ top: 0, behavior: smooth }); }
       return;
     }
     const el = h && document.getElementById(h);
@@ -670,7 +672,7 @@
     if (e.target.name === 'ckAddr') { ckAddr = +e.target.value; renderCheckout(); }
     if (e.target.name === 'ckShip') renderCheckout();
   });
-  $('#ckAddAddr').addEventListener('click', () => { wantCheckout = true; dashTab = 'addresses'; location.hash = '#dashboard'; });
+  $('#ckAddAddr').addEventListener('click', () => { wantCheckout = true; location.hash = '#dashboard/addresses'; });
   $('#ckForm').addEventListener('submit', e => {
     e.preventDefault();
     const t = totals(); if (!t.sub || !user) return;
@@ -826,7 +828,7 @@
     if (mode === 'admin' ? admin : user) { after && after(); return; }
     if (mode === 'user' && admin) {                       // manager without a customer selected
       if (drawerOpen) closeCart(false);
-      admTab = 'customers'; location.hash = '#admin';
+      location.hash = '#admin/customers';
       toast('برای ثبت سفارش به‌جای مشتری، اول حساب او را از «مشتریان و پشتیبانی» باز کنید'); return;
     }
     pendingAfter = after || null; authReturn = mode === 'admin' ? 'admin' : 'dashboard';
@@ -958,7 +960,7 @@
   }
   $('#userBtn').addEventListener('click', () => { location.hash = session ? (admin ? '#admin' : '#dashboard') : '#auth'; });
   const startAct = ph => { actAs = ph; store.set('nakhl:actAs:v2', ph); syncSession(); dashTab = 'overview'; location.hash = '#dashboard'; toast(`حساب ${custName(ph)} باز شد`); };
-  const endAct = () => { actAs = null; store.set('nakhl:actAs:v2', null); syncSession(); admTab = 'customers'; location.hash = '#admin'; };
+  const endAct = () => { actAs = null; store.set('nakhl:actAs:v2', null); syncSession(); location.hash = '#admin/customers'; };
   $$('[data-logout]').forEach(b => b.addEventListener('click', () => {
     if (user && user.viaAdmin && !b.closest('#adminView')) return endAct();   // the admin panel's own button always signs the manager out            // in support mode "exit" just leaves the customer's account
     // TODO: also invalidate the session on the server
@@ -977,6 +979,7 @@
 
   /* ════════ CUSTOMER DASHBOARD ════════ */
   let dashTab = 'overview';
+  const DASH_TABS = ['overview', 'orders', 'storage', 'addresses'];
   const TIERS = [['جوانه', 0], ['نهال', 300], ['نخل', 800], ['نخلستان', 1500]];
   const TRACK = [['ثبت سفارش', 0], ['تأیید سفارش', 1], ['بسته‌بندی در سالن سرد (۲ تا ۴ درجه)', 6], ['تحویل به کامیون یخچال‌دار', 20], ['در مسیر مقصد', 30], ['تحویل به مشتری', 48]];
   const TRACK_AT = { pending: 1, processing: 2, shipped: 4, delivered: 5 };
@@ -1111,7 +1114,7 @@
       </li>`).join('') : `<li class="rounded-3xl border border-dashed border-cyprus/20 p-6 text-center text-sm text-ink-muted sm:col-span-2">هنوز آدرسی ذخیره نکرده‌اید.</li>`;
 
   }
-  const goDashTab = t => { if (t !== dashTab) { loadBar(); dashTab = t; renderDash(); } };
+  const goDashTab = t => { const to = t === 'overview' ? '#dashboard' : '#dashboard/' + t; if (location.hash !== to) location.hash = to; else scrollTo({ top: 0, behavior: smooth }); };
   $('#dashTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goDashTab(b.dataset.tab); });
   $('#dashDock').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return; goDashTab(b.dataset.tab); scrollTo({ top: 0, behavior: smooth }); });
   {
@@ -1296,7 +1299,7 @@
         </li>`).join('') : `<li class="card p-8 text-center text-sm text-ink-muted">درخواستی ثبت نشده است.</li>`;
     }
   }
-  const goAdmTab = t => { if (t !== admTab) { loadBar(); admTab = t; renderAdmin(); } scrollTo({ top: 0, behavior: smooth }); };
+  const goAdmTab = t => { const to = t === 'stats' ? '#admin' : '#admin/' + t; if (location.hash !== to) location.hash = to; else scrollTo({ top: 0, behavior: smooth }); };
   $('#admTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goAdmTab(b.dataset.tab); });
   $('#admDock').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goAdmTab(b.dataset.tab); });
   $$('[data-goto]').forEach(b => b.addEventListener('click', () => goAdmTab(b.dataset.goto)));
@@ -1486,15 +1489,27 @@
     hero.addEventListener('dragstart', e => e.preventDefault());
   }
 
-  /* ── «بازگشت»: goes to the page you came from inside the site; opened directly → the home page ── */
-  const trail = [location.hash || '#top'];
+  /* ── «بازگشت»: exactly one step back (page or section). Opened straight from a link → the page one level up ── */
+  const trail = (() => { try { const t = JSON.parse(sessionStorage.getItem('nakhl:trail')); if (Array.isArray(t) && t.length && t[t.length - 1] === (location.hash || '#top')) return t; } catch {} return [location.hash || '#top']; })();
+  const saveTrail = () => { try { sessionStorage.setItem('nakhl:trail', JSON.stringify(trail.slice(-40))); } catch {} };
   addEventListener('hashchange', () => {
     const hsh = location.hash || '#top';
     if (trail.length > 1 && trail[trail.length - 2] === hsh) trail.pop(); else if (trail[trail.length - 1] !== hsh) trail.push(hsh);
+    saveTrail();
   });
+  const parentOf = hsh => {
+    const h = decodeURIComponent(hsh.slice(1));
+    if (/^(dashboard|account)\/./.test(h)) return '#dashboard';
+    if (/^admin\/./.test(h)) return '#admin';
+    if (/^products\/./.test(h)) return '#products';
+    if (h === 'checkout') return '#products';
+    if (/^(pay|receipt)\//.test(h)) return user ? '#dashboard/orders' : '#top';
+    return '#top';
+  };
   document.addEventListener('click', e => {
     if (!e.target.closest('[data-back]')) return;
-    if (trail.length > 1) history.back(); else location.hash = '#top';
+    if (trail.length > 1) history.back();
+    else { const p = parentOf(location.hash || '#top'); trail.splice(0, trail.length, p); history.replaceState(null, '', p); lastHash = ''; saveTrail(); onNav(); }
   });
 
   /* ── Start ── */
