@@ -133,7 +133,7 @@
 
   /* ── Scroll reveal: blocks fade up as they enter the screen. One IntersectionObserver, transform/opacity only;
      each element animates once and is then released (classes removed) so hover effects keep working. ── */
-  const RV_SEL = '#top > section:not(#hero) > *, #top > .orn-palm, #top > .orn-waves, #homeGrid > .p-card, #footer .grid > *, #catalogTop > *, #dashBody > *, #admBody > *, #authView section > div';
+  const RV_SEL = '#top > section:not(#hero) > *, #homeGrid > .p-card, #footer .grid > *, #catalogTop > *, #dashBody > *, #admBody > *, #authView section > div';
   const rvIO = 'IntersectionObserver' in window && !reduce ? new IntersectionObserver(es => es.forEach(e => {
     if (!e.isIntersecting) return;
     const el = e.target; rvIO.unobserve(el); el.classList.add('rv-in');

@@ -91,16 +91,6 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 .tel{font-family:"Yekan Bakh FaNum",ui-sans-serif,sans-serif;font-weight:600;letter-spacing:.06em}
 .latin{font-family:"Yekan Bakh EN","Yekan Bakh FaNum",ui-sans-serif,sans-serif;font-weight:700;letter-spacing:.02em}
 
-/* ── Line-art ornaments (static SVG backgrounds, cached once, zero JS) ── */
-/* `round` fits whole tiles only — no palm is ever cut at the edges */
-.orn-palm{background:url("../img/orn/palm-border.svg") round no-repeat center bottom/auto 100%}
-.orn-waves{background:url("../img/orn/waves.svg") center/100% 100% no-repeat}
-.orn-boteh{background:url("../img/orn/boteh.svg") no-repeat center/contain}
-.orn-vase{background:url("../img/orn/vase.svg") no-repeat center/contain}
-.orn-door{background:url("../img/orn/door-light.svg") no-repeat center/contain}
-.bleed{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}   /* ornament strips run edge to edge of the screen */
-.orn-fit{background-repeat:no-repeat!important;background-position:center bottom!important;background-size:100% 100%!important}
-.orn-land{background:url("../img/orn/landscape-light.svg") no-repeat center bottom/100% auto;aspect-ratio:1200/110}
 /* page backgrounds (all plain for speed), one motif per page (bold line art like a printed wallpaper; colour/opacity baked into each SVG) */
 
 /* ── Auth page: light motion, transform/opacity only; loops run only while the page is visible ── */
@@ -118,11 +108,6 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 @media (hover:hover){.btn-shine:hover::after{transform:translateX(110%);transition:transform .8s var(--ease)}}
 .a-list > li{animation:viewIn .6s var(--ease) both}
 .a-list > :nth-child(2){animation-delay:.12s}.a-list > :nth-child(3){animation-delay:.24s}
-@media (prefers-reduced-motion:no-preference){
-  .a-drift{animation:aDrift 14s ease-in-out infinite alternate}
-  .a-drift2{animation:aDrift2 18s ease-in-out infinite alternate}}
-@keyframes aDrift{to{transform:translate3d(60px,50px,0) scale(1.15)}}
-@keyframes aDrift2{to{transform:translate3d(-50px,-40px,0) scale(.9)}}
 @keyframes aMark{to{transform:translate3d(0,-14px,0) rotate(-4deg)}}
 
 /* ── Product card: pure CSS, GPU-only (transform + shadow), no JS tracking ── */
@@ -166,8 +151,6 @@ html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:
 .render.lg .orb{width:58%}
 .render .halo{position:absolute;inset:6%;border-radius:50%;border:1px solid rgba(255,255,255,.14)}
 .render .halo.two{inset:20%;border-color:rgba(255,255,255,.1)}
-.float-y{animation:floatY 7s ease-in-out infinite;will-change:transform}
-@keyframes floatY{50%{transform:translateY(-10px)}}
 
 /* ── Add-to-cart control: "افزودن" → "افزوده شد ✓" → − ۱ + ── */
 .buy{position:relative;height:44px}
@@ -261,19 +244,11 @@ main.leaving{opacity:.45;transition:opacity .3s ease}
 /* ── Two-tone full-bleed section bands (Sand ⇄ Cyprus) — static paint, no JS ── */
 html,body{overflow-x:clip}
 /* iPhone rubber-band below the footer shows the footer colour, not a white strip */
-html.at-foot{background:#1D3B20}
 body.cart-on #footer{padding-bottom:5.5rem}
-.band{position:relative;isolation:isolate}
-.band::before{content:"";position:absolute;inset:0 calc(50% - 50vw);z-index:-1;pointer-events:none;background:var(--band)}
 /* one green field from the middle of the categories to the middle of the featured products, with soft wavy edges */
-.band::after{content:"";position:absolute;z-index:-1;pointer-events:none;left:calc(50% - 50vw);right:calc(50% - 50vw);height:72px;background-repeat:repeat-x;background-size:1440px 72px}
-.band-a::before{top:60%;bottom:-2px;background:#28622D}
-.band-a::after{top:calc(60% - 71px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath d='M0 35.6 L15 36.7 L30 37.6 L45 38.4 L60 39.0 L75 39.5 L90 39.8 L105 40.0 L120 40.0 L135 39.8 L150 39.4 L165 38.9 L180 38.3 L195 37.4 L210 36.5 L225 35.5 L240 34.3 L255 33.1 L270 31.8 L285 30.5 L300 29.2 L315 27.9 L330 26.7 L345 25.5 L360 24.4 L375 23.3 L390 22.4 L405 21.6 L420 21.0 L435 20.5 L450 20.2 L465 20.0 L480 20.0 L495 20.2 L510 20.6 L525 21.1 L540 21.7 L555 22.6 L570 23.5 L585 24.5 L600 25.7 L615 26.9 L630 28.2 L645 29.5 L660 30.8 L675 32.1 L690 33.3 L705 34.5 L720 35.6 L735 36.7 L750 37.6 L765 38.4 L780 39.0 L795 39.5 L810 39.8 L825 40.0 L840 40.0 L855 39.8 L870 39.4 L885 38.9 L900 38.3 L915 37.4 L930 36.5 L945 35.5 L960 34.3 L975 33.1 L990 31.8 L1005 30.5 L1020 29.2 L1035 27.9 L1050 26.7 L1065 25.5 L1080 24.4 L1095 23.3 L1110 22.4 L1125 21.6 L1140 21.0 L1155 20.5 L1170 20.2 L1185 20.0 L1200 20.0 L1215 20.2 L1230 20.6 L1245 21.1 L1260 21.7 L1275 22.6 L1290 23.5 L1305 24.5 L1320 25.7 L1335 26.9 L1350 28.2 L1365 29.5 L1380 30.8 L1395 32.1 L1410 33.3 L1425 34.5 L1440 35.6 L1440 72 L0 72Z' fill='%23377B3D' fill-opacity='.45'/%3E%3Cpath d='M0 40.0 L15 42.3 L30 44.6 L45 46.7 L60 48.5 L75 50.0 L90 51.1 L105 51.8 L120 52.0 L135 51.8 L150 51.1 L165 50.0 L180 48.5 L195 46.7 L210 44.6 L225 42.3 L240 40.0 L255 37.7 L270 35.4 L285 33.3 L300 31.5 L315 30.0 L330 28.9 L345 28.2 L360 28.0 L375 28.2 L390 28.9 L405 30.0 L420 31.5 L435 33.3 L450 35.4 L465 37.7 L480 40.0 L495 42.3 L510 44.6 L525 46.7 L540 48.5 L555 50.0 L570 51.1 L585 51.8 L600 52.0 L615 51.8 L630 51.1 L645 50.0 L660 48.5 L675 46.7 L690 44.6 L705 42.3 L720 40.0 L735 37.7 L750 35.4 L765 33.3 L780 31.5 L795 30.0 L810 28.9 L825 28.2 L840 28.0 L855 28.2 L870 28.9 L885 30.0 L900 31.5 L915 33.3 L930 35.4 L945 37.7 L960 40.0 L975 42.3 L990 44.6 L1005 46.7 L1020 48.5 L1035 50.0 L1050 51.1 L1065 51.8 L1080 52.0 L1095 51.8 L1110 51.1 L1125 50.0 L1140 48.5 L1155 46.7 L1170 44.6 L1185 42.3 L1200 40.0 L1215 37.7 L1230 35.4 L1245 33.3 L1260 31.5 L1275 30.0 L1290 28.9 L1305 28.2 L1320 28.0 L1335 28.2 L1350 28.9 L1365 30.0 L1380 31.5 L1395 33.3 L1410 35.4 L1425 37.7 L1440 40.0 L1440 72 L0 72Z' fill='%2328622D'/%3E%3C/svg%3E");background-position:center bottom}
-.band-b::before{top:-2px;bottom:46%;background:#28622D}          /* -2px: no hairline seam where the two bands meet */
-.band-b::after{top:calc(54% - 1px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath d='M0 50.1 L15 49.2 L30 48.3 L45 47.2 L60 46.1 L75 44.8 L90 43.6 L105 42.3 L120 40.9 L135 39.7 L150 38.4 L165 37.2 L180 36.1 L195 35.1 L210 34.2 L225 33.5 L240 32.9 L255 32.4 L270 32.1 L285 32.0 L300 32.1 L315 32.3 L330 32.7 L345 33.2 L360 33.9 L375 34.8 L390 35.7 L405 36.8 L420 37.9 L435 39.2 L450 40.4 L465 41.7 L480 43.1 L495 44.3 L510 45.6 L525 46.8 L540 47.9 L555 48.9 L570 49.8 L585 50.5 L600 51.1 L615 51.6 L630 51.9 L645 52.0 L660 51.9 L675 51.7 L690 51.3 L705 50.8 L720 50.1 L735 49.2 L750 48.3 L765 47.2 L780 46.1 L795 44.8 L810 43.6 L825 42.3 L840 40.9 L855 39.7 L870 38.4 L885 37.2 L900 36.1 L915 35.1 L930 34.2 L945 33.5 L960 32.9 L975 32.4 L990 32.1 L1005 32.0 L1020 32.1 L1035 32.3 L1050 32.7 L1065 33.2 L1080 33.9 L1095 34.8 L1110 35.7 L1125 36.8 L1140 37.9 L1155 39.2 L1170 40.4 L1185 41.7 L1200 43.1 L1215 44.3 L1230 45.6 L1245 46.8 L1260 47.9 L1275 48.9 L1290 49.8 L1305 50.5 L1320 51.1 L1335 51.6 L1350 51.9 L1365 52.0 L1380 51.9 L1395 51.7 L1410 51.3 L1425 50.8 L1440 50.1 L1440 0 L0 0Z' fill='%23377B3D' fill-opacity='.45'/%3E%3Cpath d='M0 43.8 L15 44.0 L30 43.7 L45 43.0 L60 41.8 L75 40.3 L90 38.4 L105 36.3 L120 34.0 L135 31.7 L150 29.4 L165 27.1 L180 25.1 L195 23.3 L210 21.9 L225 20.8 L240 20.2 L255 20.0 L270 20.3 L285 21.0 L300 22.2 L315 23.7 L330 25.6 L345 27.7 L360 30.0 L375 32.3 L390 34.6 L405 36.9 L420 38.9 L435 40.7 L450 42.1 L465 43.2 L480 43.8 L495 44.0 L510 43.7 L525 43.0 L540 41.8 L555 40.3 L570 38.4 L585 36.3 L600 34.0 L615 31.7 L630 29.4 L645 27.1 L660 25.1 L675 23.3 L690 21.9 L705 20.8 L720 20.2 L735 20.0 L750 20.3 L765 21.0 L780 22.2 L795 23.7 L810 25.6 L825 27.7 L840 30.0 L855 32.3 L870 34.6 L885 36.9 L900 38.9 L915 40.7 L930 42.1 L945 43.2 L960 43.8 L975 44.0 L990 43.7 L1005 43.0 L1020 41.8 L1035 40.3 L1050 38.4 L1065 36.3 L1080 34.0 L1095 31.7 L1110 29.4 L1125 27.1 L1140 25.1 L1155 23.3 L1170 21.9 L1185 20.8 L1200 20.2 L1215 20.0 L1230 20.3 L1245 21.0 L1260 22.2 L1275 23.7 L1290 25.6 L1305 27.7 L1320 30.0 L1335 32.3 L1350 34.6 L1365 36.9 L1380 38.9 L1395 40.7 L1410 42.1 L1425 43.2 L1440 43.8 L1440 0 L0 0Z' fill='%2328622D'/%3E%3C/svg%3E");background-position:center top}
 /* cards that sit across a band edge get a deeper shadow so they "pop" */
-.pop,.band-b .p-card{box-shadow:0 1px 2px rgba(17,44,19,.06),0 10px 24px -10px rgba(17,44,19,.22),0 28px 52px -20px rgba(17,44,19,.42)}
-@media (hover:hover){ .pop:hover,.band-b .p-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 34px 60px -18px rgba(17,44,19,.5)}}
+.pop{box-shadow:0 1px 2px rgba(17,44,19,.06),0 10px 24px -10px rgba(17,44,19,.22),0 28px 52px -20px rgba(17,44,19,.42)}
+@media (hover:hover){ .pop:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 34px 60px -18px rgba(17,44,19,.5)}}
 
 /* hero slides */
 #heroTrack{transform:translate3d(0,0,0);will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
@@ -281,7 +256,6 @@ body.cart-on #footer{padding-bottom:5.5rem}
   background:radial-gradient(55% 65% at 80% 115%,rgba(55,123,61,.85),transparent 70%),radial-gradient(40% 55% at 5% -5%,rgba(240,247,241,.12),transparent 70%),#28622D}
 .dot{position:relative;cursor:pointer}
 .dot::before{content:"";position:absolute;inset:-12px -6px}             /* easy to click */
-.slide[aria-hidden="true"] .float-y{animation-play-state:paused}   /* only the visible slide floats */
 
 /* navbar search expands inline */
 #navSearch{width:40px;transition:width .5s cubic-bezier(.22,1,.36,1),background-color .35s ease}
@@ -678,3 +652,8 @@ html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezi
 #admBody:not([data-tab="stats"]) .adm-sec{display:block}
 #dashBody:not([data-tab="overview"]) [data-pane] {margin-top:6px}
 #admBody:not([data-tab="stats"]) [data-pane]{margin-top:14px}
+
+/* footer: floating rounded card */
+#footer{margin-inline:12px;margin-bottom:12px}
+@media (min-width:640px){#footer{margin-inline:24px;margin-bottom:20px}}
+html.at-foot{background:#fff}
