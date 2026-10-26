@@ -669,3 +669,6 @@ html.at-foot{background:#fff}
 
 /* product photos on white: multiply blends the white backdrop into any light surface */
 img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
+
+/* flying product photo (white backdrop blends away) */
+.fly.im{width:64px;height:64px;border-radius:0;background:none;box-shadow:none;object-fit:contain}

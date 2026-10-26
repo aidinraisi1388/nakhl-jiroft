@@ -10,22 +10,13 @@
   /* ── Products: set `img` to a PNG path when your photos are ready. Prices are samples.
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
-    { id:'maz5',  cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی جیرفت',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
-    { id:'maz10', cat:'mazafati', img:'img/p/maz2.webp', name:'خرمای مضافتی درجه‌ی یک', unit:'جعبه‌ی ۱ کیلویی',      price:265000,  badge:'صادراتی',     tag:'مضافتی' },
-    { id:'maz20', cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی خانواده',    unit:'جعبه‌ی ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
-    { id:'mazr',  cat:'mazafati', name:'رطب تازه‌ی مضافتی',       unit:'بسته‌بندی ۷۵۰ گرمی',   price:210000,  badge:'برداشت تازه', tag:'رطب' },
-    { id:'mazb',  cat:'mazafati', img:'img/p/maz2.webp', name:'خرمای مضافتی بی‌هسته',    unit:'بسته‌بندی ۵۰۰ گرمی',   price:185000,  badge:'۱۰۰٪ ارگانیک', tag:'بی‌هسته' },
-    { id:'maz50', cat:'mazafati', img:'img/p/pack.webp', name:'خرمای مضافتی کارتنی',     unit:'کارتن ۵ کیلویی',       price:1150000, badge:'عمده',        tag:'مضافتی' },
+    { id:'maz5',  cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
+    { id:'maz20', cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی خانواده',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
     { id:'pia5',  cat:'piarom', img:'img/p/pia.webp',   name:'خرمای پیارم',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:345000,  badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
-    { id:'pia10', cat:'piarom', img:'img/p/pia2.webp',   name:'خرمای پیارم ممتاز',        unit:'جعبه‌ی ۱ کیلویی',      price:670000,  badge:'صادراتی',     tag:'پیارم' },
-    { id:'pia20', cat:'piarom', img:'img/p/pia.webp',   name:'خرمای پیارم کادویی',       unit:'جعبه‌ی هدیه ۸۰۰ گرمی', price:590000,  badge:'صادراتی',     tag:'پیارم' },
-    { id:'pia2k', cat:'piarom', img:'img/p/pia2.webp',   name:'خرمای پیارم خانواده',      unit:'جعبه‌ی ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم' },
+    { id:'pia2k', cat:'piarom', img:'img/p/pia2.webp',   name:'خرمای پیارم خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم' },
     { id:'kal5',  cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:120000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
-    { id:'kal10', cat:'kaluteh', img:'img/p/kal2.webp',  name:'خرمای کلوته صادراتی',      unit:'جعبه‌ی ۱ کیلویی',      price:230000,  badge:'صادراتی',     tag:'کلوته' },
-    { id:'kal20', cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته خانواده',      unit:'جعبه‌ی ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته' },
-    { id:'kalg',  cat:'kaluteh', img:'img/p/kal2.webp',  name:'خرمای کلوته کادویی',       unit:'جعبه‌ی هدیه ۸۰۰ گرمی', price:260000,  badge:'صادراتی',     tag:'کلوته' },
+    { id:'kal20', cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته' },
     { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
-    { id:'pisa',  cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی احمدآقایی',         unit:'بسته‌بندی ۵۰۰ گرمی',   price:1050000, badge:'صادراتی',     tag:'پسته' },
     { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
     { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
     { id:'wal',   cat:'dried',    name:'مغز گردو',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:540000,  badge:'۱۰۰٪ ارگانیک', tag:'گردو' },
@@ -84,11 +75,10 @@
   /* ── Product card ── */
   /* short line under each product name (edit freely) */
   const DESC = {
-    maz5: 'نرم و شیرین، برداشت تازه‌ی جیرفت', maz10: 'دانه‌درشت و یکدست، مناسب پذیرایی', maz20: 'بسته‌ی اقتصادی برای مصرف خانواده',
-    mazr: 'رطب آبدار، تازه از نخلستان', mazb: 'بی‌هسته و آماده‌ی مصرف', maz50: 'کارتن عمده با قیمت پلکانی',
-    pia5: 'خشک و کم‌شیرین، ماندگاری بالا', pia10: 'دانه‌ممتاز با پوست براق', pia20: 'جعبه‌ی هدیه برای مناسبت‌ها', pia2k: 'بسته‌ی بزرگ برای مصرف خانواده',
-    kal5: 'نیمه‌خشک با طعم اصیل جنوب', kal10: 'درجه‌ی صادراتی، دانه‌ی یکدست', kal20: 'بسته‌ی اقتصادی خانواده', kalg: 'جعبه‌ی هدیه‌ی شیک و سبک',
-    pis: 'مغز درشت و خندان، تازه‌برشته', pisa: 'کشیده و خوش‌طعم، دست‌چین', fig: 'نرم و شیرین، خشک‌شده در آفتاب', alm: 'مغز کامل و ترد',
+    maz5: 'نرم و شیرین، برداشت تازه‌ی جیرفت', maz20: 'بسته‌ی اقتصادی برای مصرف خانواده',
+    pia5: 'خشک و کم‌شیرین، ماندگاری بالا', pia2k: 'بسته‌ی بزرگ برای مصرف خانواده',
+    kal5: 'نیمه‌خشک با طعم اصیل جنوب', kal20: 'بسته‌ی اقتصادی خانواده',
+    pis: 'مغز درشت و خندان، تازه‌برشته', fig: 'نرم و شیرین، خشک‌شده در آفتاب', alm: 'مغز کامل و ترد',
     wal: 'مغز روشن و تازه، بدون تلخی', hzl: 'برشته‌ی ملایم با عطر دلپذیر', apr: 'ترش و شیرین، بدون شکر افزوده', rai: 'دانه‌ی سبز و شیرین قزوین'
   };
   /* product card — floating 3D image: lifts, grows and tilts on hover with a soft green glow behind it.
@@ -204,19 +194,22 @@
     if (drawerOpen) renderCart();
   };
 
-  /* one-shot flying dot: a single transform animation, no scroll/mouse listeners */
-  const fly = (from, done) => {
+  /* one-shot flying product: the product photo (or the sphere when it has none) flies into the cart pill — a single transform animation */
+  const fly = (from, done, id) => {
     const to = $('#cartPill');
     if (reduce || !from.animate) { done(); return; }
+    const p = byId[id], img = p && p.img, S = img ? 64 : 28, h = S / 2;
     const a = from.getBoundingClientRect(), b = to.getBoundingClientRect();
-    const x0 = a.left + a.width / 2 - 14, y0 = a.top + a.height / 2 - 14;
-    const dx = b.left + b.width / 2 - 14 - x0, dy = b.top + b.height / 2 - 14 - y0;
-    const dot = document.createElement('span'); dot.className = 'fly'; dot.style.left = x0 + 'px'; dot.style.top = y0 + 'px';
+    const x0 = a.left + a.width / 2 - h, y0 = a.top + a.height / 2 - h;
+    const dx = b.left + b.width / 2 - h - x0, dy = b.top + b.height / 2 - h - y0;
+    const dot = document.createElement(img ? 'img' : 'span'); dot.className = img ? 'fly im ph' : 'fly';
+    if (img) { dot.src = img; dot.alt = ''; dot.decoding = 'async'; }
+    dot.style.left = x0 + 'px'; dot.style.top = y0 + 'px';
     document.body.appendChild(dot);
     dot.animate([
-      { transform: 'translate(0,0) scale(1)', opacity: 1 },
-      { transform: `translate(${dx * .45}px,${dy * .45 - 90}px) scale(.85)`, opacity: 1, offset: .45 },
-      { transform: `translate(${dx}px,${dy}px) scale(.3)`, opacity: .4 }
+      { transform: 'translate(0,0) scale(1) rotate(0)', opacity: 1 },
+      { transform: `translate(${dx * .45}px,${dy * .45 - 90}px) scale(.9) rotate(-8deg)`, opacity: 1, offset: .45 },
+      { transform: `translate(${dx}px,${dy}px) scale(.3) rotate(-14deg)`, opacity: .5 }
     ], { duration: 700, easing: 'cubic-bezier(0.45, 0, 0.55, 1)' }).onfinish = () => { dot.remove(); done(); };
   };
 
@@ -228,7 +221,7 @@
       if (add && buy.dataset.state === 'idle') {
         buy.dataset.state = 'added';               // instant feedback: "افزوده شد ✓"
         setQty(id, q + 1);
-        fly(add, () => { bump($('#cartCount')); updateBar(true); });
+        fly(add, () => { bump($('#cartCount')); updateBar(true); }, id);
         clearTimeout(timers.get(buy));
         timers.set(buy, setTimeout(() => { if (cart[id]) { buy.dataset.state = 'open'; $('.inc', buy).focus({ preventScroll: true }); } else buy.dataset.state = 'idle'; }, 900));
       }
@@ -1148,7 +1141,7 @@
     const pz = e.target.closest('[data-pay]'); if (pz) { const o = orders.find(x => x.id === pz.dataset.pay); if (o) startPay(o); return; }
     const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
     const add = e.target.closest('[data-qadd]');
-    if (add) { const id = add.dataset.qadd; setQty(id, (cart[id] || 0) + 1); fly(add, () => { bump($('#cartCount')); updateBar(true); }); toast(`${byId[id].name} به سبد اضافه شد`); return; }
+    if (add) { const id = add.dataset.qadd; setQty(id, (cart[id] || 0) + 1); fly(add, () => { bump($('#cartCount')); updateBar(true); }, id); toast(`${byId[id].name} به سبد اضافه شد`); return; }
     const cp = e.target.closest('[data-copy]');
     if (cp) { try { navigator.clipboard.writeText(cp.dataset.copy).then(() => toast('کد رهگیری کپی شد'), () => toast(cp.dataset.copy)); } catch { toast(cp.dataset.copy); } }
   });
