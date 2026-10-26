@@ -10,24 +10,24 @@
   /* ── Products: set `img` to a PNG path when your photos are ready. Prices are samples.
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
-    { id:'maz5',  cat:'mazafati', name:'خرمای مضافتی جیرفت',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
-    { id:'maz10', cat:'mazafati', name:'خرمای مضافتی درجه‌ی یک', unit:'جعبه‌ی ۱ کیلویی',      price:265000,  badge:'صادراتی',     tag:'مضافتی' },
-    { id:'maz20', cat:'mazafati', name:'خرمای مضافتی خانواده',    unit:'جعبه‌ی ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
+    { id:'maz5',  cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی جیرفت',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
+    { id:'maz10', cat:'mazafati', img:'img/p/maz2.webp', name:'خرمای مضافتی درجه‌ی یک', unit:'جعبه‌ی ۱ کیلویی',      price:265000,  badge:'صادراتی',     tag:'مضافتی' },
+    { id:'maz20', cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی خانواده',    unit:'جعبه‌ی ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
     { id:'mazr',  cat:'mazafati', name:'رطب تازه‌ی مضافتی',       unit:'بسته‌بندی ۷۵۰ گرمی',   price:210000,  badge:'برداشت تازه', tag:'رطب' },
-    { id:'mazb',  cat:'mazafati', name:'خرمای مضافتی بی‌هسته',    unit:'بسته‌بندی ۵۰۰ گرمی',   price:185000,  badge:'۱۰۰٪ ارگانیک', tag:'بی‌هسته' },
-    { id:'maz50', cat:'mazafati', name:'خرمای مضافتی کارتنی',     unit:'کارتن ۵ کیلویی',       price:1150000, badge:'عمده',        tag:'مضافتی' },
-    { id:'pia5',  cat:'piarom',   name:'خرمای پیارم',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:345000,  badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
-    { id:'pia10', cat:'piarom',   name:'خرمای پیارم ممتاز',        unit:'جعبه‌ی ۱ کیلویی',      price:670000,  badge:'صادراتی',     tag:'پیارم' },
-    { id:'pia20', cat:'piarom',   name:'خرمای پیارم کادویی',       unit:'جعبه‌ی هدیه ۸۰۰ گرمی', price:590000,  badge:'صادراتی',     tag:'پیارم' },
-    { id:'pia2k', cat:'piarom',   name:'خرمای پیارم خانواده',      unit:'جعبه‌ی ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم' },
-    { id:'kal5',  cat:'kaluteh',  name:'خرمای کلوته',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:120000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
-    { id:'kal10', cat:'kaluteh',  name:'خرمای کلوته صادراتی',      unit:'جعبه‌ی ۱ کیلویی',      price:230000,  badge:'صادراتی',     tag:'کلوته' },
-    { id:'kal20', cat:'kaluteh',  name:'خرمای کلوته خانواده',      unit:'جعبه‌ی ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته' },
-    { id:'kalg',  cat:'kaluteh',  name:'خرمای کلوته کادویی',       unit:'جعبه‌ی هدیه ۸۰۰ گرمی', price:260000,  badge:'صادراتی',     tag:'کلوته' },
-    { id:'pis',   cat:'dried',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
-    { id:'pisa',  cat:'dried',    name:'پسته‌ی احمدآقایی',         unit:'بسته‌بندی ۵۰۰ گرمی',   price:1050000, badge:'صادراتی',     tag:'پسته' },
-    { id:'fig',   cat:'dried',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
-    { id:'alm',   cat:'dried',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
+    { id:'mazb',  cat:'mazafati', img:'img/p/maz2.webp', name:'خرمای مضافتی بی‌هسته',    unit:'بسته‌بندی ۵۰۰ گرمی',   price:185000,  badge:'۱۰۰٪ ارگانیک', tag:'بی‌هسته' },
+    { id:'maz50', cat:'mazafati', img:'img/p/pack.webp', name:'خرمای مضافتی کارتنی',     unit:'کارتن ۵ کیلویی',       price:1150000, badge:'عمده',        tag:'مضافتی' },
+    { id:'pia5',  cat:'piarom', img:'img/p/pia.webp',   name:'خرمای پیارم',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:345000,  badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
+    { id:'pia10', cat:'piarom', img:'img/p/pia2.webp',   name:'خرمای پیارم ممتاز',        unit:'جعبه‌ی ۱ کیلویی',      price:670000,  badge:'صادراتی',     tag:'پیارم' },
+    { id:'pia20', cat:'piarom', img:'img/p/pia.webp',   name:'خرمای پیارم کادویی',       unit:'جعبه‌ی هدیه ۸۰۰ گرمی', price:590000,  badge:'صادراتی',     tag:'پیارم' },
+    { id:'pia2k', cat:'piarom', img:'img/p/pia2.webp',   name:'خرمای پیارم خانواده',      unit:'جعبه‌ی ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم' },
+    { id:'kal5',  cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:120000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
+    { id:'kal10', cat:'kaluteh', img:'img/p/kal2.webp',  name:'خرمای کلوته صادراتی',      unit:'جعبه‌ی ۱ کیلویی',      price:230000,  badge:'صادراتی',     tag:'کلوته' },
+    { id:'kal20', cat:'kaluteh', img:'img/p/kal.webp',  name:'خرمای کلوته خانواده',      unit:'جعبه‌ی ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته' },
+    { id:'kalg',  cat:'kaluteh', img:'img/p/kal2.webp',  name:'خرمای کلوته کادویی',       unit:'جعبه‌ی هدیه ۸۰۰ گرمی', price:260000,  badge:'صادراتی',     tag:'کلوته' },
+    { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
+    { id:'pisa',  cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی احمدآقایی',         unit:'بسته‌بندی ۵۰۰ گرمی',   price:1050000, badge:'صادراتی',     tag:'پسته' },
+    { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
+    { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
     { id:'wal',   cat:'dried',    name:'مغز گردو',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:540000,  badge:'۱۰۰٪ ارگانیک', tag:'گردو' },
     { id:'hzl',   cat:'dried',    name:'فندق ممتاز',              unit:'بسته‌بندی ۵۰۰ گرمی',   price:690000,  badge:'صادراتی',     tag:'فندق' },
     { id:'apr',   cat:'dried',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو' },
@@ -55,7 +55,7 @@
     dried:    '--hi:#FFFFFF;--mid:#BCD2BE;--lo:#87C28C;--glow:rgba(135,194,140,.2)'
   };
   const renderArt = (p, extra = '') => `<div class="render${extra}" style="${TONE[p.cat]}"><span class="ground"></span>${p.cat === 'dried' ? '<span class="orb duo"></span><span class="orb"></span>' : '<span class="orb"></span>'}<span class="tag">${p.tag}</span></div>`;
-  const thumb = (p, extra) => p.img ? `<img src="${p.img}" alt="" class="h-full w-full object-contain p-2" loading="lazy">` : renderArt(p, extra);
+  const thumb = (p, extra) => p.img ? `<img src="${p.img}" alt="" class="ph h-full w-full object-contain p-2" loading="lazy" decoding="async">` : renderArt(p, extra);
 
   /* per-browser demo storage (wrapped: private mode / blocked storage just falls back) */
   const store = {
@@ -101,7 +101,7 @@
         <!-- IMAGE SLOT · ${p.name} -->
         <div class="relative grid aspect-square place-items-center overflow-hidden rounded-2xl">
           <div class="p-glow pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true"></div>
-          <div class="p-img relative grid h-full w-full place-items-center" role="img" aria-label="${p.name}">${p.img ? `<img src="${p.img}" alt="${p.name}" class="max-h-full w-auto object-contain p-3 drop-shadow-xl" loading="lazy" decoding="async">` : renderArt(p)}</div>
+          <div class="p-img relative grid h-full w-full place-items-center" role="img" aria-label="${p.name}">${p.img ? `<img src="${p.img}" alt="${p.name}" class="ph max-h-full w-auto object-contain p-3" loading="lazy" decoding="async">` : renderArt(p)}</div>
         </div>
         <span class="absolute right-2 top-2 rounded-full ${p.badge.includes('ارگانیک') ? 'bg-cyprus-soft text-cyprus ring-1 ring-cyprus/15' : 'bg-white text-cyprus-mid ring-1 ring-cyprus/10'} px-2.5 py-1 font-display text-[11px] font-bold shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)]">${p.stock > 0 ? p.badge : 'ناموجود'}</span>
         <div class="p-tools absolute left-2 top-2 flex flex-col gap-1.5">
