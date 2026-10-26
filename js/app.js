@@ -10,7 +10,7 @@
   /* ── Products: set `img` to a PNG path when your photos are ready. Prices are samples.
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
-    { id:'maz5',  cat:'mazafati', img:'img/p/maz.webp', name:'خرمای مضافتی',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
+    { id:'maz5',  cat:'mazafati', img:'img/p/maz-pouch.webp', name:'خرمای مضافتی',     unit:'بسته‌بندی ۵۰۰ گرمی',   price:140000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
     { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی خانواده',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی' },
     { id:'mazc',  cat:'mazafati', name:'خرمای مضافتی کارتن مادر',  unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:2970000, badge:'', tag:'مضافتی' },
     { id:'pia5',  cat:'piarom', img:'img/p/pia.webp',   name:'خرمای پیارم',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:345000,  badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
