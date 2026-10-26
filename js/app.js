@@ -987,7 +987,7 @@
     if (!user) { $('#dashDock').hidden = true; return; }
     $('#actBanner').hidden = !user.viaAdmin;
     $('#actText').textContent = `حالت پشتیبانی: شما به‌عنوان مدیر، حساب «${user.name}» (${user.phone}) را مدیریت می‌کنید.`;
-    setTab($('#dashTabs'), dashTab, $('#dashBody'));
+    setTab($('#dashTabs'), dashTab, $('#dashBody')); $('#dashBody').dataset.tab = dashTab;
     $$('#dashDock [data-tab]').forEach(b => b.dataset.tab === dashTab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
     $('#dashDock').hidden = false;
     const ini = (user.name || 'م').trim()[0];
@@ -1187,7 +1187,8 @@
   function renderAdmin() {
     $('#admGuest').hidden = !!admin; $('#admBody').hidden = !admin; $('#admDock').hidden = !admin;
     if (!admin) return;
-    setTab($('#admTabs'), admTab, $('#admBody'));
+    setTab($('#admTabs'), admTab, $('#admBody')); $('#admBody').dataset.tab = admTab;
+    $('#admSecTitle').textContent = TITLES[admTab];
     $$('#admDock [data-tab]').forEach(b => b.dataset.tab === admTab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
     $('#admTitle').textContent = TITLES[admTab];
     $('#admPhone').textContent = admin.phone;

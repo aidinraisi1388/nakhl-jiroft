@@ -674,3 +674,10 @@ html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezi
 /* Safari 26 colours the strip under its floating address bar from whatever touches the bottom edge of the screen.
    At the end of the home page that must be the dark footer colour, never the light page colour. */
 html.at-foot body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:calc(env(safe-area-inset-bottom,0px) + 8px);background:#1D3B20;z-index:39;pointer-events:none}
+
+/* each thing in its own place: name, level, bell and shop button only on the dashboard / admin home */
+#dashBody:not([data-tab="overview"]) .db-top,#admBody:not([data-tab="stats"]) .db-top{display:none}
+.adm-sec{display:none;margin-top:6px;font-size:24px}
+#admBody:not([data-tab="stats"]) .adm-sec{display:block}
+#dashBody:not([data-tab="overview"]) [data-pane] {margin-top:6px}
+#admBody:not([data-tab="stats"]) [data-pane]{margin-top:14px}
