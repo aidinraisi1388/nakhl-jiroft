@@ -710,7 +710,7 @@
       o.trackId = j.trackId; saveOrders();
       location.href = 'https://gateway.zibal.ir/start/' + j.trackId;                // off to the bank
     } catch (err) {
-      if (!PAY.api) { location.hash = '#pay/test/' + o.id; return; }                // test mode without network access → built-in test gateway
+      if (!PAY.api) { history.replaceState(null, '', '#pay/test/' + o.id); lastHash = location.hash; route(); return; }                // test mode without network access → built-in test gateway
       renderPay(o, 'fail', 'اتصال به درگاه برقرار نشد. اینترنت را بررسی کنید و دوباره تلاش کنید.');
     }
   }
@@ -1484,6 +1484,17 @@
     hero.addEventListener('click', e => { if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; } }, true);
     hero.addEventListener('dragstart', e => e.preventDefault());
   }
+
+  /* ── «بازگشت»: goes to the page you came from inside the site; opened directly → the home page ── */
+  const trail = [location.hash || '#top'];
+  addEventListener('hashchange', () => {
+    const hsh = location.hash || '#top';
+    if (trail.length > 1 && trail[trail.length - 2] === hsh) trail.pop(); else if (trail[trail.length - 1] !== hsh) trail.push(hsh);
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('[data-back]')) return;
+    if (trail.length > 1) history.back(); else location.hash = '#top';
+  });
 
   /* ── Start ── */
   renderCatalog(false);

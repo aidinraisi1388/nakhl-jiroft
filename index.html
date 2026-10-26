@@ -25,8 +25,8 @@
 <link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/tailwind.css?v=20261027f">
-<link rel="stylesheet" href="css/style.css?v=20261027f">
+<link rel="stylesheet" href="css/tailwind.css?v=20261027g">
+<link rel="stylesheet" href="css/style.css?v=20261027g">
 
 
 </head>
@@ -466,6 +466,7 @@
 <!-- ╔══════════════════════ VIEW 2 · PRODUCTS CATALOG ══════════════════════╗ -->
 <main id="catalogView" data-view="catalog" hidden class="mx-auto max-w-7xl px-3 sm:px-6">
 <section id="catalogTop" class="scroll-mt-28 pb-16 pt-8 sm:pb-24 sm:pt-12" aria-labelledby="catalogTitle">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
   <nav aria-label="مسیر صفحه" class="plate flex items-center gap-1.5 text-xs font-bold text-ink-muted">
     <a href="#top" class="ease-ui rounded-full hover:text-cyprus focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus">خانه</a>
     <svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
@@ -509,6 +510,7 @@
 <!-- ╔══════════════════════ VIEW 3 · CUSTOMER DASHBOARD (customers only) ══════════════════════╗ -->
 <main id="dashboardView" data-view="dashboard" hidden class="mx-auto max-w-7xl px-3 sm:px-6">
 <section class="pb-16 pt-8 sm:pb-24 sm:pt-12">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
   <nav aria-label="مسیر صفحه" class="plate flex items-center gap-1.5 text-xs font-bold text-ink-muted">
     <a href="#top" class="ease-ui rounded-full hover:text-cyprus focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus">خانه</a>
     <svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
@@ -602,14 +604,12 @@
       <!-- pane: my orders -->
       <div data-pane="orders" hidden class="db-pane">
         <div class="flex items-end justify-between"><h2 class="db-title">سفارش‌های من</h2><a href="#products" class="plate ease-ui inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">خرید تازه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a></div>
-        <p class="plate mt-1 text-sm text-ink">هر سفارش در زنجیره‌ی سرد پیگیری می‌شود: ثبت، بسته‌بندی سرد، باربری یخچال‌دار و تحویل.</p>
         <ul id="dashOrders" class="mt-4 flex flex-col gap-3"></ul>
       </div>
 
       <!-- pane: storage requests -->
       <div data-pane="storage" hidden class="db-pane">
         <div class="flex items-end justify-between"><h2 class="db-title">درخواست‌های سردخانه</h2><a href="#storage" data-service="storage" class="plate ease-ui inline-flex items-center gap-1 text-xs font-bold text-cyprus hover:-translate-x-0.5">درخواست تازه<svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a></div>
-        <p class="plate mt-1 text-sm text-ink">استعلام‌هایی که با همین شماره در فرم «استعلام سریع» ثبت کرده‌اید.</p>
         <ul id="dashRequests" class="mt-4 flex flex-col gap-3"></ul>
       </div>
 
@@ -641,6 +641,7 @@
 <!-- ╔══════════════════════ VIEW 4 · ADMIN PANEL (store managers only) ══════════════════════╗ -->
 <main id="adminView" data-view="admin" hidden class="mx-auto max-w-7xl px-3 sm:px-6">
 <section class="pb-16 pt-8 sm:pb-24 sm:pt-12">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
   <nav aria-label="مسیر صفحه" class="plate flex items-center gap-1.5 text-xs font-bold text-ink-muted">
     <a href="#top" class="ease-ui rounded-full hover:text-cyprus focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus">خانه</a>
     <svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
@@ -725,8 +726,6 @@
 
       <!-- pane: order management table -->
       <div data-pane="orders" hidden class="db-pane">
-
-        <p class="plate text-sm leading-7 text-ink">هر سفارشی که پرداختش موفق باشد خودکار اینجا می‌آید؛ بسته‌بندی، ارسال و تحویل را با دکمه‌های هر سفارش جلو ببرید.</p>
         <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div id="admFilters" class="no-scrollbar -mx-3 flex gap-2 overflow-x-auto px-3 py-1 sm:mx-0 sm:px-0" role="group" aria-label="فیلتر وضعیت سفارش">
             <button class="chip" data-f="all" aria-pressed="true">همه <span class="c opacity-70"></span></button>
@@ -744,7 +743,6 @@
 
       <!-- pane: inventory & prices -->
       <div data-pane="inventory" hidden class="db-pane">
-        <p class="plate text-sm text-ink">قیمت یا موجودی را تغییر دهید؛ فروشگاه همان لحظه به‌روز می‌شود. موجودی صفر یعنی «ناموجود».</p>
         <div class="mt-4 hidden grid-cols-[1.6fr_1fr_1fr_110px] gap-5 rounded-2xl bg-white/95 px-5 py-2.5 text-xs font-black text-cyprus shadow-sm ring-1 ring-cyprus/10 md:grid" aria-hidden="true">
           <span>محصول</span><span>قیمت (تومان)</span><span>موجودی (عدد)</span><span>وضعیت</span>
         </div>
@@ -753,7 +751,6 @@
 
       <!-- pane: customers & support — the manager can open any customer's account and act for them -->
       <div data-pane="customers" hidden class="db-pane">
-        <p class="plate text-sm leading-7 text-ink">برای حل مشکل مشتری، حسابش را باز کنید: به‌جای او سفارش ثبت کنید، آدرس و اطلاعاتش را اصلاح کنید، کیف پولش را شارژ کنید یا رمز موقت بسازید.</p>
         <label class="ease-ui mt-4 flex h-12 items-center gap-2 rounded-full border border-cyprus/15 bg-white px-4 text-ink-soft focus-within:border-cyprus focus-within:ring-2 focus-within:ring-[#28622D]">
           <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg><span class="sr-only">جستجوی مشتری</span>
           <input id="custSearch" type="search" class="h-full min-w-0 flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink-soft" placeholder="جستجو با نام یا شماره موبایل">
@@ -787,7 +784,7 @@
 <!-- ╔══════════════════════ VIEW 5 · AUTH (standalone page, not a pop-up) ══════════════════════╗ -->
 <main id="authView" data-view="auth" hidden class="mx-auto max-w-6xl px-3 sm:px-6">
 <section class="py-6 sm:py-14">
-  <a href="#top" class="pg-back lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت به فروشگاه</a>
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
   <div class="grid overflow-hidden rounded-[40px] border border-[#28622D]/10 bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_20px_50px_rgba(40,98,45,0.10)] lg:grid-cols-[1fr_1.1fr]">
     <!-- brand side -->
     <div class="relative hidden flex-col justify-between gap-10 overflow-hidden bg-[#28622D] p-10 text-white lg:flex">
@@ -887,7 +884,7 @@
 <main id="checkoutView" data-view="checkout" hidden class="mx-auto max-w-6xl px-3 sm:px-6">
 <section class="db pb-28 pt-4 sm:pb-24 sm:pt-10">
   <header class="ck-head">
-    <a href="#products" class="ck-back" aria-label="بازگشت به فروشگاه"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg></a>
+    <button type="button" data-back class="ck-back" aria-label="بازگشت"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg></button>
     <h1 class="db-name">تکمیل خرید</h1>
   </header>
   <ol class="ck-steps" aria-label="مراحل خرید"><li class="on">سبد خرید</li><li class="on cur">ارسال</li><li>پرداخت</li></ol>
@@ -944,6 +941,7 @@
 <!-- ════════ PAYMENT (connecting · result · test gateway) ════════ -->
 <main id="payView" data-view="pay" hidden class="mx-auto px-3 sm:px-6">
 <section class="db py-8 sm:py-14">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
   <article class="pay-card">
     <span id="payIc" class="pay-ic"></span>
     <h1 id="payTitle" class="mt-5 font-display text-2xl font-black text-ink"></h1>
@@ -956,6 +954,7 @@
 
 <main id="receiptView" data-view="receipt" hidden class="mx-auto px-3 sm:px-6">
 <section class="py-8 sm:py-12">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
   <article id="receiptCard" class="mx-auto w-full max-w-[400px] rounded-[28px] border border-[#28622D]/10 bg-white p-5 shadow-[0_20px_50px_rgba(40,98,45,0.10)] sm:p-6">
     <!-- logo + title -->
     <div class="flex flex-col items-center text-center">
@@ -1117,6 +1116,6 @@
 <!-- Toast (top, so it never collides with the cart capsule) -->
 <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
 
-<script src="js/app.js?v=20261027f"></script>
+<script src="js/app.js?v=20261027g"></script>
 </body>
 </html>
