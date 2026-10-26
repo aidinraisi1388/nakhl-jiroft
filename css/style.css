@@ -672,3 +672,7 @@ img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
 
 /* flying product photo (white backdrop blends away) */
 .fly.im{width:64px;height:64px;border-radius:0;background:none;box-shadow:none;object-fit:contain}
+/* product card: equal description height so unit pills line up; pill never overflows */
+.p-card .min-h-12{min-height:3rem}
+.p-card .unit-pill{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-card h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

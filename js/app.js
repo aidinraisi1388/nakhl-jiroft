@@ -11,11 +11,11 @@
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
     { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی خانواده',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
-    { id:'mazc',  cat:'mazafati', img:'img/p/maz-carton.webp', name:'خرمای مضافتی کارتن مادر',  unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:2970000, badge:'', tag:'مضافتی' },
+    { id:'mazc',  cat:'mazafati', img:'img/p/maz-carton.webp', name:'کارتن مادر مضافتی',  unit:'کارتن مادر ۱۲ کیلویی', price:2970000, badge:'', tag:'مضافتی' },
     { id:'pia2k', cat:'piarom', img:'img/p/pia-box.webp',   name:'خرمای پیارم خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
-    { id:'piac',  cat:'piarom', img:'img/p/pia-carton.webp',   name:'خرمای پیارم کارتن مادر',   unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:7740000, badge:'', tag:'پیارم' },
+    { id:'piac',  cat:'piarom', img:'img/p/pia-carton.webp',   name:'کارتن مادر پیارم',   unit:'کارتن مادر ۱۲ کیلویی', price:7740000, badge:'', tag:'پیارم' },
     { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته خانواده',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
-    { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'خرمای کلوته کارتن مادر',   unit:'کارتن مادر ۱۲ کیلویی (۶ جعبه‌ی خانواده)', price:2580000, badge:'', tag:'کلوته' },
+    { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'کارتن مادر کلوته',   unit:'کارتن مادر ۱۲ کیلویی', price:2580000, badge:'', tag:'کلوته' },
     { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
     { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
     { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
@@ -94,14 +94,11 @@
           <div class="p-img relative grid h-full w-full place-items-center" role="img" aria-label="${p.name}">${p.img ? `<img src="${p.img}" alt="${p.name}" class="ph max-h-full w-auto object-contain p-3" loading="lazy" decoding="async">` : renderArt(p)}</div>
         </div>
         ${p.stock > 0 ? '' : `<span class="absolute right-2 top-2 rounded-full bg-white px-2.5 py-1 font-display text-[11px] font-bold text-cyprus-mid shadow-[0_2px_6px_-2px_rgba(40,98,45,0.18)] ring-1 ring-cyprus/10">ناموجود</span>`}
-        <div class="p-tools absolute left-2 top-2 flex flex-col gap-1.5">
-          <button class="quick ease-ui grid h-9 w-9 place-items-center rounded-full bg-white text-ink-soft shadow-sm hover:scale-110 hover:text-cyprus active:scale-90" aria-label="نمایش سریع ${p.name}">${svg('<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', 17, 2)}</button>
-        </div>
       </div>
       <div class="flex flex-1 flex-col pt-4 text-center">
         <h3 class="font-display text-[15px] font-extrabold leading-snug text-ink transition-colors duration-300 group-hover:text-cyprus-mid sm:text-[17px]">${p.name}</h3>
-        <p class="mt-1 line-clamp-2 text-xs leading-6 text-ink-muted sm:text-[13px]">${DESC[p.id] || ''}</p>
-        <span class="unit-pill mx-auto mt-2 inline-flex w-fit items-center gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid">${svg('<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/>', 12, 2.4)}${p.unit}</span>
+        <p class="mt-1 line-clamp-2 min-h-12 text-xs leading-6 text-ink-muted sm:text-[13px]">${DESC[p.id] || ''}</p>
+        <span class="unit-pill mx-auto mt-2 inline-flex w-fit max-w-full items-center whitespace-nowrap gap-1 rounded-full bg-sand px-2.5 py-1 text-[11px] font-bold text-cyprus-mid">${svg('<path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/>', 12, 2.4)}${p.unit}</span>
         <div class="mt-auto flex flex-col items-stretch gap-3 pt-4 xl:flex-row xl:items-center xl:justify-between">
           <p class="flex items-baseline justify-center gap-1 xl:justify-start"><span class="font-display text-xl font-black tabular-nums text-cyprus sm:text-[21px]">${fa(p.price)}</span><span class="text-[11px] font-bold text-cyprus-mid">تومان</span></p>
           ${p.stock <= 0 ? `<div class="grid h-11 place-items-center rounded-xl bg-sand px-4 font-display text-sm font-bold text-ink-soft xl:w-32">ناموجود</div>` : `<div class="buy w-full xl:w-32" data-id="${p.id}" data-state="${q ? 'open' : 'idle'}">
