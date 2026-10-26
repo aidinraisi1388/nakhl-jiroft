@@ -669,17 +669,3 @@ html.at-foot{background:#fff}
 
 /* product photos on white: multiply blends the white backdrop into any light surface */
 img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
-
-/* hero on phones: photo banner on top, smaller headline/copy so everything fits */
-@media (max-width:639px){
-  #heroTrack{min-height:0!important}
-  .slide{padding:14px 14px 22px!important;gap:16px!important;align-content:start}
-  .slide .hslot{order:-1;aspect-ratio:16/10!important;max-width:none!important}
-  .slide .hslot > div[role=img]{position:absolute;inset:0;height:100%;display:block!important}
-  .slide .hslot img{border-radius:20px!important;height:100%!important}
-  .slide h1,.slide h2{font-size:26px!important;line-height:1.5!important}
-  .slide p{font-size:14px!important;line-height:1.85!important}
-  .slide .btn-light,.slide .btn-line{height:3rem!important;padding-inline:1.25rem!important;font-size:14px!important}
-  .slide .hslot > div.absolute{bottom:10px!important;left:10px!important;padding:6px 12px 6px 14px!important;border-radius:16px!important}
-  .slide .hslot > div.absolute span.grid{display:none}
-  .slide > div:first-child{gap:12px!important;padding-inline:4px}}
