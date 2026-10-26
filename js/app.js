@@ -151,7 +151,28 @@
       el.classList.add('rv'); rvIO.observe(el);
     });
   };
-  reveal();
+  /* text (titles, lines, labels) wakes up from a light blur as it enters the screen; released afterwards so nothing stays on the GPU */
+  const BL_SEL = 'main h1, main h2, main h3, main p, main .eyebrow, #footer h2, #footer h3, #footer p';
+  const blIO = rvIO ? new IntersectionObserver(es => {
+    let n = 0;
+    es.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target; blIO.unobserve(el);
+      el.style.setProperty('--bl-d', Math.min(n++, 6) * 70 + 'ms');
+      requestAnimationFrame(() => el.classList.add('bl-in'));
+      const done = ev => { if (ev.target !== el || ev.propertyName !== 'filter') return; el.classList.remove('bl', 'bl-in'); el.style.removeProperty('--bl-d'); el.removeEventListener('transitionend', done); };
+      el.addEventListener('transitionend', done);
+      setTimeout(() => el.classList.remove('bl', 'bl-in'), 1800);           // safety net if transitionend never fires
+    });
+  }, { rootMargin: '0px 0px -4% 0px', threshold: 0 }) : null;
+  const blur = (root = document) => {
+    if (!blIO) return;
+    $$(BL_SEL, root).forEach(el => {
+      if (el.dataset.bl || el.closest('#mobileMenu,#cartDrawer,#qv,.db-notes,[aria-hidden="true"],.slide:not([data-slide="0"])') || !el.textContent.trim()) return;
+      el.dataset.bl = 1; el.classList.add('bl'); blIO.observe(el);
+    });
+  };
+  reveal(); blur();
   if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => document.documentElement.classList.toggle('at-foot', e.isIntersecting && !$('#footer').hidden), { rootMargin: '0px 0px 0px 0px' }).observe($('#footer'));
 
   /* ── Toast ── */
@@ -378,7 +399,7 @@
   const setHash = h => { if (location.hash !== h) history.pushState(null, '', h); lastHash = location.hash; };
   $$('#cats .chip').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.cat === 'storage') { location.hash = '#storage'; selectService('storage'); return; }
-    loadBar(); cat = b.dataset.cat; page = 1; query = ''; $('#search').value = '';
+    loadBar(); cat = b.dataset.cat; page = 1; query = ''; clearSearchFields();
     history.replaceState(null, '', '#products/' + cat); lastHash = location.hash;
     syncPills(); renderCatalog();
   }));
@@ -390,7 +411,7 @@
     if (current === name) return false;
     Object.entries(views).forEach(([k, el]) => { el.hidden = k !== name; });
     $('#footer').hidden = name !== 'home'; document.body.dataset.view = name;   // footer on home only; per-page background
-    const v = views[name]; v.classList.remove('view-in'); void v.offsetWidth; v.classList.add('view-in'); requestAnimationFrame(() => reveal(v));
+    const v = views[name]; v.classList.remove('view-in'); void v.offsetWidth; v.classList.add('view-in'); requestAnimationFrame(() => { reveal(v); blur(v); });
     current = name; loadBar();
     const key = { home: 'home', catalog: 'products' }[name];
     $$('[data-nav]').forEach(a => a.dataset.nav === key ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
@@ -404,7 +425,7 @@
     if (h.startsWith('products')) {
       const c = h.split('/')[1];
       const changed = show('catalog');
-      cat = CATS[c] ? c : 'dates'; page = 1; query = ''; $('#search').value = '';
+      cat = CATS[c] ? c : 'dates'; page = 1; query = ''; clearSearchFields();
       syncPills(); renderCatalog();
       if (changed) toTop(); else { loadBar(); $('#catalogTop').scrollIntoView({ behavior: smooth }); }
       return;
@@ -464,13 +485,19 @@
   addEventListener('popstate', onNav);
 
   /* search lives in the navbar and always shows results in the catalog */
-  $('#search').addEventListener('input', e => {
+  const clearSearchFields = () => $$('#search, #catSearch, #dbSearch').forEach(f => { f.value = ''; });
+  $$('#search, #catSearch, #dbSearch').forEach(f => f.addEventListener('input', e => {
     query = norm(e.target.value); page = 1;
-    if (current !== 'catalog') { setHash('#products'); show('catalog'); toTop(); }
+    if (current !== 'catalog') {                   // jump to the catalog and keep typing in its own field (keyboard stays up)
+      setHash('#products'); show('catalog'); toTop();
+      const cs = $('#catSearch'); cs.value = e.target.value; e.target.value = ''; cs.focus({ preventScroll: true });
+      if (e.target.id === 'search') e.target.blur();
+    }
     if (query) cat = 'all';
     syncPills(); renderCatalog(false);
-  });
-  $('#clearSearch').addEventListener('click', () => { query = ''; $('#search').value = ''; cat = 'dates'; history.replaceState(null, '', '#products'); lastHash = location.hash; syncPills(); renderCatalog(); });
+  }));
+  $('#catSearch').addEventListener('keydown', e => { if (e.key === 'Enter') e.target.blur(); });
+  $('#clearSearch').addEventListener('click', () => { query = ''; clearSearchFields(); cat = 'dates'; history.replaceState(null, '', '#products'); lastHash = location.hash; syncPills(); renderCatalog(); });
 
   /* ── Navbar: expanding search, mobile menu ── */
   const header = $('#header'), ns = $('#navSearch'), st = $('#searchToggle'), si = $('#search');
@@ -631,7 +658,7 @@
     $('#ckShipCost').textContent = t.free ? 'رایگان' : 'پس‌کرایه';
     $('#ckCount').textContent = fa(count());
     $('#ckItems').innerHTML = Object.entries(cart).map(([id, q]) => { const p = byId[id]; return `
-      <li><span class="ck-thumb">${thumb(p, ' mini')}<em>${fa(q)}</em></span><span class="min-w-0 flex-1"><b>${p.name}</b><small>${p.unit}</small></span><span class="ck-pr">${fa(p.price * q)}</span></li>`; }).join('');
+      <li><span class="ck-thumb">${thumb(p, ' mini')}</span><span class="min-w-0 flex-1"><b>${p.name}</b><small>${p.unit} · ${fa(q)} عدد</small></span><span class="ck-pr">${fa(p.price * q)}</span></li>`; }).join('');
     $('#ckSub').textContent = fa(t.sub) + ' تومان';
     $('#ckDiscRow').hidden = !t.disc; $('#ckDisc').textContent = '− ' + fa(t.disc) + ' تومان'; $('#ckDiscL').textContent = promo ? `تخفیف (${promo.code})` : 'تخفیف';
     $('#ckShipSum').textContent = shipCost(ship, t);
@@ -964,7 +991,7 @@
     $$('#dashDock [data-tab]').forEach(b => b.dataset.tab === dashTab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
     $('#dashDock').hidden = false;
     const ini = (user.name || 'م').trim()[0];
-    $('#dbAvatar').textContent = ini; $('#dbPAvatar').textContent = ini;
+    $('#dbPAvatar').textContent = ini;
     $('#dbPName').textContent = user.name; $('#dbPPhone').textContent = user.phone;
     const mine = orders.filter(o => o.phone === user.phone), active = mine.filter(o => o.status !== 'delivered' && o.status !== 'unpaid');
     $('#dashTitle').textContent = user.name;
@@ -1109,8 +1136,6 @@
     document.addEventListener('focusin', e => { if (typing(e.target)) document.documentElement.classList.add('typing'); });
     document.addEventListener('focusout', () => setTimeout(() => { if (!typing(document.activeElement)) document.documentElement.classList.remove('typing'); }, 60));
   }
-  /* open the header search inside the tap itself, so iPhone shows the keyboard (it refuses focus() from a timer) */
-  $('#dbSearch').addEventListener('click', () => { scrollTo({ top: 0, behavior: smooth }); if (!$('#navSearch').classList.contains('open')) $('#searchToggle').click(); else $('#search').focus(); });
   $('#dashBody').addEventListener('click', e => {
     const pz = e.target.closest('[data-pay]'); if (pz) { const o = orders.find(x => x.id === pz.dataset.pay); if (o) startPay(o); return; }
     const t = e.target.closest('[data-dtab]'); if (t) { goDashTab(t.dataset.dtab); scrollTo({ top: 0, behavior: smooth }); return; }
@@ -1166,9 +1191,7 @@
     $$('#admDock [data-tab]').forEach(b => b.dataset.tab === admTab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
     $('#admTitle').textContent = TITLES[admTab];
     $('#admPhone').textContent = admin.phone;
-    const ini = (admin.name || 'م').trim()[0];
-    $('#admName').textContent = admin.name; $('#admMeBtn').textContent = ini; $('#admMeAv').textContent = ini;
-    $('#admMeName').textContent = admin.name; $('#admMePhone').textContent = admin.phone;
+    $('#admName').textContent = admin.name;
     const k = s => orders.filter(o => o.status === s).length;
     $('#admNewBadge').textContent = fa(k('processing')); $('#admNewBadge').hidden = !k('processing');
     $('#admDockBadge').textContent = fa(k('processing')); $('#admDockBadge').hidden = !k('processing');
@@ -1276,9 +1299,9 @@
   $('#admTabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goAdmTab(b.dataset.tab); });
   $('#admDock').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) goAdmTab(b.dataset.tab); });
   $$('[data-goto]').forEach(b => b.addEventListener('click', () => goAdmTab(b.dataset.goto)));
-  /* bell panel + account menu in the admin top bar (one open at a time) */
+  /* bell panel in the admin top bar */
   {
-    const pops = [[$('#admBell'), $('#admNotes')], [$('#admMeBtn'), $('#admMe')]];
+    const pops = [[$('#admBell'), $('#admNotes')]];
     const close = () => pops.forEach(([b, p]) => { p.hidden = true; p.classList.remove('on'); b.setAttribute('aria-expanded', false); });
     pops.forEach(([b, p]) => b.addEventListener('click', e => {
       e.stopPropagation(); const open = p.hidden; close();
@@ -1286,7 +1309,7 @@
         if (p.id === 'admNotes') { store.set('nakhl:admSeen', JSON.parse(b.dataset.keys || '[]')); $('#admDot').hidden = true; $('#admNotesN').textContent = ''; } }
     }));
     $('#admNotes').addEventListener('click', e => { const n = e.target.closest('[data-goto-n]'); if (n) { close(); goAdmTab(n.dataset.gotoN); } });
-    document.addEventListener('pointerdown', e => { if (!e.target.closest('#admNotes, #admMe, #admBell, #admMeBtn')) close(); });
+    document.addEventListener('pointerdown', e => { if (!e.target.closest('#admNotes, #admBell')) close(); });
     addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     addEventListener('hashchange', close);
   }

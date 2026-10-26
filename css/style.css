@@ -626,3 +626,36 @@ a,button,[role="button"]{-webkit-tap-highlight-color:transparent;-webkit-touch-c
 .ck-add:active{background:#F0F7F1}
 .db-need{margin-top:16px;padding:14px 16px;border-radius:18px;background:#28622D;color:#fff;font-size:13px;line-height:1.9;box-shadow:0 14px 30px -16px rgba(25,67,29,.6)}
 .db-need b{display:block;font:900 15px Peyda,Vazirmatn,Tahoma,sans-serif}
+
+/* the site header lives on the home page only; every other page has its own way back */
+body:not([data-view="home"]) #header{display:none}
+body:not([data-view="home"]) main > section:first-child{padding-top:max(1.25rem,env(safe-area-inset-top))}
+@media (min-width:640px){ body:not([data-view="home"]) main > section:first-child{padding-top:2.5rem} }
+.pg-back{display:inline-flex;align-items:center;gap:4px;height:40px;margin-bottom:14px;padding:0 14px;border-radius:999px;background:#fff;font:700 13px Peyda,Vazirmatn,Tahoma,sans-serif;color:#28622D;box-shadow:0 6px 18px -8px rgba(17,44,19,.25)}
+.cat-search{display:flex;align-items:center;gap:10px;height:52px;margin-top:10px;padding:0 16px;border-radius:18px;background:#fff;color:#6B8A6F;box-shadow:0 1px 2px rgba(17,44,19,.04),0 10px 28px -14px rgba(17,44,19,.22);max-width:560px}
+.cat-search:focus-within{box-shadow:0 0 0 2px #28622D,0 10px 28px -14px rgba(17,44,19,.22)}
+.cat-search input,.db-search input{flex:1;min-width:0;height:100%;background:transparent;border:0;outline:0;font-size:16px;color:#14301A}
+.cat-search input::placeholder,.db-search input::placeholder{color:#8AA38D}
+.cat-search input::-webkit-search-cancel-button,.db-search input::-webkit-search-cancel-button{-webkit-appearance:none}
+.db-search{cursor:text}
+.db-search:focus-within{box-shadow:0 0 0 2px #28622D,var(--db-sh)}
+a.db-bell{display:grid;place-items:center}
+.adm-out{align-self:center;margin-top:4px}
+.ck-thumb{overflow:hidden}
+
+/* ══════ Softer search on phones: the field grows with flex-grow (animatable) instead of jumping to "auto" ══════ */
+@media (max-width:639px){
+  #navCapsule>.ms-auto{flex:1 1 auto;min-width:0;justify-content:flex-end}
+  #header #navSearch{flex:0 1 40px;width:auto;min-width:40px;transition:flex-grow .72s cubic-bezier(.45,.05,.2,1),background-color .4s ease}
+  #header.searching #navSearch.open{flex:1 1 40px;width:auto;min-width:40px}
+  #header #navSearch input{transition:opacity .45s ease,transform .72s cubic-bezier(.45,.05,.2,1)}
+  #header #navSearch.open input{transition-delay:.22s}
+  #header .brand-text{transition:max-width .72s cubic-bezier(.45,.05,.2,1),opacity .45s ease}
+  #header #userBtn{transition:max-width .72s cubic-bezier(.45,.05,.2,1),opacity .3s ease,margin .72s cubic-bezier(.45,.05,.2,1)}
+}
+
+/* ══════ Text comes in from a soft blur (like Eagle Arta) — opacity/transform/filter only, once per element ══════ */
+.bl{opacity:0;filter:blur(8px);transform:translate3d(0,10px,0)}
+.bl.bl-in{opacity:1;filter:blur(0);transform:none;
+  transition:opacity .6s ease var(--bl-d,0ms),filter .9s cubic-bezier(.22,1,.36,1) var(--bl-d,0ms),transform .9s cubic-bezier(.22,1,.36,1) var(--bl-d,0ms)}
+@media (prefers-reduced-motion:reduce){ .bl{opacity:1;filter:none;transform:none} }

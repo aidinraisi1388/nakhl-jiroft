@@ -25,8 +25,8 @@
 <link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
 
-<link rel="stylesheet" href="css/tailwind.css?v=20261027c">
-<link rel="stylesheet" href="css/style.css?v=20261027c">
+<link rel="stylesheet" href="css/tailwind.css?v=20261027e">
+<link rel="stylesheet" href="css/style.css?v=20261027e">
 
 
 </head>
@@ -473,6 +473,7 @@
   </nav>
   <div class="mt-4 flex flex-col gap-2">
     <div><h1 id="catalogTitle" class="halo font-display text-[28px] font-black leading-[1.4] text-[#28622D] sm:text-[40px]">خرمای جیرفت</h1></div>
+    <label class="cat-search"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg><span class="sr-only">جستجوی محصولات</span><input id="catSearch" data-search type="search" enterkeyhint="search" autocomplete="off" placeholder="جستجوی خرما و خشکبار…"></label>
   </div>
 
   <div id="cats" class="no-scrollbar -mx-3 mt-6 flex gap-2 overflow-x-auto px-3 py-1 sm:mx-0 sm:px-0" role="group" aria-label="دسته‌بندی محصولات">
@@ -545,7 +546,7 @@
         </div>
         <div class="db-me">
           <button type="button" id="dbBell" class="db-bell" aria-label="اعلان‌ها" aria-expanded="false" aria-controls="dbNotes"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /> </svg><span id="liveDot" hidden class="db-dot"></span></button>
-          <span id="dbAvatar" class="db-avatar" aria-hidden="true"></span>
+          <a href="#top" class="db-bell" aria-label="بازگشت به فروشگاه" title="فروشگاه"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" /> <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /> <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" /> <path d="M2 7h20" /> <path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7" /> </svg></a>
           <div id="dbNotes" class="db-notes" hidden role="dialog" aria-label="اعلان‌ها">
             <div class="db-notes-h"><b>اعلان‌ها</b><span id="dbNotesN"></span></div>
             <ul id="dbNotesList"></ul>
@@ -555,7 +556,7 @@
 
       <!-- pane: overview -->
       <div data-pane="overview" class="db-stack">
-        <button type="button" id="dbSearch" class="db-search db-wide"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg><span>جستجوی خرما و خشکبار…</span></button>
+        <label class="db-search db-wide"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg><span class="sr-only">جستجوی محصولات</span><input id="dbSearch" data-search type="search" enterkeyhint="search" autocomplete="off" placeholder="جستجوی خرما و خشکبار…"></label>
 
         <div class="db-chips no-scrollbar db-wide">
           <button type="button" data-dtab="orders" class="db-chip"><i><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" /> <path d="M12 22V12" /> <path d="m3.3 7 7.703 4.734a2 2 0 0 0 1.994 0L20.7 7" /> <path d="m7.5 4.27 9 5.15" /> </svg></i><span>سفارش‌ها</span></button>
@@ -681,14 +682,10 @@
         </div>
         <div class="db-me">
           <button type="button" id="admBell" class="db-bell" aria-label="سفارش‌های تازه" aria-expanded="false" aria-controls="admNotes"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /> <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /> </svg><span id="admDot" hidden class="db-dot"></span></button>
-          <button type="button" id="admMeBtn" class="db-avatar adm-me-btn" aria-label="حساب مدیر" aria-expanded="false" aria-controls="admMe"></button>
+          <a href="#top" class="db-bell" aria-label="بازگشت به فروشگاه" title="فروشگاه"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" /> <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /> <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" /> <path d="M2 7h20" /> <path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7" /> </svg></a>
           <div id="admNotes" class="db-notes" hidden role="dialog" aria-label="سفارش‌های تازه">
             <div class="db-notes-h"><b>سفارش‌های تازه</b><span id="admNotesN"></span></div>
             <ul id="admNotesList"></ul>
-          </div>
-          <div id="admMe" class="db-notes adm-me" hidden role="dialog" aria-label="حساب مدیر">
-            <div class="flex items-center gap-3 p-2"><span id="admMeAv" class="db-avatar" aria-hidden="true"></span><div class="min-w-0"><p id="admMeName" class="truncate font-display font-black text-ink"></p><p id="admMePhone" dir="ltr" class="tel text-right text-xs text-ink-soft"></p></div></div>
-            <button data-logout class="db-logout mt-2 w-full justify-center"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج مدیر</button>
           </div>
         </div>
       </header>
@@ -722,6 +719,7 @@
           <div class="db-h"><h2>سالن‌های سردخانه</h2><button type="button" data-goto="storage" class="db-all">جزئیات</button></div>
           <ul id="admHalls" class="db-row no-scrollbar"></ul>
         </section>
+        <button data-logout class="db-logout adm-out lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /> <polyline points="16 17 21 12 16 7" /> <line x1="21" x2="9" y1="12" y2="12" /> </svg>خروج از پنل مدیریت</button>
       </div>
 
       <!-- pane: order management table -->
@@ -787,7 +785,8 @@
 
 <!-- ╔══════════════════════ VIEW 5 · AUTH (standalone page, not a pop-up) ══════════════════════╗ -->
 <main id="authView" data-view="auth" hidden class="mx-auto max-w-6xl px-3 sm:px-6">
-<section class="py-8 sm:py-14">
+<section class="py-6 sm:py-14">
+  <a href="#top" class="pg-back lg:hidden"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت به فروشگاه</a>
   <div class="grid overflow-hidden rounded-[40px] border border-[#28622D]/10 bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_20px_50px_rgba(40,98,45,0.10)] lg:grid-cols-[1fr_1.1fr]">
     <!-- brand side -->
     <div class="relative hidden flex-col justify-between gap-10 overflow-hidden bg-[#28622D] p-10 text-white lg:flex">
@@ -1117,6 +1116,6 @@
 <!-- Toast (top, so it never collides with the cart capsule) -->
 <div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
 
-<script src="js/app.js?v=20261027c"></script>
+<script src="js/app.js?v=20261027e"></script>
 </body>
 </html>
