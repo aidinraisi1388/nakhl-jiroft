@@ -24,6 +24,8 @@
     { id:'apr',   cat:'dried', img:'img/p/apr.webp',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو', featured:true },
     { id:'rai',   cat:'dried', img:'img/p/rai.webp',    name:'کشمش سبز',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:210000,  badge:'صادراتی',     tag:'کشمش' }
   ];
+  const IMG_V = '3';                // bump when product photos change, so phones don't keep old cached copies
+  products.forEach(p => { if (p.img) p.img += '?v=' + IMG_V; });
   const byId = Object.fromEntries(products.map(p => [p.id, p]));
   /* weight in kg (for the customer's "purchased weight") + sample stock; the admin panel overrides price/stock */
   const faDigits = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
