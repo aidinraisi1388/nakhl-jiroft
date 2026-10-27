@@ -17,11 +17,11 @@
     { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته',      unit:'جعبه‌ی ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
     { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'کارتن مادر کلوته',   unit:'کارتن مادر ۱۲ کیلویی', price:2580000, badge:'', tag:'کلوته' },
     { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
-    { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر', featured:true },
-    { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام', featured:true },
-    { id:'wal',   cat:'dried', img:'img/p/wal.webp',    name:'مغز گردو',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:540000,  badge:'۱۰۰٪ ارگانیک', tag:'گردو', featured:true },
+    { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
+    { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
+    { id:'wal',   cat:'dried', img:'img/p/wal.webp',    name:'مغز گردو',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:540000,  badge:'۱۰۰٪ ارگانیک', tag:'گردو' },
     { id:'hzl',   cat:'dried', img:'img/p/hzl.webp',    name:'فندق',              unit:'بسته‌بندی ۵۰۰ گرمی',   price:690000,  badge:'صادراتی',     tag:'فندق' },
-    { id:'apr',   cat:'dried', img:'img/p/apr.webp',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو', featured:true },
+    { id:'apr',   cat:'dried', img:'img/p/apr.webp',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو' },
     { id:'rai',   cat:'dried', img:'img/p/rai.webp',    name:'کشمش سبز',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:210000,  badge:'صادراتی',     tag:'کشمش' }
   ];
   const IMG_V = '9';                // bump when product photos change, so phones don't keep old cached copies
@@ -118,7 +118,7 @@
     </article>`;
   };
 
-  const renderHome = () => { $('#homeGrid').innerHTML = products.filter(p => p.featured).slice(0, 8).map(cardHTML).join(''); };
+  const renderHome = () => { $('#homeGrid').innerHTML = products.filter(p => p.featured).slice(0, 4).map(cardHTML).join(''); };
   renderHome();
   if (window.lucide) lucide.createIcons();
 
