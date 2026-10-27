@@ -721,3 +721,17 @@ html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
 #footer{padding-top:1.75rem}
 @media (min-width:640px){#footer{padding-top:3.5rem}}
 /* paint the footer colour below the page end too (iOS Safari shows that area under its floating toolbar) */
+/* footer: a little larger overall */
+#footer{padding-top:2.5rem;font-size:14px}
+@media (min-width:640px){#footer{padding-top:4.25rem;font-size:15px}}
+#footer > div:first-child{padding-bottom:1.75rem}
+@media (min-width:640px){#footer > div:first-child{padding-bottom:3rem}}
+#footer h4{font-size:17px}
+@media (min-width:640px){#footer h4{font-size:19px}}
+#footer .font-display.text-xl{font-size:24px}
+#footer a[href="#top"] > span:first-child{width:52px;height:52px}
+#footer a[href="#top"] > span:first-child img{width:42px;height:42px}
+#footer a[aria-label^="اینستاگرام"],#footer a[aria-label^="تلگرام"],#footer a[aria-label="تماس تلفنی"]{width:46px;height:46px}
+#footer ul{row-gap:14px}
+#footer > div:last-child p{font-size:12.5px;padding-top:1.25rem}
+@media (min-width:640px){#footer > div:last-child p{font-size:13.5px;padding-top:1.75rem;padding-bottom:1.75rem}}
