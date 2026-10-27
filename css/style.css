@@ -720,3 +720,6 @@ html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
 @media (min-width:640px){.ft-copy{padding:22px 0}.ft-copy p{font-size:12px}}
 #footer{padding-top:1.75rem}
 @media (min-width:640px){#footer{padding-top:3.5rem}}
+/* paint the footer colour below the page end too (iOS Safari shows that area under its floating toolbar) */
+#footer{box-shadow:0 calc(70vh + 48px) 0 70vh #1D3B20}
+#footer[hidden]{box-shadow:none}
