@@ -677,3 +677,4 @@ img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
 .p-card .unit-pill{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .p-card h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cat-search[hidden],#storage[hidden],#grid[hidden]{display:none!important}
+.p-card .p-img img.ph{padding:2px}
