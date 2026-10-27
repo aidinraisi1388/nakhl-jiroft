@@ -66,9 +66,11 @@
   /* sample promo codes — validate real codes on the server */
   const PROMOS = { NAKHL10: { type: 'pct', v: 10, label: '۱۰٪ تخفیف' }, JIROFT: { type: 'off', v: 50000, label: '۵۰ هزار تومان تخفیف' } };
   let promo = null;
+  /* each customer may use a promo code only once: a paid order carrying the code marks it as used */
+  const promoUsed = (code, ph) => { try { return !!ph && orders.some(o => o.phone === ph && o.promo === code && o.status !== 'unpaid'); } catch (e) { return false; } };
   const totals = () => {
     const sub = subtotal();
-    const disc = !promo || !sub ? 0 : Math.min(sub, promo.type === 'pct' ? Math.round(sub * promo.v / 100) : promo.v);
+    const disc = !promo || !sub || (user && promoUsed(promo.code, user.phone)) ? 0 : Math.min(sub, promo.type === 'pct' ? Math.round(sub * promo.v / 100) : promo.v);
     return { sub, disc, total: sub - disc, free: sub >= FREE_SHIP };
   };
 
@@ -338,6 +340,7 @@
     e.preventDefault();
     const code = toLatin($('#promoInput').value).toUpperCase(), m = $('#promoMsg');
     if (!code) { promo = null; m.textContent = ''; }
+    else if (PROMOS[code] && user && promoUsed(code, user.phone)) { promo = null; m.textContent = `شما قبلاً از کد ${code} استفاده کرده‌اید؛ هر کد فقط یک بار.`; m.className = 'mt-2 min-h-[1rem] text-xs font-bold text-red-700'; }
     else if (PROMOS[code]) { promo = { code, ...PROMOS[code] }; m.textContent = `کد ${code} اعمال شد: ${PROMOS[code].label}`; m.className = 'mt-2 min-h-[1rem] text-xs font-bold text-cyprus'; }
     else { promo = null; m.textContent = 'این کد تخفیف معتبر نیست.'; m.className = 'mt-2 min-h-[1rem] text-xs font-bold text-red-700'; }
     renderCart(); updateBar();
@@ -689,7 +692,7 @@
     orders = orders.filter(o => !(o.phone === user.phone && o.status === 'unpaid'));
     const id = 'NKH-' + (Math.max(1046, ...orders.map(o => +o.id.split('-')[1] || 0)) + 1);
     const items = Object.entries(cart).map(([pid, q]) => [pid, q, byId[pid].price]);
-    const o = { id, phone: user.phone, name, rphone: rph, addr, ship, note: $('#ckNote').value.trim(), items, sub: t.sub, disc: t.disc, promo: promo && promo.code, free: t.free || ship === 'pickup', total: t.total, date: Date.now(), status: 'unpaid', tries: 0 };
+    const o = { id, phone: user.phone, name, rphone: rph, addr, ship, note: $('#ckNote').value.trim(), items, sub: t.sub, disc: t.disc, promo: t.disc && promo ? promo.code : null, free: t.free || ship === 'pickup', total: t.total, date: Date.now(), status: 'unpaid', tries: 0 };
     orders.unshift(o); saveOrders(); store.set('nakhl:cartOrder', id);
     // TODO (server): save the order in your database here — the server must re-check prices, stock and the promo code
     startPay(o);
@@ -827,7 +830,7 @@
   syncSession();
   let authReturn = null, pendingAfter = null, fpPhone = '';
   /* checkout & protected pages call this: send the visitor to the auth page and continue afterwards */
-  function openLogin(after, mode = 'user') {
+  function openLogin(after, mode = 'user', scr = 'signin') {
     if (mode === 'admin' ? admin : user) { after && after(); return; }
     if (mode === 'user' && admin) {                       // manager without a customer selected
       if (drawerOpen) closeCart(false);
@@ -836,8 +839,24 @@
     }
     pendingAfter = after || null; authReturn = mode === 'admin' ? 'admin' : 'dashboard';
     if (drawerOpen) closeCart(false);
-    location.hash = '#auth';
+    location.hash = scr === 'signup' ? '#auth/signup' : '#auth';
   }
+  /* «۱۰٪ تخفیف با کد NAKHL10» card: not signed in → sign in (or sign up if this browser never had an account) → then
+     empty cart → products page (code kept for later) · items in cart → cart drawer with the code already applied */
+  const offerPromo = code => {
+    const go = () => {
+      const m = $('#promoMsg');
+      if (promoUsed(code, user.phone)) { promo = null; toast(`شما قبلاً از کد ${code} استفاده کرده‌اید؛ هر کد فقط یک بار`); }
+      else { promo = { code, ...PROMOS[code] }; $('#promoInput').value = code; m.textContent = `کد ${code} اعمال شد: ${PROMOS[code].label}`; m.className = 'mt-2 min-h-[1rem] text-xs font-bold text-cyprus'; }
+      if (!count()) { location.hash = '#products'; if (promo) toast(`کد ${code} برای شما فعال شد؛ محصول‌تان را انتخاب کنید`); }
+      else { if (location.hash.startsWith('#auth')) location.hash = '#products'; setTimeout(openCart, 120); }
+      updateBar();
+    };
+    if (user) return go();
+    const known = store.get('nakhl:known', false) || Object.keys(users).some(ph => !PRESET[ph]);
+    openLogin(go, 'user', known ? 'signin' : 'signup');
+  };
+  $$('[data-promo]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); offerPromo(a.dataset.promo); }));
   const note = m => { $('#authNote').hidden = !m; $('#authNote').textContent = m || ''; };
   function authScreen(scr) {
     $$('[data-screen]').forEach(el => { el.hidden = el.dataset.screen !== scr; });
@@ -874,7 +893,7 @@
   const strong = pw => pw.length >= 8 && /[A-Za-z؀-ۿ]/.test(pw) && /\d/.test(toLatin(pw));
 
   function startSession(phone) {
-    session = { phone }; store.set('nakhl:session', session); syncSession(); updateUserUI();
+    session = { phone }; store.set('nakhl:session', session); store.set('nakhl:known', true); syncSession(); updateUserUI();
     const isAdm = session.role === 'admin', wantAdm = authReturn === 'admin', after = pendingAfter;
     authReturn = null; pendingAfter = null;
     const w = $('#welcome'), btns = $$('#authView button');
