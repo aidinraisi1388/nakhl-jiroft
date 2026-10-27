@@ -858,6 +858,7 @@
     const known = store.get('nakhl:known', false) || Object.keys(users).some(ph => !PRESET[ph]);
     openLogin(go, 'user', known ? 'signin' : 'signup');
   };
+  $('#toTop') && $('#toTop').addEventListener('click', () => scrollTo({ top: 0, behavior: smooth }));
   $$('[data-promo]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); offerPromo(a.dataset.promo); }));
   const note = m => { $('#authNote').hidden = !m; $('#authNote').textContent = m || ''; };
   function authScreen(scr) {

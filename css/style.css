@@ -699,3 +699,24 @@ img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
 @media (prefers-reduced-motion:reduce){#hero .hx > *{opacity:1;transform:none;filter:none;animation:none!important}#hero .hx h1 .block,#hero .hx h2 .block,.hx-slide::before,.hx-slide::after{animation:none}}
 /* footer: cart capsule steps aside so the copyright sits on the very bottom */
 html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
+
+/* ── Footer: compact mobile layout ── */
+.ft-mob{display:block}
+.ft-desk{display:none!important}
+@media (min-width:640px){.ft-mob{display:none}.ft-desk{display:grid!important}}
+.ft-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ft-soc{display:flex;gap:8px}
+.ft-soc a{width:38px;height:38px}
+.ft-line{margin-top:14px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.72)}
+.ft-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.ft-chips a{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-weight:700;font-size:12.5px;color:rgba(255,255,255,.85);transition:background .25s,color .25s}
+.ft-chips a:hover,.ft-chips a:active{background:#fff;color:#1D3B20}
+.ft-trust{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.ft-trust[hidden]{display:none}
+.ft-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
+.ft-copy p{font-size:11px;font-weight:700;color:rgba(255,255,255,.45)}
+.ft-top{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:999px;background:rgba(255,255,255,.08);color:#fff;transition:background .25s,transform .25s}
+.ft-top:hover{background:rgba(255,255,255,.16)}.ft-top:active{transform:scale(.9)}
+@media (min-width:640px){.ft-copy{padding:22px 0}.ft-copy p{font-size:12px}}
+#footer{padding-top:1.75rem}
+@media (min-width:640px){#footer{padding-top:3.5rem}}
