@@ -10,18 +10,18 @@
   /* ── Products: set `img` to a PNG path when your photos are ready. Prices are samples.
         featured:true → shown in the 4 curated cards on the homepage ── */
   const products = [
-    { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی',    unit:'بسته‌بندی خانواده ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
+    { id:'maz20', cat:'mazafati', img:'img/p/maz-box.webp', name:'خرمای مضافتی',    unit:'جعبه‌ی ۲ کیلویی',      price:495000,  badge:'۱۰۰٪ ارگانیک', tag:'مضافتی', featured:true },
     { id:'mazc',  cat:'mazafati', img:'img/p/maz-carton.webp', name:'کارتن مادر مضافتی',  unit:'کارتن مادر ۱۲ کیلویی', price:2970000, badge:'', tag:'مضافتی' },
-    { id:'pia2k', cat:'piarom', img:'img/p/pia-box.webp',   name:'خرمای پیارم',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
+    { id:'pia2k', cat:'piarom', img:'img/p/pia-box.webp',   name:'خرمای پیارم',      unit:'جعبه‌ی ۲ کیلویی',      price:1290000, badge:'۱۰۰٪ ارگانیک', tag:'پیارم', featured:true },
     { id:'piac',  cat:'piarom', img:'img/p/pia-carton.webp',   name:'کارتن مادر پیارم',   unit:'کارتن مادر ۱۲ کیلویی', price:7740000, badge:'', tag:'پیارم' },
-    { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته',      unit:'بسته‌بندی خانواده ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
+    { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته',      unit:'جعبه‌ی ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
     { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'کارتن مادر کلوته',   unit:'کارتن مادر ۱۲ کیلویی', price:2580000, badge:'', tag:'کلوته' },
     { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
-    { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
-    { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
-    { id:'wal',   cat:'dried', img:'img/p/wal.webp',    name:'مغز گردو',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:540000,  badge:'۱۰۰٪ ارگانیک', tag:'گردو' },
+    { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر', featured:true },
+    { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام', featured:true },
+    { id:'wal',   cat:'dried', img:'img/p/wal.webp',    name:'مغز گردو',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:540000,  badge:'۱۰۰٪ ارگانیک', tag:'گردو', featured:true },
     { id:'hzl',   cat:'dried', img:'img/p/hzl.webp',    name:'فندق',              unit:'بسته‌بندی ۵۰۰ گرمی',   price:690000,  badge:'صادراتی',     tag:'فندق' },
-    { id:'apr',   cat:'dried', img:'img/p/apr.webp',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو' },
+    { id:'apr',   cat:'dried', img:'img/p/apr.webp',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو', featured:true },
     { id:'rai',   cat:'dried', img:'img/p/rai.webp',    name:'کشمش سبز',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:210000,  badge:'صادراتی',     tag:'کشمش' }
   ];
   const byId = Object.fromEntries(products.map(p => [p.id, p]));
@@ -75,9 +75,9 @@
   /* ── Product card ── */
   /* short line under each product name (edit freely) */
   const DESC = {
-    maz20: 'بسته‌ی اقتصادی برای مصرف خانواده', mazc: 'شش جعبه‌ی خانواده، مناسب خرید عمده و هدیه',
-    pia2k: 'بسته‌ی بزرگ برای مصرف خانواده', piac: 'شش جعبه‌ی خانواده، مناسب خرید عمده و هدیه',
-    kal20: 'بسته‌ی اقتصادی خانواده', kalc: 'شش جعبه‌ی خانواده، مناسب خرید عمده و هدیه',
+    maz20: 'نرم و شیرین، برداشت تازه‌ی جیرفت', mazc: 'شش جعبه‌ی ۲ کیلویی، مناسب خرید عمده',
+    pia2k: 'خشک و کم‌شیرین، ماندگاری بالا', piac: 'شش جعبه‌ی ۲ کیلویی، مناسب خرید عمده',
+    kal20: 'نیمه‌خشک با طعم اصیل جنوب', kalc: 'شش جعبه‌ی ۲ کیلویی، مناسب خرید عمده',
     pis: 'مغز درشت و خندان، تازه‌برشته', fig: 'نرم و شیرین، خشک‌شده در آفتاب', alm: 'مغز کامل و ترد',
     wal: 'مغز روشن و تازه، بدون تلخی', hzl: 'برشته‌ی ملایم با عطر دلپذیر', apr: 'ترش و شیرین، بدون شکر افزوده', rai: 'دانه‌ی سبز و شیرین قزوین'
   };
@@ -114,7 +114,7 @@
     </article>`;
   };
 
-  const renderHome = () => { $('#homeGrid').innerHTML = products.filter(p => p.featured).slice(0, 4).map(cardHTML).join(''); };
+  const renderHome = () => { $('#homeGrid').innerHTML = products.filter(p => p.featured).slice(0, 8).map(cardHTML).join(''); };
   renderHome();
   if (window.lucide) lucide.createIcons();
 
