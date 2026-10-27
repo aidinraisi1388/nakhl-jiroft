@@ -652,9 +652,9 @@ html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezi
 #admBody:not([data-tab="stats"]) [data-pane]{margin-top:14px}
 
 /* footer: floating rounded card */
-#footer{margin:1.5rem 0 0;border-radius:28px 28px 0 0}
-@media (min-width:640px){#footer{border-radius:44px 44px 0 0}}
-html.at-foot{background:#1D3B20}
+#footer{margin:1.5rem 12px 12px;border-radius:28px}
+@media (min-width:640px){#footer{margin:1.5rem 24px 20px;border-radius:44px}}
+
 
 /* wavy green bands */
 .band{position:relative;isolation:isolate}
@@ -713,7 +713,7 @@ html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
 .ft-chips a:hover,.ft-chips a:active{background:#fff;color:#1D3B20}
 .ft-trust{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .ft-trust[hidden]{display:none}
-.ft-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
+.ft-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 16px}
 .ft-copy p{font-size:11px;font-weight:700;color:rgba(255,255,255,.45)}
 .ft-top{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:999px;background:rgba(255,255,255,.08);color:#fff;transition:background .25s,transform .25s}
 .ft-top:hover{background:rgba(255,255,255,.16)}.ft-top:active{transform:scale(.9)}
@@ -721,5 +721,3 @@ html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
 #footer{padding-top:1.75rem}
 @media (min-width:640px){#footer{padding-top:3.5rem}}
 /* paint the footer colour below the page end too (iOS Safari shows that area under its floating toolbar) */
-#footer{box-shadow:0 calc(70vh + 48px) 0 70vh #1D3B20}
-#footer[hidden]{box-shadow:none}
