@@ -12,6 +12,8 @@ const products = [
   { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'کارتن مادر کلوته',   unit:'کارتن مادر ۱۲ کیلویی', price:2580000, badge:'', tag:'کلوته' },
   { id:'khk20', cat:'khoshk', name:'خرمای خشک',              unit:'جعبه‌ی ۲ کیلویی',      price:380000,  badge:'', tag:'خرمای خشک' },
   { id:'khkc',  cat:'khoshk', name:'کارتن مادر خرمای خشک',   unit:'کارتن مادر ۱۲ کیلویی', price:2280000, badge:'', tag:'خرمای خشک' },
+  { id:'mrd20', cat:'mordasang', name:'خرمای مرداسنگ',        unit:'جعبه‌ی ۲ کیلویی',      price:460000,  badge:'', tag:'مرداسنگ' },
+  { id:'mrdc',  cat:'mordasang', name:'کارتن مادر مرداسنگ',  unit:'کارتن مادر ۱۲ کیلویی', price:2760000, badge:'', tag:'مرداسنگ' },
   { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
   { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
   { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
@@ -26,15 +28,16 @@ const byId = Object.fromEntries(products.map(p => [p.id, p]));
 /* weight in kg (for the customer's "purchased weight") + sample stock; the admin panel overrides price/stock */
 const faDigits = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
 products.forEach(p => { const m = faDigits(p.unit).match(/(\d+)\s*(گرمی|کیلویی)/); p.kg = m ? (m[2] === 'گرمی' ? +m[1] / 1000 : +m[1]) : 0.5; p.stock = p.id === 'hzl' ? 0 : 40; });
-const DATE_CATS = ['mazafati', 'piarom', 'kaluteh', 'khoshk'];
+const DATE_CATS = ['mazafati', 'piarom', 'kaluteh', 'khoshk', 'mordasang'];
 const PAGE_SIZE = 8;              // products per catalog page
 const FREE_SHIP = 2000000;        // free cold shipping threshold (Toman)
 const CATS = {
-  dates:    ['خرمای جنوب',    'مضافتی، پیارم، کلوته و خرمای خشک؛ مستقیم از نخلستان‌ها.'],
+  dates:    ['خرمای جنوب',    'مضافتی، پیارم، کلوته، مرداسنگ و خرمای خشک؛ مستقیم از نخلستان‌ها.'],
   mazafati: ['خرمای مضافتی', 'نرم و شیرین، برداشت تازه‌ی جنوب.'],
   piarom:   ['خرمای پیارم',  'خشک و اصیل، مناسب صادرات و هدیه.'],
   kaluteh:  ['خرمای کلوته',  'نیمه‌خشک، با طعم اصیل جنوب.'],
   khoshk:   ['خرمای خشک',   'خشک و ماندگار، مناسب سفر و مصرف روزانه.'],
+  mordasang:['خرمای مرداسنگ', 'نیمه‌خشک و خوش‌طعم، از نخلستان‌های جنوب.'],
   dried:    ['خشکبار ممتاز', 'پسته، بادام، انجیر و گردوی دست‌چین.'],
   all:      ['همه محصولات',  'کل محصولات نخل و ماه در یک نگاه.']
 };
@@ -42,6 +45,7 @@ const TONE = {
   mazafati: '--hi:#DFECE0;--mid:#447448;--lo:#19431D;--glow:rgba(40,98,45,.18)',
   piarom:   '--hi:#F0F7F1;--mid:#325D36;--lo:#113213;--glow:rgba(25,67,29,.2)',
   kaluteh:  '--hi:#F0F7F1;--mid:#6EAA73;--lo:#377B3D;--glow:rgba(55,123,61,.16)',
+  mordasang:'--hi:#F0F7F1;--mid:#5E9663;--lo:#1D4A22;--glow:rgba(40,98,45,.16)',
   khoshk:   '--hi:#F0F7F1;--mid:#8FB592;--lo:#28622D;--glow:rgba(40,98,45,.16)',
   dried:    '--hi:#FFFFFF;--mid:#BCD2BE;--lo:#87C28C;--glow:rgba(135,194,140,.2)'
 };

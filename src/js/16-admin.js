@@ -7,7 +7,7 @@ const HALLS = [                        // sample hall data → 3,900 of 5,000 t 
   { name: 'سالن ۳ · کلوته',  cap: 1300, used: 930,  temp: '+2.8', hum: 84 },
   { name: 'سالن ۴ · خشکبار', cap: 1000, used: 700,  temp: '+3.6', hum: 65 }
 ];
-const CAT_FA = { mazafati: 'مضافتی', piarom: 'پیارم', kaluteh: 'کلوته', khoshk: 'خرمای خشک', dried: 'خشکبار' };
+const CAT_FA = { mazafati: 'مضافتی', piarom: 'پیارم', kaluteh: 'کلوته', khoshk: 'خرمای خشک', mordasang: 'مرداسنگ', dried: 'خشکبار' };
 const TITLES = { stats: 'آمار و داشبورد', orders: 'مدیریت سفارش‌ها', inventory: 'کنترل موجودی و قیمت', storage: 'وضعیت سردخانه', customers: 'مشتریان و پشتیبانی' };
 const saveWallet = () => store.set('nakhl:wallet:v2', wallet);
 let admTab = 'stats', admFilter = 'all';
