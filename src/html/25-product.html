@@ -1,0 +1,95 @@
+<!-- ▸ 25-product.html — PRODUCT PAGE (#product/<id>): photo, rating, price & add-to-cart, sizes, description, specs,
+     reviews (stars + comments) and similar products. Everything inside is filled by js/08b-product-page.js. -->
+<!-- ╔══════════════════════ VIEW · PRODUCT PAGE ══════════════════════╗ -->
+<main id="productView" data-view="product" hidden class="mx-auto max-w-7xl px-3 sm:px-6">
+<section class="pd pb-16 pt-8 sm:pb-24 sm:pt-12" aria-labelledby="pdName">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>بازگشت</button>
+  <nav aria-label="مسیر صفحه" class="pd-crumbs">
+    <a href="#top">خانه</a><i aria-hidden="true">‹</i><a href="#products">محصولات</a><i aria-hidden="true">‹</i><a id="pdCatLink" href="#products"></a><i aria-hidden="true">‹</i><span id="pdCrumb" aria-current="page"></span>
+  </nav>
+
+  <!-- top: photo + buying box -->
+  <div class="pd-top">
+    <figure class="pd-media">
+      <div class="pd-glow" aria-hidden="true"></div>
+      <div id="pdImg" class="pd-img"></div>
+      <figcaption class="pd-chips">
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M4.9 7l14.2 10M4.9 17 19.1 7"/></svg>زنجیره‌ی سرد ۲ تا ۴ درجه</span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>تضمین اصالت</span>
+      </figcaption>
+    </figure>
+
+    <div class="pd-info">
+      <p id="pdKind" class="eyebrow"></p>
+      <h1 id="pdName" class="pd-name"></h1>
+      <button type="button" id="pdRate" class="pd-rate"></button>
+      <p id="pdShort" class="pd-short"></p>
+
+      <div id="pdSizes" class="pd-sizes" role="group" aria-label="اندازه‌ی بسته"></div>
+
+      <div class="pd-buybox">
+        <div class="flex items-end justify-between gap-3">
+          <div><p class="text-xs font-bold text-ink-soft">قیمت</p><p class="pd-price"><b id="pdPrice"></b> <span>تومان</span></p></div>
+          <p id="pdStock" class="pd-stock"></p>
+        </div>
+        <div id="pdBuy" class="mt-4"></div>
+        <ul class="pd-perks">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>ارسال با کامیون یخچال‌دار؛ رایگان برای خرید بالای ۲ میلیون تومان</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>اگر محصول با توضیحات یکی نبود، تا ۷ روز مرجوع می‌شود</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- description + specs -->
+  <div class="pd-grid">
+    <article class="pd-card">
+      <h2 class="pd-h">درباره‌ی این محصول</h2>
+      <p id="pdAbout" class="pd-text"></p>
+      <h3 class="pd-h3">پیشنهاد مصرف</h3>
+      <p id="pdUse" class="pd-text"></p>
+    </article>
+    <article class="pd-card">
+      <h2 class="pd-h">مشخصات</h2>
+      <dl id="pdSpec" class="pd-spec"></dl>
+    </article>
+  </div>
+
+  <!-- reviews: average + bars, list, and a form (one review per account per product) -->
+  <section id="pdReviews" class="pd-card pd-rev scroll-mt-6" aria-labelledby="pdRevTitle">
+    <div class="pd-rev-head">
+      <h2 id="pdRevTitle" class="pd-h">امتیاز و نظر خریداران</h2>
+      <div id="pdRevSum" class="pd-rev-sum"></div>
+    </div>
+    <ul id="pdRevList" class="pd-rev-list"></ul>
+    <form id="pdRevForm" class="pd-rev-form" novalidate>
+      <p class="pd-h3">نظر خودتان را بنویسید</p>
+      <fieldset class="pd-stars-in">
+        <legend class="sr-only">امتیاز شما</legend>
+        <input type="radio" name="pdStar" id="pdS5" value="5"><label for="pdS5" title="عالی">★<span class="sr-only">۵ ستاره</span></label>
+        <input type="radio" name="pdStar" id="pdS4" value="4"><label for="pdS4" title="خوب">★<span class="sr-only">۴ ستاره</span></label>
+        <input type="radio" name="pdStar" id="pdS3" value="3"><label for="pdS3" title="متوسط">★<span class="sr-only">۳ ستاره</span></label>
+        <input type="radio" name="pdStar" id="pdS2" value="2"><label for="pdS2" title="ضعیف">★<span class="sr-only">۲ ستاره</span></label>
+        <input type="radio" name="pdStar" id="pdS1" value="1"><label for="pdS1" title="خیلی ضعیف">★<span class="sr-only">۱ ستاره</span></label>
+      </fieldset>
+      <div class="grid gap-3 sm:grid-cols-[1fr_2fr]">
+        <div class="flex flex-col gap-1.5"><label for="pdRevName" class="label">نام شما</label><input id="pdRevName" class="field" maxlength="40" autocomplete="name" placeholder="مثلاً: مریم"></div>
+        <div class="flex flex-col gap-1.5"><label for="pdRevText" class="label">نظر شما</label><textarea id="pdRevText" class="field h-auto resize-y py-3" rows="3" maxlength="500" placeholder="طعم، تازگی، بسته‌بندی، ارسال…"></textarea></div>
+      </div>
+      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p id="pdRevMsg" class="min-h-[1.25rem] text-sm" role="status" aria-live="polite"></p>
+        <button class="btn-cyprus h-12 px-8 text-sm">ثبت نظر</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- similar products (same family first) -->
+  <section class="mt-10" aria-labelledby="pdSimTitle">
+    <div class="flex items-end justify-between gap-3">
+      <h2 id="pdSimTitle" class="pd-h !m-0">محصولات مشابه</h2>
+      <a id="pdSimAll" href="#products" class="text-sm font-bold text-cyprus">مشاهده‌ی همه</a>
+    </div>
+    <div id="pdSimilar" class="mt-5 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"></div>
+  </section>
+</section>
+</main>

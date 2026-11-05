@@ -1,0 +1,32 @@
+/* 05-sections.css — Card sheen, green section bands, hero slides, navbar search. */
+
+/* ── "Alive" frost sheen on cards: one transform per hover, no blur ── */
+.card-hover,.p-card{position:relative;overflow:hidden}
+.card-hover::after,.p-card::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;z-index:1;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);transform:translateX(110%);transition:transform .8s var(--ease)}
+@media (hover:hover){ .card-hover:hover::after,.p-card:hover::after{transform:translateX(-110%)}}
+
+/* ── Two-tone full-bleed section bands (Sand ⇄ Cyprus) — static paint, no JS ── */
+html,body{overflow-x:clip}
+/* iPhone rubber-band below the footer shows the footer colour, not a white strip */
+/* cart capsule hides at the footer instead of padding it */
+/* one green field from the middle of the categories to the middle of the featured products, with soft wavy edges */
+/* cards that sit across a band edge get a deeper shadow so they "pop" */
+
+/* hero slides */
+#heroTrack{transform:translate3d(0,0,0);will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.slide{flex:0 0 100%;min-width:100%;transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden;
+  background:radial-gradient(55% 65% at 80% 115%,rgba(55,123,61,.85),transparent 70%),radial-gradient(40% 55% at 5% -5%,rgba(240,247,241,.12),transparent 70%),#28622D}
+.dot{position:relative;cursor:pointer}
+.dot::before{content:"";position:absolute;inset:-12px -6px}             /* easy to click */
+
+/* navbar search expands inline */
+#navSearch{width:40px;transition:width .5s cubic-bezier(.22,1,.36,1),background-color .35s ease}
+#navSearch.open{width:min(260px,48vw);background:rgba(255,255,255,.12)}
+#navSearch input{opacity:0;width:0;transform:translate3d(8px,0,0);transition:opacity .25s ease,transform .45s cubic-bezier(.22,1,.36,1)}
+#navSearch.open input{opacity:1;width:100%;transform:none;transition-delay:.12s}
+@media (max-width:639px){ #header.searching .brand-text{display:none}}
+@media (max-width:374px){ #header .brand-text{display:none}}          /* very small phones: logo only, so every button fits */
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

@@ -1,0 +1,80 @@
+<!-- ▸ 80-overlays.html — Cart capsule, cart drawer, welcome banner, toast, script include, end of document. -->
+<!-- ═════════ Floating cart capsule (appears after the first add) ═════════ -->
+<button id="cartBar" type="button" aria-haspopup="dialog" aria-controls="cartDrawer"
+  class="fixed bottom-4 left-1/2 z-40 flex h-14 w-[min(420px,calc(100vw-1.5rem))] items-center gap-3 rounded-full bg-[#28622D] p-1.5 pl-5 text-white shadow-[0_20px_50px_rgba(40,98,45,0.35)] hover:bg-cyprus-mid focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus focus-visible:ring-offset-2 focus-visible:ring-offset-sand">
+  <span id="cartBarIcon" class="relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-cyprus">
+    <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 11-1 9" /> <path d="m19 11-4-7" /> <path d="M2 11h20" /> <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" /> <path d="M4.5 15.5h15" /> <path d="m5 11 4-7" /> <path d="m9 11 1 9" /> </svg>
+    <span id="barCount" class="absolute -left-1 -top-1 grid h-5 min-w-5 place-items-center rounded-full bg-cyprus-deep px-1 font-display text-[11px] font-black text-white ring-2 ring-[#28622D]">۰</span>
+  </span>
+  <span class="font-display text-sm font-bold">مشاهده‌ی سبد خرید</span>
+  <span class="ms-auto flex items-baseline gap-1 font-display"><b id="barTotal" class="text-base font-black tabular-nums">۰</b><span class="text-[11px] text-white/70">تومان</span></span>
+  <svg class="h-4 w-4 text-white/70" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
+</button>
+
+<!-- ═════════ Cart drawer ═════════ -->
+<div id="cartOverlay" class="fixed inset-0 z-50 bg-[#19431D]/45"></div>
+<aside id="cartDrawer" class="drawer fixed z-[55] flex flex-col bg-sand shadow-[0_30px_80px_rgba(25,67,29,0.35)]" role="dialog" aria-modal="true" aria-labelledby="cartTitle" inert>
+  <div class="mx-auto mt-2.5 h-1.5 w-12 shrink-0 rounded-full bg-cyprus/15 sm:hidden" aria-hidden="true"></div>
+  <div class="flex shrink-0 items-center justify-between px-5 pb-3 pt-4 sm:px-6 sm:pt-6">
+    <div class="flex items-center gap-2">
+      <h2 id="cartTitle" class="font-display text-xl font-black text-cyprus">سبد خرید</h2>
+      <span id="drawerCount" class="grid h-6 min-w-6 place-items-center rounded-full bg-cyprus px-2 font-display text-xs font-black text-white">۰</span>
+    </div>
+    <button id="closeCart" class="ease-ui grid h-10 w-10 place-items-center rounded-full bg-white text-cyprus shadow-[0_4px_12px_rgba(40,98,45,0.08)] hover:bg-cyprus hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus" aria-label="بستن سبد خرید"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 6 6 18" /> <path d="m6 6 12 12" /> </svg></button>
+  </div>
+
+  <!-- free shipping progress -->
+  <div id="shipBox" class="mx-5 shrink-0 rounded-3xl bg-white p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_10px_30px_rgba(40,98,45,0.06)] sm:mx-6">
+    <p class="flex items-center gap-2 text-sm text-ink-muted"><svg class="h-4 w-4 shrink-0 text-cyprus" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /> </svg><span id="shipText">برای ارسال رایگان محصول اضافه کنید</span></p>
+    <div class="mt-3 h-2 overflow-hidden rounded-full bg-sand" role="progressbar" aria-label="پیشرفت تا ارسال رایگان" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="shipProgress">
+      <div id="shipBar" class="h-full w-full rounded-full bg-[#28622D]" style="transform:scaleX(0)"></div>
+    </div>
+  </div>
+
+  <ul id="cartItems" class="mt-4 flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto overscroll-contain px-5 pb-4 sm:px-6"></ul>
+
+  <div id="cartEmpty" class="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
+    <span class="grid h-16 w-16 place-items-center rounded-full bg-white text-cyprus shadow-[0_10px_30px_rgba(40,98,45,0.06)]"><svg class="h-7 w-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 11-1 9" /> <path d="m19 11-4-7" /> <path d="M2 11h20" /> <path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4" /> <path d="M4.5 15.5h15" /> <path d="m5 11 4-7" /> <path d="m9 11 1 9" /> </svg></span>
+    <p class="font-display text-lg font-black text-cyprus">سبد خرید شما خالی است</p>
+    <p class="text-sm text-ink-muted">خرمای تازه‌ی جنوب منتظر شماست.</p>
+    <a href="#products" data-close-cart class="btn-cyprus mt-2 h-12 px-6 text-sm">مشاهده‌ی محصولات</a>
+  </div>
+
+  <div id="cartFoot" class="shrink-0 rounded-t-4xl bg-white p-5 shadow-[0_-10px_30px_rgba(40,98,45,0.06)] sm:rounded-b-4xl sm:p-6">
+    <form id="promoForm" novalidate class="ease-ui flex h-12 items-center gap-1 rounded-full bg-sand-light p-1 ring-1 ring-cyprus/10 focus-within:bg-white focus-within:ring-2 focus-within:ring-[#28622D]">
+      <svg class="mr-3 h-4 w-4 shrink-0 text-cyprus" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 9a3 3 0 1 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 1 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" /> <path d="M9 9h.01" /> <path d="m15 9-6 6" /> <path d="M15 15h.01" /> </svg>
+      <label for="promoInput" class="sr-only">کد تخفیف</label>
+      <input id="promoInput" dir="ltr" autocomplete="off" placeholder="کد تخفیف" class="h-full min-w-0 flex-1 bg-transparent px-2 text-right text-sm font-bold uppercase text-cyprus outline-none placeholder:normal-case placeholder:font-normal placeholder:text-ink-soft">
+      <button class="btn-cyprus h-full shrink-0 px-5 text-xs focus-visible:ring-offset-white">اعمال</button>
+    </form>
+    <p id="promoMsg" class="mt-2 min-h-[1rem] text-xs" aria-live="polite"></p>
+    <dl class="mt-2 flex flex-col gap-2.5 text-sm">
+      <div class="flex justify-between"><dt class="text-ink-muted">جمع کالاها</dt><dd class="font-display font-bold text-ink"><span id="cartSubtotal">۰</span> تومان</dd></div>
+      <div id="discRow" hidden class="flex justify-between"><dt id="discLabel" class="text-ink-muted">تخفیف</dt><dd class="font-display font-bold text-cyprus">− <span id="cartDisc">۰</span> تومان</dd></div>
+      <div class="flex justify-between"><dt class="text-ink-muted">هزینه‌ی ارسال</dt><dd id="cartShipping" class="font-display font-bold text-ink">—</dd></div>
+      <div class="mt-1 flex items-baseline justify-between border-t border-dashed border-cyprus/15 pt-3"><dt class="font-display font-bold text-ink">مبلغ قابل پرداخت</dt><dd class="font-display text-cyprus"><b id="cartTotal" class="text-2xl font-black tabular-nums">۰</b> <span class="text-xs font-bold">تومان</span></dd></div>
+    </dl>
+    <button id="checkout" class="btn-cyprus mt-5 h-14 w-full text-base">ادامه‌ی خرید<svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg></button>
+    <p class="mt-2 text-center text-xs leading-6 text-ink-muted">در مرحله‌ی بعد آدرس را انتخاب و آنلاین پرداخت می‌کنید.</p>
+    <p id="loginHint" class="mt-3 text-center text-xs text-ink-soft">حساب کاربری دارید؟ <a href="#auth" class="font-bold text-cyprus underline-offset-4 hover:underline">ورود</a></p>
+  </div>
+</aside>
+
+<!-- Quick view (product sheet) -->
+<div id="qvOverlay" class="qv-ov" hidden></div>
+<div id="qv" class="qv" role="dialog" aria-modal="true" aria-label="نمایش سریع محصول" hidden>
+  <span class="qv-grab" aria-hidden="true"></span>
+  <button id="qvClose" type="button" class="qv-x" aria-label="بستن"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div id="qvBody"></div>
+</div>
+
+<!-- Welcome banner (login → redirect) -->
+<div id="welcome" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-4 z-50 flex items-center gap-2 rounded-full border border-white/25 bg-[#28622D] px-6 py-2.5 text-sm font-bold text-white shadow-2xl"></div>
+
+
+<!-- Toast (top, so it never collides with the cart capsule) -->
+<div id="toast" role="status" aria-live="polite" class="pointer-events-none fixed left-1/2 top-24 z-[90] w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-2 rounded-full bg-cyprus-deep px-5 py-3 text-center text-sm text-white opacity-0 shadow-lg transition duration-200"></div>
+
+<script src="js/app.js?v={{V}}"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!-- ▸ 50-auth.html — AUTH view: sign in / sign up / forgot password. -->
+<!-- ╔══════════════════════ VIEW 5 · AUTH (standalone page, not a pop-up) ══════════════════════╗ -->
+<main id="authView" data-view="auth" hidden class="mx-auto max-w-6xl px-3 sm:px-6">
+<section class="py-6 sm:py-14">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
+  <div class="grid overflow-hidden rounded-[40px] border border-[#28622D]/10 bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_20px_50px_rgba(40,98,45,0.10)] lg:grid-cols-[1fr_1.1fr]">
+    <!-- brand side -->
+    <div class="relative hidden flex-col justify-between gap-10 overflow-hidden bg-[#28622D] p-10 text-white lg:flex">
+      <a href="#top" class="relative flex w-fit items-center gap-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"><span class="grid h-11 w-11 place-items-center rounded-full bg-white"><img src="img/logo.svg" alt="" width="976" height="1084" class="h-8 w-8 object-contain" decoding="async"></span><span class="font-display text-xl font-black">نخل و ماه</span></a>
+      <div class="relative">
+        <h2 id="authBrandT" class="font-display text-[32px] font-black leading-[1.4]">دوباره خوش آمدید<br>به نخل و ماه</h2>
+        <p id="authBrandL" class="mt-3 max-w-sm text-sm leading-7 text-white/70">سفارش‌ها، کیف پول و درخواست‌های سردخانه‌تان منتظر شماست.</p>
+        <ul class="a-list mt-6 flex flex-col gap-3 text-sm text-white/80">
+          <li class="flex items-center gap-2.5"><span class="grid h-8 w-8 place-items-center rounded-xl bg-white/10"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /> </svg></span>پیگیری لحظه‌ای سفارش در زنجیره‌ی سرد</li>
+          <li class="flex items-center gap-2.5"><span class="grid h-8 w-8 place-items-center rounded-xl bg-white/10"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /> <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /> </svg></span>کیف پول و امتیاز باشگاه مشتریان</li>
+          <li class="flex items-center gap-2.5"><span class="grid h-8 w-8 place-items-center rounded-xl bg-white/10"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg></span>درخواست سالن سردخانه و خرید عمده</li>
+        </ul>
+      </div>
+      <div class="glass relative rounded-3xl p-5"><p class="text-sm leading-7 text-white/80">«خرمای تازه‌ی جنوب، از نخلستان تا خانه‌ی شما با دمای ثابت ۲ تا ۴ درجه.»</p></div>
+    </div>
+
+    <!-- forms side -->
+    <div class="p-6 sm:p-10">
+      <div class="relative mb-6 flex items-center gap-3 overflow-hidden rounded-3xl bg-[#28622D] p-4 text-white lg:hidden">
+        <span class="relative grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white"><img src="img/logo.svg" alt="" width="976" height="1084" class="h-8 w-8 object-contain" decoding="async"></span>
+        <p class="relative font-display text-[15px] font-black leading-7"><span id="authBrandM">دوباره خوش آمدید</span><span id="authBrandMs" class="block text-[11px] font-bold text-white/70">سفارش‌هایتان منتظر شماست</span></p>
+      </div>
+      <div id="authTabs" class="relative isolate flex rounded-full bg-sand p-1" role="tablist" aria-label="ورود یا ثبت‌نام">
+        <span id="authPill" aria-hidden="true" class="absolute bottom-1 right-1 top-1 -z-10 w-[calc(50%-4px)] rounded-full bg-white shadow-[0_6px_14px_-6px_rgba(40,98,45,.35)]"></span>
+        <a href="#auth" data-auth-tab="signin" class="ease-ui grid h-11 flex-1 place-items-center rounded-full font-display text-sm font-bold text-cyprus-mid hover:text-cyprus active:scale-95">ورود</a>
+        <a href="#auth/signup" data-auth-tab="signup" class="ease-ui grid h-11 flex-1 place-items-center rounded-full font-display text-sm font-bold text-cyprus-mid hover:text-cyprus active:scale-95">ثبت‌نام</a>
+      </div>
+      <h1 id="authHeading" class="mt-8 font-display text-2xl font-black text-cyprus sm:text-[28px]">ورود به حساب</h1>
+      <p id="authLead" class="mt-1 text-sm text-ink-muted"></p>
+      <p id="authNote" hidden class="mt-4 flex items-center gap-2 rounded-2xl bg-cyprus-soft px-4 py-3 text-sm font-bold text-cyprus" role="status"></p>
+
+      <!-- sign in -->
+      <form id="signinForm" novalidate class="mt-6 flex flex-col gap-4" data-screen="signin">
+        <div class="flex flex-col gap-1.5"><label for="siPhone" class="label">شماره موبایل</label><input id="siPhone" class="field tel text-right" dir="ltr" inputmode="tel" autocomplete="username" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰"></div>
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between"><label for="siPass" class="label">رمز عبور</label><a href="#auth/forgot" class="text-xs font-bold text-cyprus-mid hover:text-cyprus">فراموشی رمز عبور؟</a></div>
+          <div class="relative"><input id="siPass" type="password" class="field pl-12 text-right" dir="ltr" autocomplete="current-password" placeholder="••••••••"><button type="button" class="pw-eye ease-ui absolute left-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-ink-soft hover:bg-sand hover:text-cyprus" aria-label="نمایش رمز عبور" aria-pressed="false"></button></div>
+        </div>
+        <p id="siErr" class="min-h-[1.25rem] text-sm font-bold text-red-700" role="alert"></p>
+        <button class="btn-cyprus btn-shine h-12 w-full">ورود<svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></button>
+      </form>
+
+      <!-- sign up -->
+      <form id="signupForm" hidden novalidate class="mt-6 flex flex-col gap-4" data-screen="signup">
+        <div class="flex flex-col gap-1.5"><label for="suName" class="label">نام و نام خانوادگی</label><input id="suName" class="field" autocomplete="name" placeholder="مثلاً: علی رضایی"></div>
+        <div class="flex flex-col gap-1.5"><label for="suPhone" class="label">شماره موبایل</label><input id="suPhone" class="field tel text-right" dir="ltr" inputmode="tel" autocomplete="username" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰"></div>
+        <div class="flex flex-col gap-1.5"><label for="suPass" class="label">رمز عبور</label>
+          <div class="relative"><input id="suPass" type="password" class="field pl-12 text-right" dir="ltr" autocomplete="new-password" placeholder="حداقل ۸ کاراکتر" aria-describedby="suPassHint"><button type="button" class="pw-eye ease-ui absolute left-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-ink-soft hover:bg-sand hover:text-cyprus" aria-label="نمایش رمز عبور" aria-pressed="false"></button></div>
+          <span id="suPassHint" class="text-xs text-ink-soft">حداقل ۸ کاراکتر، شامل حرف و عدد.</span>
+        </div>
+        <p id="suErr" class="min-h-[1.25rem] text-sm font-bold text-red-700" role="alert"></p>
+        <button class="btn-cyprus btn-shine h-12 w-full">ساخت حساب<svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <line x1="19" x2="19" y1="8" y2="14" /> <line x1="22" x2="16" y1="11" y2="11" /> </svg></button>
+      </form>
+
+      <!-- forgot password: phone → code → new password -->
+      <div id="forgotFlow" hidden class="mt-6" data-screen="forgot">
+        <form id="fpPhoneForm" novalidate class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5"><label for="fpPhone" class="label">شماره موبایل حساب</label><input id="fpPhone" class="field tel text-right" dir="ltr" inputmode="tel" autocomplete="username" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰"></div>
+          <p id="fpErr1" class="min-h-[1.25rem] text-sm font-bold text-red-700" role="alert"></p>
+          <button class="btn-cyprus btn-shine h-12 w-full">ادامه</button>
+        </form>
+        <form id="fpCodeForm" hidden novalidate class="flex flex-col gap-4">
+          <p class="text-sm leading-7 text-ink-muted">کد ۵ رقمی ارسال شده به <b id="fpTo" dir="ltr" class="tel text-cyprus"></b> را وارد کنید.</p>
+          <div class="flex justify-center gap-2.5 sm:gap-3" dir="ltr" role="group" aria-label="کد تأیید ۵ رقمی">
+            <input type="text" class="otp field tel h-14 w-12 px-0 text-center text-xl font-bold text-cyprus" inputmode="numeric" autocomplete="one-time-code" aria-label="رقم ۱">
+            <input type="text" class="otp field tel h-14 w-12 px-0 text-center text-xl font-bold text-cyprus" inputmode="numeric" autocomplete="off" aria-label="رقم ۲">
+            <input type="text" class="otp field tel h-14 w-12 px-0 text-center text-xl font-bold text-cyprus" inputmode="numeric" autocomplete="off" aria-label="رقم ۳">
+            <input type="text" class="otp field tel h-14 w-12 px-0 text-center text-xl font-bold text-cyprus" inputmode="numeric" autocomplete="off" aria-label="رقم ۴">
+            <input type="text" class="otp field tel h-14 w-12 px-0 text-center text-xl font-bold text-cyprus" inputmode="numeric" autocomplete="off" aria-label="رقم ۵">
+          </div>
+          <p id="fpErr2" class="min-h-[1.25rem] text-center text-sm font-bold text-red-700" role="alert"></p>
+          <button class="btn-cyprus btn-shine h-12 w-full">تأیید کد</button>
+          <p class="rounded-2xl bg-sand px-4 py-2.5 text-center text-[11px] text-cyprus-mid">نسخه‌ی نمایشی: کد <b dir="ltr" class="latin">12345</b> را وارد کنید.</p>
+        </form>
+        <form id="fpNewForm" hidden novalidate class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5"><label for="fpPass" class="label">رمز عبور جدید</label>
+            <div class="relative"><input id="fpPass" type="password" class="field pl-12 text-right" dir="ltr" autocomplete="new-password" placeholder="حداقل ۸ کاراکتر"><button type="button" class="pw-eye ease-ui absolute left-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full text-ink-soft hover:bg-sand hover:text-cyprus" aria-label="نمایش رمز عبور" aria-pressed="false"></button></div></div>
+          <div class="flex flex-col gap-1.5"><label for="fpPass2" class="label">تکرار رمز عبور جدید</label><input id="fpPass2" type="password" class="field text-right" dir="ltr" autocomplete="new-password"></div>
+          <p id="fpErr3" class="min-h-[1.25rem] text-sm font-bold text-red-700" role="alert"></p>
+          <button class="btn-cyprus btn-shine h-12 w-full">ذخیره‌ی رمز جدید</button>
+        </form>
+        <a href="#auth" class="mt-5 inline-flex items-center gap-1 text-sm font-bold text-cyprus hover:-translate-x-0.5"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /> </svg>بازگشت به ورود</a>
+      </div>
+
+      <p class="mt-2 text-center text-[11px] leading-6 text-ink-soft">حساب شما روی همین دستگاه و مرورگر ذخیره می‌شود.</p>
+    </div>
+  </div>
+</section>
+</main>

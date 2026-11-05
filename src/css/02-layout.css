@@ -1,0 +1,72 @@
+/* 02-layout.css — Page layout helpers, side menu, scroll reveal, phone-friendly painting, auth page motion. */
+
+/* text that sits directly on a patterned page background: a soft plate (small text) or a halo (titles) keeps it readable */
+.plate{width:fit-content;max-width:100%;background:rgba(247,251,247,.94);border-radius:12px;padding:.3rem .75rem;box-shadow:0 0 0 1px rgba(40,98,45,.08),0 4px 12px -8px rgba(40,98,45,.3)}
+.plate:empty{display:none}
+.halo{text-shadow:0 0 2px #F0F7F1,0 0 8px #F0F7F1,0 0 14px #F0F7F1,0 0 22px #F0F7F1}
+
+[data-rdel].confirming{width:auto;padding:0 .5rem;background:#DC2626;color:#fff}
+#revDelete.confirming{background:#991B1B}
+@media (max-width:767px){
+  .rev-tbl thead{display:none}
+  .rev-tbl tr:has(.c-chk){display:grid;grid-template-columns:28px minmax(0,1fr) auto;grid-template-areas:"chk id act" "chk date act" ". cust cust" ". items items" ". amt amt";column-gap:.6rem;padding:1rem}
+  .rev-tbl td{padding:0!important;max-width:none!important}
+  .c-chk{grid-area:chk;padding-top:2px!important}.c-id{grid-area:id}.c-date{grid-area:date}.c-cust{grid-area:cust;margin-top:.6rem}
+  .c-items{grid-area:items;margin-top:.25rem}.c-amt{grid-area:amt;margin-top:.35rem}.c-act{grid-area:act;align-self:center}
+  .c-date span{display:inline!important}
+  .rev-tbl td[colspan]{display:block;padding:2.5rem 1rem!important}}
+/* grids without an explicit column count get one shrinkable column (no sideways overflow on phones);
+   :where() has zero specificity, so every grid-cols-* utility still wins */
+:where(.grid){grid-template-columns:minmax(0,1fr)}
+/* the floating cart capsule belongs to the shop pages only */
+body:not([data-view="home"]):not([data-view="catalog"]) #cartBar{display:none}
+/* product tools (♥, 🔍) are always visible on touch screens — there is no hover there */
+@media (hover:none){ .p-card .p-tools{opacity:1;transform:none}}
+.chk{width:18px;height:18px;accent-color:#28622D;cursor:pointer;vertical-align:middle}
+
+/* ── Mobile side menu: one transform + one opacity, GPU only ── */
+.m-drawer{transform:translate3d(-104%,0,0);transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s;will-change:transform;border-radius:0 26px 26px 0;overscroll-behavior:contain;box-shadow:none!important}
+html.menu-open .m-drawer{box-shadow:16px 0 48px rgba(15,36,17,.28)!important}
+.m-shade{opacity:0;pointer-events:none;transition:opacity .5s cubic-bezier(.22,1,.36,1);touch-action:none}
+html.menu-open .m-drawer{transform:none}
+html.menu-open .m-shade{opacity:1;pointer-events:auto}
+.m-link{display:flex;align-items:center;gap:.75rem;height:3.25rem;padding:0 .85rem;border-radius:1rem;font-family:Peyda,Vazirmatn,Tahoma,sans-serif;font-weight:700;color:#14301A;transition:background-color .2s}
+.m-link:active{background:#F0F7F1}
+@media (hover:hover){.m-link:hover{background:#F0F7F1}}
+html.menu-open .m-link{animation:mIn .6s cubic-bezier(.22,1,.36,1) .08s both}
+html.menu-open .m-link:nth-child(2){animation-delay:.13s}html.menu-open .m-link:nth-child(3){animation-delay:.18s}html.menu-open .m-link:nth-child(4){animation-delay:.23s}html.menu-open .m-link:nth-child(5){animation-delay:.28s}
+@keyframes mIn{from{opacity:0;transform:translate3d(-22px,0,0)}}
+
+/* ── Phones & tablets: lighter painting so scrolling stays smooth ── */
+@media (max-width:1023px){
+  #navCapsule{-webkit-backdrop-filter:none;backdrop-filter:none;background:#28622D}   /* a blurred sticky bar repaints every scroll frame on iPhone */
+  .rv.rv-in{animation-duration:.5s}
+  @keyframes rvIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:none}}}
+
+/* ── Scroll reveal ── */
+.rv{opacity:0}
+.rv.rv-in{animation:rvIn .8s cubic-bezier(.16,1,.3,1) var(--rv-d,0ms) both}
+@keyframes rvIn{from{opacity:0;transform:translate3d(0,28px,0)}to{opacity:1;transform:none}}
+
+/* phone numbers & codes: Yekan Bakh with Persian digits (prettier than the display font's Latin digits) */
+.tel{font-family:"Yekan Bakh FaNum",ui-sans-serif,sans-serif;font-weight:600;letter-spacing:.06em}
+.latin{font-family:"Yekan Bakh EN","Yekan Bakh FaNum",ui-sans-serif,sans-serif;font-weight:700;letter-spacing:.02em}
+
+/* page backgrounds (all plain for speed), one motif per page (bold line art like a printed wallpaper; colour/opacity baked into each SVG) */
+
+/* ── Auth page: light motion, transform/opacity only; loops run only while the page is visible ── */
+#authPill{transition:transform .45s var(--ease)}
+#authView .label{transition:color .2s var(--ease)}
+#authView form div:focus-within > .label,#authView form div:focus-within > div > .label{color:#28622D}
+.a-in{animation:viewIn .45s var(--ease) both}
+.a-in > *{animation:viewIn .5s var(--ease) both}
+.a-in > :nth-child(2){animation-delay:.06s}.a-in > :nth-child(3){animation-delay:.12s}.a-in > :nth-child(4){animation-delay:.18s}.a-in > :nth-child(5){animation-delay:.24s}
+#authLead.a-in{animation-delay:.05s}
+.a-shake{animation:aShake .4s var(--ease)}
+@keyframes aShake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.btn-shine{position:relative;overflow:hidden;isolation:isolate}
+.btn-shine::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.28) 50%,transparent 70%);transform:translateX(-110%)}
+@media (hover:hover){.btn-shine:hover::after{transform:translateX(110%);transition:transform .8s var(--ease)}}
+.a-list > li{animation:viewIn .6s var(--ease) both}
+.a-list > :nth-child(2){animation-delay:.12s}.a-list > :nth-child(3){animation-delay:.24s}
+@keyframes aMark{to{transform:translate3d(0,-14px,0) rotate(-4deg)}}

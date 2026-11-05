@@ -1,0 +1,47 @@
+/* 04-drawer-misc.css — Cart drawer, top loading bar, welcome banner, hero drag, receipt. */
+
+/* ── Cart drawer: bottom sheet on phones, side panel on larger screens ── */
+#cartOverlay{opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s}
+#cartOverlay.open{opacity:1;visibility:visible}
+.drawer{left:0;right:0;bottom:0;max-height:88vh;max-height:88dvh;border-radius:32px 32px 0 0;transform:translateY(105%);visibility:hidden;
+  transition:transform .4s var(--ease),visibility .4s;will-change:transform}
+.drawer.open{transform:none;visibility:visible}
+@media (min-width:640px){
+  .drawer{top:12px;bottom:12px;left:12px;right:auto;width:420px;max-height:none;border-radius:32px;transform:translateX(-110%)}}
+#shipBar{transform-origin:right;transition:transform .5s var(--ease)}
+
+/* ── Top loading bar: one scaleX animation (GPU), ~300ms fill then fade ── */
+#loadBar{transform:scaleX(0);transform-origin:right;opacity:0;will-change:transform,opacity}
+#loadBar.run{animation:loadBar .45s cubic-bezier(0.16,1,0.3,1) forwards}
+@keyframes loadBar{0%{transform:scaleX(0);opacity:1}66%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes loadLong{from{transform:scaleX(0);opacity:1}to{transform:scaleX(1);opacity:1}}   /* 1.5s login transfer */
+#loadBar.done{transform:scaleX(1);opacity:0;transition:opacity .4s ease}
+#loadBar.stall{animation:barStall 2.4s cubic-bezier(.16,1,.3,1) forwards}
+#loadBar.finish{animation:barFinish .6s cubic-bezier(.16,1,.3,1) forwards}
+@keyframes barStall{0%{transform:scaleX(0);opacity:1}18%{transform:scaleX(.6);opacity:1}100%{transform:scaleX(.82);opacity:1}}
+@keyframes barFinish{0%{transform:scaleX(.62);opacity:1}50%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+main.leaving{opacity:.45;transition:opacity .3s ease}
+
+/* welcome banner shown while redirecting after login */
+#welcome{transform:translate3d(-50%,-160%,0);opacity:0;transition:transform .45s var(--ease),opacity .3s ease;will-change:transform}
+#welcome.show{transform:translate3d(-50%,0,0);opacity:1}
+
+/* draggable hero */
+#hero{cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#hero.grabbing{cursor:grabbing}
+#hero a,#hero button{cursor:pointer}
+#hero img{-webkit-user-drag:none}
+
+/* receipt */
+.rc-ok{animation:doneIn .5s var(--ease) both}
+@keyframes doneIn{from{opacity:0;transform:scale(.6)}}
+@page{margin:0}
+@media print{
+  body.print-receipt{padding:14mm 10mm}
+  body.print-receipt > *:not(#receiptView){display:none!important}
+  body.print-receipt #receiptView{display:block!important;max-width:none;padding:0}
+  body.print-receipt #receiptView > section{padding:0}
+  body.print-receipt .rc-ok{animation:none}
+  body.print-receipt .no-print{display:none!important}
+  body.print-receipt #receiptCard{box-shadow:none;border-color:#E1EAE2}
+  body.print-receipt{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}}

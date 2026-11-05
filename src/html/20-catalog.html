@@ -1,0 +1,123 @@
+<!-- ▸ 20-catalog.html — PRODUCTS view: category chips, search, grid, cold-storage services tab (+ quick inquiry form), pagination. -->
+<!-- ╔══════════════════════ VIEW 2 · PRODUCTS CATALOG ══════════════════════╗ -->
+<main id="catalogView" data-view="catalog" hidden class="mx-auto max-w-7xl px-3 sm:px-6">
+<section id="catalogTop" class="scroll-mt-28 pb-16 pt-8 sm:pb-24 sm:pt-12" aria-labelledby="catalogTitle">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
+  <nav aria-label="مسیر صفحه" class="plate flex items-center gap-1.5 text-xs font-bold text-ink-muted">
+    <a href="#top" class="ease-ui rounded-full hover:text-cyprus focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus">خانه</a>
+    <svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
+    <span class="text-cyprus" aria-current="page">محصولات</span>
+  </nav>
+  <div class="mt-4 flex flex-col gap-2">
+    <div><h1 id="catalogTitle" class="halo font-display text-[28px] font-black leading-[1.4] text-[#28622D] sm:text-[40px]">خرمای جنوب</h1></div>
+    <label class="cat-search"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg><span class="sr-only">جستجوی محصولات</span><input id="catSearch" data-search type="search" enterkeyhint="search" autocomplete="off" placeholder="جستجوی خرما و خشکبار…"></label>
+  </div>
+
+  <div id="cats" class="no-scrollbar -mx-3 mt-6 flex gap-2 overflow-x-auto px-3 py-1 sm:mx-0 sm:px-0" role="group" aria-label="دسته‌بندی محصولات">
+    <button class="chip" data-cat="dates" aria-pressed="true"><svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 8c0-2.76-2.46-5-5.5-5S2 5.24 2 8h2l1-1 1 1h4" /> <path d="M13 7.14A5.82 5.82 0 0 1 16.5 6c3.04 0 5.5 2.24 5.5 5h-3l-1-1-1 1h-3" /> <path d="M5.89 9.71c-2.15 2.15-2.3 5.47-.35 7.43l4.24-4.25.7-.7.71-.71 2.12-2.12c-1.95-1.96-5.27-1.8-7.42.35" /> <path d="M11 15.5c.5 2.5-.17 4.5-1 6.5h4c2-5.5-.5-12-1-14" /> </svg>خرما</button>
+    <button class="chip" data-cat="khoshk" aria-pressed="false">خرمای خشک</button>
+    <button class="chip" data-cat="dried" aria-pressed="false">خشکبار ممتاز</button>
+    <button class="chip" data-cat="all" aria-pressed="false">همه محصولات</button>
+    <button class="chip" data-cat="storage" aria-pressed="false"><svg class="h-3.5 w-3.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg>خدمات سردخانه</button>
+  </div>
+
+  <div id="grid" class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4"></div>
+
+<section id="storage" hidden class="scroll-mt-28 mt-6">
+  <div class="grid gap-4 lg:grid-cols-5">
+    <div class="relative flex flex-col gap-6 overflow-hidden rounded-4xl bg-cyprus p-6 text-white sm:p-8 lg:col-span-2">
+      <div class="relative">
+        <span class="eyebrow text-sand before:bg-sand">سردخانه‌ی هوشمند نخل و ماه</span>
+        <h2 class="mt-2 font-display text-2xl font-black sm:text-[28px]">بار خود را با خیال راحت بسپارید</h2>
+        <p class="mt-2 text-sm leading-[2] text-white/75">نگهداری استاندارد خرما و خشکبار با پایش لحظه‌ای دما و رطوبت، برای باغ‌داران، بنکداران و صادرکنندگان.</p>
+      </div>
+      <dl class="relative grid grid-cols-2 gap-3">
+        <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 7.7c0-.6-.4-1.2-.8-1.5l-6.3-3.9a1.72 1.72 0 0 0-1.7 0l-10.3 6c-.5.2-.9.8-.9 1.4v6.6c0 .5.4 1.2.8 1.5l6.3 3.9a1.72 1.72 0 0 0 1.7 0l10.3-6c.5-.3.9-1 .9-1.5Z" /> <path d="M10 21.9V14L2.1 9.1" /> <path d="m10 14 11.9-6.9" /> <path d="M14 19.8v-8.1" /> <path d="M18 17.5V9.4" /> </svg><dt class="mt-2 text-xs text-white/60">ظرفیت کل</dt><dd class="font-display text-xl font-black">۵,۰۰۰ تن</dd></div>
+        <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2 12h10" /> <path d="M9 4v16" /> <path d="m3 9 3 3-3 3" /> <path d="M12 6 9 9 6 6" /> <path d="m6 18 3-3 1.5 1.5" /> <path d="M20 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z" /> </svg><dt class="mt-2 text-xs text-white/60">دمای سالن‌ها</dt><dd class="font-display text-xl font-black">۲ تا ۴<span class="text-sm"> درجه</span></dd></div>
+        <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z" /> <path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97" /> </svg><dt class="mt-2 text-xs text-white/60">رطوبت کنترل‌شده</dt><dd class="font-display text-xl font-black">۸۵٪</dd></div>
+        <div class="ease-ui rounded-3xl bg-white/[.08] p-4 hover:-translate-y-0.5 hover:bg-white/[.14]"><svg class="h-5 w-5 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" /> </svg><dt class="mt-2 text-xs text-white/60">پایش</dt><dd class="font-display text-xl font-black">۲۴ ساعته</dd></div>
+      </dl>
+      <ul class="relative flex flex-col gap-2.5 text-sm text-white/80">
+        <li class="flex items-center gap-2"><svg class="h-4 w-4 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg>ثبت و تحویل بار بدون حضور</li>
+        <li class="flex items-center gap-2"><svg class="h-4 w-4 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg>قیمت پلکانی خرید عمده از ۵۰۰ کیلوگرم</li>
+        <li class="flex items-center gap-2"><svg class="h-4 w-4 text-sand" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg>هماهنگی حمل با کامیون یخچال‌دار</li>
+      </ul>
+    </div>
+
+    <!-- Quick inquiry: one short form → on send it turns into a confirmation «ticket» with a message from the shop
+         (code, summary, what happens next). js: 11-inquiry.js · with a server, INQUIRY.api also sends the customer a real SMS -->
+    <div class="inq card !rounded-4xl lg:col-span-3">
+    <form id="inquiryForm" novalidate class="flex flex-col gap-5 p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-3">
+        <div><h3 class="font-display text-xl font-black text-cyprus">استعلام سریع</h3><p class="mt-1 text-sm text-ink-muted">فرم را پر کنید؛ همان لحظه کد پیگیری و پیام تأیید می‌گیرید.</p></div>
+        <span class="inq-badge">پاسخ تا ۲ ساعت کاری</span>
+      </div>
+      <fieldset>
+        <legend class="label mb-2.5"><b class="inq-n">۱</b>نوع درخواست</legend>
+        <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="نوع درخواست">
+          <button type="button" class="chip svc h-11 px-5 text-sm" role="radio" aria-checked="true"  data-value="bulk"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z" /> <path d="m7 16.5-4.74-2.85" /> <path d="m7 16.5 5-3" /> <path d="M7 16.5v5.17" /> <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z" /> <path d="m17 16.5-5-3" /> <path d="m17 16.5 4.74-2.85" /> <path d="M17 16.5v5.17" /> <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z" /> <path d="M12 8 7.26 5.15" /> <path d="m12 8 4.74-2.85" /> <path d="M12 13.5V8" /> </svg>سفارش عمده</button>
+          <button type="button" class="chip svc h-11 px-5 text-sm" role="radio" aria-checked="false" data-value="storage"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg>رزرو سالن</button>
+          <button type="button" class="chip svc h-11 px-5 text-sm" role="radio" aria-checked="false" data-value="shipping"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /> </svg>استعلام حمل</button>
+        </div>
+      </fieldset>
+      <fieldset class="grid gap-4 sm:grid-cols-2">
+        <legend class="label mb-2.5 sm:col-span-2"><b class="inq-n">۲</b>اطلاعات شما</legend>
+        <div class="flex flex-col gap-1.5"><label for="fName" class="label">نام و نام خانوادگی</label><input id="fName" class="field" placeholder="مثلاً: علی رضایی" autocomplete="name" maxlength="60" aria-describedby="fNameErr"><p id="fNameErr" class="inq-err" role="alert"></p></div>
+        <div class="flex flex-col gap-1.5"><label for="fPhone" class="label">شماره‌ی موبایل</label><input id="fPhone" class="field tel text-right" dir="ltr" inputmode="tel" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰" autocomplete="tel" maxlength="14" aria-describedby="fPhoneErr"><p id="fPhoneErr" class="inq-err" role="alert"></p></div>
+        <div class="flex flex-col gap-1.5"><label for="fProduct" class="label">محصول</label>
+          <div class="group relative">
+            <select id="fProduct" class="field appearance-none pl-10"><option>خرمای مضافتی</option><option>خرمای پیارم</option><option>خرمای کلوته</option><option>خرمای خشک</option><option>خشکبار</option><option>ترکیبی</option></select>
+            <svg class="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-cyprus transition-transform duration-200 group-focus-within:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m6 9 6 6 6-6" /> </svg>
+          </div>
+        </div>
+        <div class="flex flex-col gap-1.5"><label for="fQty" class="label">مقدار تقریبی</label><input id="fQty" class="field" placeholder="مثلاً: ۲ تن یا ۳۰۰ کارتن" maxlength="40"></div>
+        <div class="flex flex-col gap-1.5 sm:col-span-2"><label for="fMsg" class="label">توضیحات <span class="font-normal text-ink-soft">(اختیاری)</span></label><textarea id="fMsg" rows="3" maxlength="400" class="field h-auto resize-y py-3" placeholder="زمان تحویل، مقصد ارسال یا هر نکته‌ی دیگر"></textarea></div>
+        <!-- spam trap: real people never see or fill this field -->
+        <input id="fWeb" name="website" type="text" tabindex="-1" autocomplete="off" class="inq-hp" aria-hidden="true">
+      </fieldset>
+      <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p id="formMsg" class="min-h-[1.25rem] text-sm text-ink-muted" role="status" aria-live="polite"></p>
+        <button type="submit" class="btn-cyprus h-12 shrink-0 whitespace-nowrap px-8"><b class="inq-n inq-n-w">۳</b>ارسال استعلام<svg class="h-4 w-4 -scale-x-100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /> </svg></button>
+      </div>
+    </form>
+
+    <!-- confirmation shown after sending (filled by js) -->
+    <div id="inqDone" class="inq-done p-6 sm:p-8" hidden tabindex="-1" aria-live="polite">
+      <div class="flex items-center gap-3">
+        <span class="inq-ok"><svg class="h-7 w-7" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <div><p class="font-display text-xl font-black text-cyprus">استعلام شما ثبت شد</p><p class="mt-0.5 text-sm text-ink-muted">کد پیگیری: <b id="inqCode" dir="ltr" class="latin text-cyprus"></b></p></div>
+      </div>
+      <div class="inq-msg"><span class="inq-from"><img src="img/logo.svg" alt="" width="976" height="1084">پیام نخل و ماه</span><p id="inqText"></p><em id="inqTime"></em></div>
+      <ol class="inq-steps" aria-label="مراحل پیگیری">
+        <li class="on"><i></i><span>ثبت درخواست</span></li>
+        <li class="cur"><i></i><span>بررسی کارشناس</span></li>
+        <li><i></i><span>تماس و پیشنهاد قیمت</span></li>
+      </ol>
+      <dl id="inqSum" class="inq-sum"></dl>
+      <div class="flex flex-col gap-2 sm:flex-row">
+        <a id="inqTrack" href="#dashboard/storage" class="btn-cyprus h-12 flex-1 text-sm">پیگیری در حساب کاربری</a>
+        <button type="button" id="inqCopy" class="btn-ghost h-12 flex-1 text-sm">کپی کد پیگیری</button>
+        <button type="button" id="inqNew" class="btn-ghost h-12 flex-1 text-sm">درخواست جدید</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+  <div id="empty" hidden class="card mt-6 flex flex-col items-center gap-3 p-10 text-center">
+    <span class="grid h-14 w-14 place-items-center rounded-full bg-sand text-cyprus"><svg class="h-6 w-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m13.5 8.5-5 5" /> <path d="m8.5 8.5 5 5" /> <circle cx="11" cy="11" r="8" /> <path d="m21 21-4.3-4.3" /> </svg></span>
+    <p id="emptyText" class="font-display font-bold">محصولی پیدا نشد</p>
+    <button id="clearSearch" class="btn-cyprus h-10 px-5 text-sm">پاک کردن جستجو</button>
+  </div>
+
+  <nav id="pager" class="mt-10 flex items-center justify-center gap-2" aria-label="صفحه‌بندی محصولات">
+    <button id="prevPage" class="ease-ui inline-flex h-11 items-center gap-1.5 rounded-full bg-white px-4 font-display text-sm font-bold text-cyprus shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_6px_18px_rgba(40,98,45,0.08)] hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(40,98,45,0.12)] active:scale-95 disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus">
+      <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>قبلی
+    </button>
+    <div id="pageNums" class="flex items-center gap-1.5 rounded-full bg-white p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_6px_18px_rgba(40,98,45,0.08)]"></div>
+    <button id="nextPage" class="ease-ui inline-flex h-11 items-center gap-1.5 rounded-full bg-white px-4 font-display text-sm font-bold text-cyprus shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_6px_18px_rgba(40,98,45,0.08)] hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(40,98,45,0.12)] active:scale-95 disabled:pointer-events-none disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyprus">
+      بعدی<svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m15 18-6-6 6-6" /> </svg>
+    </button>
+  </nav>
+</section>
+</main>

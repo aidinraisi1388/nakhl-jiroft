@@ -1,0 +1,119 @@
+<!-- ▸ 60-checkout-pay-receipt.html — CHECKOUT, PAYMENT and RECEIPT views. -->
+<!-- ╔══════════════════════ VIEW 6 · ORDER RECEIPT (after payment) — compact card, like the reference ══════════════════════╗ -->
+<!-- ════════ CHECKOUT (address · shipping · pay) ════════ -->
+<main id="checkoutView" data-view="checkout" hidden class="mx-auto max-w-6xl px-3 sm:px-6">
+<section class="db pb-28 pt-4 sm:pb-24 sm:pt-10">
+  <header class="ck-head">
+    <button type="button" data-back class="ck-back" aria-label="بازگشت"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg></button>
+    <h1 class="db-name">تکمیل خرید</h1>
+  </header>
+  <ol class="ck-steps" aria-label="مراحل خرید"><li class="on">سبد خرید</li><li class="on cur">ارسال</li><li>پرداخت</li></ol>
+
+  <form id="ckForm" novalidate class="ck-grid">
+    <div class="ck-main">
+      <section class="db-card">
+        <h2 class="ck-h"><i><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="8" r="5" /> <path d="M20 21a8 8 0 0 0-16 0" /> </svg></i>گیرنده</h2>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="flex flex-col gap-1.5"><label for="ckName" class="label">نام و نام خانوادگی</label><input id="ckName" class="field" autocomplete="name"></div>
+          <div class="flex flex-col gap-1.5"><label for="ckPhone" class="label">شماره موبایل گیرنده</label><input id="ckPhone" class="field tel text-right" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="۰۹۱۲ ۰۰۰ ۰۰۰۰"></div>
+        </div>
+      </section>
+
+      <section class="db-card">
+        <h2 class="ck-h"><i><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2" /> <path d="M15 18H9" /> <path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14" /> <circle cx="17" cy="18" r="2" /> <circle cx="7" cy="18" r="2" /> </svg></i>روش تحویل</h2>
+        <div class="ck-opts" role="radiogroup" aria-label="روش تحویل">
+          <label class="ck-opt"><input type="radio" name="ckShip" value="cold" checked><span class="min-w-0 flex-1"><b>ارسال با کامیون یخچال‌دار</b><small>به سراسر ایران، با زنجیره‌ی سرد ۲ تا ۴ درجه</small></span><em id="ckShipCost"></em></label>
+          <label class="ck-opt"><input type="radio" name="ckShip" value="pickup"><span class="min-w-0 flex-1"><b>تحویل حضوری از سردخانه</b><small>بندرعباس · زمان تحویل تلفنی هماهنگ می‌شود</small></span><em>رایگان</em></label>
+        </div>
+      </section>
+
+      <section id="ckAddrBox" class="db-card">
+        <h2 class="ck-h"><i><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" /> <circle cx="12" cy="10" r="3" /> </svg></i>آدرس تحویل</h2>
+        <div id="ckAddrList" class="ck-opts" role="radiogroup" aria-label="آدرس‌های ذخیره‌شده"></div>
+        <button type="button" id="ckAddAddr" class="ck-add">+ افزودن آدرس تازه در حساب من</button>
+      </section>
+
+      <section class="db-card">
+        <label for="ckNote" class="ck-h"><i><svg class="h-[18px] w-[18px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /> </svg></i>توضیحات سفارش <span class="text-xs font-normal text-ink-soft">(اختیاری)</span></label>
+        <textarea id="ckNote" rows="2" class="field h-auto py-3 leading-7" placeholder="مثلاً: قبل از ارسال تماس بگیرید"></textarea>
+      </section>
+    </div>
+
+    <aside class="ck-side">
+      <section class="db-card">
+        <h2 class="ck-h">خلاصه‌ی سفارش <span id="ckCount" class="db-count"></span></h2>
+        <ul id="ckItems" class="ck-items"></ul>
+        <dl class="ck-sum">
+          <div><dt>جمع کالاها</dt><dd id="ckSub"></dd></div>
+          <div id="ckDiscRow"><dt id="ckDiscL">تخفیف</dt><dd id="ckDisc"></dd></div>
+          <div><dt>هزینه‌ی ارسال</dt><dd id="ckShipSum"></dd></div>
+          <div class="ck-total"><dt>مبلغ قابل پرداخت</dt><dd><b id="ckTotal"></b> <small>تومان</small></dd></div>
+        </dl>
+        <p id="ckErr" class="min-h-[1.25rem] text-sm font-bold text-red-700" role="alert"></p>
+        <button id="ckPay" class="btn-cyprus h-14 w-full text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><span>پرداخت آنلاین</span></button>
+        <p class="ck-secure"><svg class="h-3.5 w-3.5 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="18" height="11" x="3" y="11" rx="2" ry="2" /> <path d="M7 11V7a5 5 0 0 1 10 0v4" /> </svg>پرداخت امن با درگاه زیبال؛ بعد از پرداخت موفق، سفارش خودکار ثبت و برای ارسال آماده می‌شود.</p>
+      </section>
+    </aside>
+  </form>
+</section>
+</main>
+
+<!-- ════════ PAYMENT (connecting · result · test gateway) ════════ -->
+<main id="payView" data-view="pay" hidden class="mx-auto px-3 sm:px-6">
+<section class="db py-8 sm:py-14">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
+  <article class="pay-card">
+    <span id="payIc" class="pay-ic"></span>
+    <h1 id="payTitle" class="mt-5 font-display text-2xl font-black text-ink"></h1>
+    <p id="payText" class="mt-2 text-sm leading-7 text-ink-muted"></p>
+    <dl id="payInfo" class="pay-info"></dl>
+    <div id="payActions" class="mt-6 flex flex-col gap-3"></div>
+  </article>
+</section>
+</main>
+
+<main id="receiptView" data-view="receipt" hidden class="mx-auto px-3 sm:px-6">
+<section class="py-8 sm:py-12">
+  <button type="button" data-back class="pg-back"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m9 18 6-6-6-6" /> </svg>بازگشت</button>
+  <article id="receiptCard" class="mx-auto w-full max-w-[400px] rounded-[28px] border border-[#28622D]/10 bg-white p-5 shadow-[0_20px_50px_rgba(40,98,45,0.10)] sm:p-6">
+    <!-- logo + title -->
+    <div class="flex flex-col items-center text-center">
+      <span class="grid h-[72px] w-[72px] place-items-center rounded-full bg-white text-[#28622D] shadow-[0_8px_24px_rgba(40,98,45,0.14)] ring-1 ring-[#28622D]/10"><img src="img/logo.svg" alt="" width="976" height="1084" class="h-12 w-12 object-contain" decoding="async"></span>
+      <h1 class="mt-5 font-display text-2xl font-black text-ink">رسید ثبت سفارش</h1>
+      <p class="mt-2 text-sm font-bold text-ink-muted">نخل و ماه</p>
+    </div>
+
+    <!-- payment state -->
+    <div id="rcState" class="mt-6 flex items-center gap-3 rounded-2xl border border-[#28622D] bg-cyprus-soft/60 p-3.5">
+      <span id="rcIc" class="rc-ok grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-[#28622D] text-[#28622D]"></span>
+      <div class="min-w-0"><p id="rcStateT" class="font-display text-sm font-black text-[#28622D]"></p><p id="rcWhen" class="mt-0.5 font-display text-xs text-cyprus-mid"></p><p id="rcStateS" class="mt-1.5 text-xs leading-6 text-ink-muted"></p></div>
+    </div>
+
+    <!-- buyer -->
+    <section class="mt-3 rounded-2xl border border-[#28622D]/10 p-4" aria-labelledby="rcBuyerT">
+      <h2 id="rcBuyerT" class="border-b border-[#28622D]/10 pb-2.5 font-display text-xs font-black text-[#28622D]">مشخصات خریدار</h2>
+      <dl id="rcBuyer" class="mt-3 flex flex-col gap-3 text-[13px]"></dl>
+    </section>
+
+    <!-- order -->
+    <section class="mt-3 rounded-2xl border border-[#28622D]/10 p-4" aria-labelledby="rcOrderT">
+      <h2 id="rcOrderT" class="border-b border-[#28622D]/10 pb-2.5 font-display text-xs font-black text-[#28622D]">جزئیات سفارش</h2>
+      <dl id="rcOrder" class="mt-3 flex flex-col gap-3 text-[13px]"></dl>
+    </section>
+
+    <!-- total -->
+    <div class="mt-5 flex items-center justify-between gap-3 px-1">
+      <p class="flex items-center gap-2 font-display text-sm font-black text-ink"><span class="grid h-8 w-8 place-items-center rounded-lg border border-ink/70 text-ink"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="20" height="12" x="2" y="6" rx="2" /> <circle cx="12" cy="12" r="2" /> <path d="M6 12h.01M18 12h.01" /> </svg></span>مبلغ کل سفارش:</p>
+      <p class="text-left font-display"><b id="rcTotal" class="text-lg font-black tabular-nums text-ink"></b> <span class="text-xs font-bold text-ink">تومان</span><span id="rcToman" class="block text-[11px] text-ink-soft"></span></p>
+    </div>
+
+    <!-- actions -->
+    <button id="rcPay" hidden class="no-print btn-cyprus mt-5 h-14 w-full text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="20" height="14" x="2" y="5" rx="2" /> <line x1="2" x2="22" y1="10" y2="10" /> </svg>پرداخت آنلاین سفارش</button>
+    <div class="no-print mt-3 grid grid-cols-2 gap-3">
+      <a href="#products" class="ease-ui grid h-12 place-items-center rounded-2xl bg-sand font-display text-sm font-black text-ink shadow-[0_6px_16px_rgba(40,98,45,0.08)] hover:bg-sand-dark active:scale-95">ثبت سفارش جدید</a>
+      <button id="rcPrint" class="ease-ui h-12 rounded-2xl border border-[#28622D]/10 bg-white font-display text-sm font-black text-ink shadow-[0_6px_16px_rgba(40,98,45,0.08)] hover:border-[#28622D]/30 active:scale-95">چاپ / ذخیره رسید</button>
+    </div>
+    <a id="rcDash" href="#dashboard" class="no-print mt-4 block text-center text-xs font-bold text-cyprus-mid hover:text-cyprus">پیگیری مرسوله در داشبورد</a>
+  </article>
+</section>
+</main>

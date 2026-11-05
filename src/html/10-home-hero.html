@@ -1,0 +1,45 @@
+<!-- ▸ 10-home-hero.html — HOME view starts. Hero slider: three text-only slides with motion. -->
+<!-- ╔══════════════════════ VIEW 1 · HOME ══════════════════════╗ -->
+<main id="top" data-view="home" class="mx-auto max-w-7xl px-3 sm:px-6">
+
+<!-- ═════════ 2. Hero banner (slider) ═════════ -->
+<section id="hero" class="relative mt-5 overflow-hidden rounded-[36px] bg-white p-2.5 text-white shadow-[0_10px_30px_rgba(40,98,45,0.08)] sm:p-3" aria-roledescription="carousel" aria-label="پیشنهادهای ویژه؛ برای دیدن اسلاید بعدی بکشید">
+
+  <div id="heroTrack" class="relative flex gap-3 min-h-[540px] lg:min-h-[480px]">
+    <div class="slide hx-slide relative grid items-center overflow-hidden rounded-[28px] p-8 sm:p-12" data-slide="0">
+      <div class="hx relative z-[1] mx-auto flex max-w-4xl flex-col items-center gap-5 text-center">
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[13px] text-white/90"><span class="h-2 w-2 rounded-full bg-sand"></span>برداشت تازه‌ی ۱۴۰۵ · نخلستان‌های جنوب</span>
+        <h1 class="font-display text-[32px] font-extrabold leading-[1.35] sm:text-5xl lg:text-[54px] lg:leading-[1.3]">خرمای ارگانیک جنوب؛<span class="block text-sand/80">طلای نخلستان‌های گرم</span></h1>
+        <p class="max-w-lg text-base leading-[2] text-white/80">با گواهی ۱۰۰٪ ارگانیک، نگهداری در سردخانه‌ی ۲ تا ۴ درجه و خرید مستقیم از باغ‌دار؛ بدون واسطه و با قیمت منصفانه.</p>
+        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+          <a href="#products" class="btn-light group h-14 px-8 text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /> <path d="M3 6h18" /> <path d="M16 10a4 4 0 0 1-8 0" /> </svg>سفارش آنلاین<svg class="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 19-7-7 7-7" /> <path d="M19 12H5" /> </svg></a>
+          <a href="#storage" data-service="storage" class="btn-line h-14 px-8 text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <line x1="2" x2="22" y1="12" y2="12" /> <line x1="12" x2="12" y1="2" y2="22" /> <path d="m20 16-4-4 4-4" /> <path d="m4 8 4 4-4 4" /> <path d="m16 4-4 4-4-4" /> <path d="m8 20 4-4 4 4" /> </svg>استعلام سردخانه</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide hx-slide relative grid items-center overflow-hidden rounded-[28px] p-8 sm:p-12" data-slide="1" aria-hidden="true">
+      <div class="hx relative z-[1] mx-auto flex max-w-4xl flex-col items-center gap-5 text-center">
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[13px] text-white/90"><span class="h-2 w-2 rounded-full bg-sand"></span>کلکسیون خشکبار</span>
+        <h2 class="font-display text-[32px] font-black leading-[1.35] sm:text-5xl lg:text-[54px] lg:leading-[1.3]">پسته، بادام و انجیر<span class="block text-sand/80">دست‌چین و تازه‌بسته‌بندی</span></h2>
+        <p class="max-w-lg text-base leading-[2] text-white/80">خشکبار ممتاز از بهترین باغ‌های ایران، با بسته‌بندی بهداشتی و ارسال سرد.</p>
+        <a href="#products/dried" class="btn-light h-14 px-8 text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 4V2" /> <path d="M5 10v4a7.004 7.004 0 0 0 5.277 6.787c.412.104.802.292 1.102.592L12 22l.621-.621c.3-.3.69-.488 1.102-.592A7.003 7.003 0 0 0 19 14v-4" /> <path d="M12 4C8 4 4.5 6 4 8c-.243.97-.919 1.952-2 3 1.31-.082 1.972-.29 3-1 .54.92.982 1.356 2 2 1.452-.647 1.954-1.098 2.5-2 .595.995 1.151 1.427 2.5 2 1.31-.621 1.862-1.058 2.5-2 .629.977 1.162 1.423 2.5 2 1.209-.548 1.68-.967 2-2 1.032.916 1.683 1.157 3 1-1.297-1.036-1.758-2.03-2-3-.5-2-4-4-8-4Z" /> </svg>خرید خشکبار</a>
+      </div>
+    </div>
+
+    <div class="slide hx-slide relative grid items-center overflow-hidden rounded-[28px] p-8 sm:p-12" data-slide="2" aria-hidden="true">
+      <div class="hx relative z-[1] mx-auto flex max-w-4xl flex-col items-center gap-5 text-center">
+        <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-[13px] text-white/90"><span class="h-2 w-2 rounded-full bg-sand"></span>سردخانه‌ی هوشمند</span>
+        <h2 class="font-display text-[32px] font-black leading-[1.35] sm:text-5xl lg:text-[54px] lg:leading-[1.3]">۵,۰۰۰ تن ظرفیت<span class="block text-sand/80">با دمای ثابت ۲ تا ۴ درجه</span></h2>
+        <p class="max-w-lg text-base leading-[2] text-white/80">سالن خود را آنلاین رزرو کنید و بار را بدون حضور تحویل دهید.</p>
+        <a href="#storage" data-service="storage" class="btn-light h-14 px-8 text-base"><svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z" /> <path d="M6 18h12" /> <path d="M6 14h12" /> <rect width="12" height="12" x="6" y="10" /> </svg>رزرو سالن</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-center gap-2.5 pb-1 pt-3" role="tablist" aria-label="اسلایدها">
+    <button class="dot ease-ui h-2 w-7 rounded-full bg-cyprus" role="tab" aria-selected="true"  aria-label="اسلاید ۱" data-to="0"></button>
+    <button class="dot ease-ui h-2 w-2 rounded-full bg-cyprus/25 hover:bg-cyprus/50" role="tab" aria-selected="false" aria-label="اسلاید ۲" data-to="1"></button>
+    <button class="dot ease-ui h-2 w-2 rounded-full bg-cyprus/25 hover:bg-cyprus/50" role="tab" aria-selected="false" aria-label="اسلاید ۳" data-to="2"></button>
+  </div>
+</section>

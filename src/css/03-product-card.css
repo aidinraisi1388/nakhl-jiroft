@@ -1,0 +1,80 @@
+/* 03-product-card.css — Product card, placeholder render, add-to-cart control, flying product, cart capsule. */
+
+/* ── Product card: pure CSS, GPU-only (transform + shadow), no JS tracking ── */
+.p-card{transition:transform .5s var(--ease),box-shadow .5s var(--ease);
+  background:linear-gradient(180deg,rgba(248,251,249,.9),#FFFFFF 62%);
+  box-shadow:0 1px 2px rgba(40,98,45,.05),0 6px 16px -6px rgba(40,98,45,.10),0 18px 36px -18px rgba(40,98,45,.16)}
+.p-card .render .orb,.p-card .p-img img{transition:transform .7s var(--ease)}
+.p-card .render .ground{transition:transform .7s var(--ease),opacity .7s var(--ease)}
+.p-card .p-glow{opacity:0;background:radial-gradient(70% 60% at 50% 55%,rgba(135,194,140,.22),rgba(135,194,140,.06) 60%,transparent 80%);transition:opacity .5s var(--ease)}
+.p-card .p-tools{opacity:0;transform:translateX(6px);transition:all .25s var(--ease)}
+@media (hover:hover){
+  .p-card:hover{transform:translateY(-8px);box-shadow:0 2px 4px rgba(40,98,45,.06),0 14px 28px -10px rgba(40,98,45,.16),0 30px 56px -24px rgba(40,98,45,.24)}
+  /* product image rises and grows, its shadow on the "floor" shrinks → it pops out of the card */
+  .p-card:hover .p-glow{opacity:1}
+  .p-card:hover .render .orb{transform:translate3d(0,-10%,0) scale(1.1) rotate(3deg)}
+  .p-card:hover .render .orb.duo + .orb{transform:translate3d(0,-14%,0) scale(1.1) rotate(-3deg)}
+  .p-card:hover .render .ground{transform:translateX(-50%) scale(.72);opacity:.5}
+  .p-card:hover .p-img img{transform:translate3d(0,-6px,0) scale(1.1) rotate(3deg)}
+  .p-card:hover .p-tools{opacity:1;transform:none}}
+@media (hover:none){ .p-card .p-tools{opacity:1;transform:none}}
+.p-card.enter{animation:cardIn .3s var(--ease) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(.98)}}
+
+/* ── CSS product render (shown until a real PNG is set) ── */
+.render{position:relative;display:grid;place-items:center;width:100%;height:100%;isolation:isolate}
+.render::before{content:"";position:absolute;inset:14%;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle at 50% 55%,var(--glow,rgba(40,98,45,.16)),transparent 68%)}
+.render .orb{position:relative;width:54%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle at 64% 26%,#FFFFFF 0%,var(--hi,#F0F7F1) 14%,var(--mid,#87C28C) 52%,var(--lo,#28622D) 100%);
+  box-shadow:inset 10px -14px 26px rgba(17,44,19,.35),inset -8px 10px 18px rgba(255,255,255,.35),0 18px 30px -12px rgba(25,67,29,.45)}
+.render .orb::after{content:"";position:absolute;top:13%;right:20%;width:24%;height:15%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.8),rgba(255,255,255,0));transform:rotate(-30deg)}
+.render .orb.duo{width:40%;margin-inline-start:-14%}
+.render .orb.duo + .orb{position:absolute;width:30%;inset-inline-end:20%;bottom:24%;margin:0}
+.render .ground{position:absolute;bottom:13%;left:50%;width:46%;height:8%;border-radius:50%;transform:translateX(-50%);
+  background:radial-gradient(ellipse,rgba(25,67,29,.35),transparent 70%)}
+.render .tag{position:absolute;bottom:9%;right:9%;padding:4px 10px;border-radius:999px;font:800 11px/1.6 Peyda,Vazirmatn,sans-serif;color:#28622D;
+  background:rgba(255,255,255,.85);box-shadow:inset 0 1px 0 #fff,0 4px 12px rgba(40,98,45,.12)}
+.render.dark .tag{background:rgba(255,255,255,.14);color:#F0F7F1;box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.render.mini .tag,.render.mini .orb::after{display:none}
+.render.mini .orb{width:62%;box-shadow:inset 4px -6px 10px rgba(17,44,19,.35),0 8px 12px -6px rgba(25,67,29,.45)}
+.render.lg .orb{width:58%}
+.render .halo{position:absolute;inset:6%;border-radius:50%;border:1px solid rgba(255,255,255,.14)}
+.render .halo.two{inset:20%;border-color:rgba(255,255,255,.1)}
+
+/* ── Add-to-cart control: "افزودن" → "افزوده شد ✓" → − ۱ + ── */
+.buy{position:relative;height:44px}
+.buy .add,.buy .step{position:absolute;inset:0;border-radius:999px;transition:all .25s var(--ease)}
+.buy .add{display:flex;align-items:center;justify-content:center;gap:6px;background:#28622D;color:#fff;
+  font:800 14px/1 Peyda,Vazirmatn,sans-serif;box-shadow:0 8px 18px -8px rgba(40,98,45,.6)}
+@media (hover:hover){.buy .add:hover{background:#377B3D;transform:translateY(-1px)}}
+.buy .add:active{transform:scale(.97)}
+.buy .add:focus-visible{outline:2px solid #28622D;outline-offset:2px}
+.buy .add .ok{display:none}
+.buy[data-state="added"] .add{background:#377B3D}
+.buy[data-state="added"] .add .lbl{display:none}
+.buy[data-state="added"] .add .ok{display:inline-flex;align-items:center;gap:6px;animation:okIn .3s var(--ease)}
+@keyframes okIn{from{opacity:0;transform:scale(.8)}}
+.buy .step{display:flex;align-items:center;justify-content:space-between;padding:4px;background:#E3F2E5;
+  opacity:0;visibility:hidden;transform:scale(.96)}
+.buy[data-state="open"] .step{opacity:1;visibility:visible;transform:none}
+.buy[data-state="open"] .add{opacity:0;visibility:hidden;transform:scale(.96)}
+.stepper button{display:grid;place-items:center;width:36px;height:36px;border-radius:999px;background:#fff;color:#28622D;
+  box-shadow:0 2px 6px rgba(40,98,45,.1);transition:all .2s var(--ease)}
+@media (hover:hover){.stepper button:hover{background:#28622D;color:#fff}}
+.stepper button:active{transform:scale(.88)}
+.stepper button:focus-visible{outline:2px solid #28622D;outline-offset:1px}
+.stepper .num{min-width:24px;text-align:center;font:900 16px/1 Peyda,Vazirmatn,sans-serif;color:#28622D}
+.stepper.sm button{width:30px;height:30px}
+.stepper.sm .num{font-size:14px}
+.bump{animation:bump .35s var(--ease)}
+@keyframes bump{50%{transform:scale(1.25)}}
+
+/* flying dot from the card to the cart pill */
+.fly{position:fixed;z-index:60;width:28px;height:28px;border-radius:50%;pointer-events:none;will-change:transform,opacity;
+  background:radial-gradient(circle at 64% 26%,#fff 0%,#F0F7F1 18%,#447448 60%,#28622D 100%);
+  box-shadow:0 0 0 3px #fff,0 10px 20px rgba(25,67,29,.35)}
+
+/* ── Floating cart capsule (bottom) ── */
+#cartBar{transform:translate(-50%,160%);visibility:hidden;transition:transform .4s var(--ease),visibility .4s;will-change:transform}
+#cartBar.show{transform:translate(-50%,0);visibility:visible}

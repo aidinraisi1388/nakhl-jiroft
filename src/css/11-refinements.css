@@ -1,0 +1,159 @@
+/* 11-refinements.css — Later refinements: soft search, blur-in text, footer card, bands, photos, hero text. */
+
+/* ══════ Softer search on phones: the field grows with flex-grow (animatable) instead of jumping to "auto" ══════ */
+@media (max-width:639px){
+  #navCapsule>.ms-auto{flex:1 1 auto;min-width:0;justify-content:flex-end}
+  #header #navSearch{flex:0 1 40px;width:auto;min-width:40px;transition:flex-grow .72s cubic-bezier(.45,.05,.2,1),background-color .4s ease}
+  #header.searching #navSearch.open{flex:1 1 40px;width:auto;min-width:40px}
+  #header #navSearch input{transition:opacity .45s ease,transform .72s cubic-bezier(.45,.05,.2,1)}
+  #header #navSearch.open input{transition-delay:.22s}
+  #header .brand-text{transition:max-width .72s cubic-bezier(.45,.05,.2,1),opacity .45s ease}
+  #header #userBtn{transition:max-width .72s cubic-bezier(.45,.05,.2,1),opacity .3s ease,margin .72s cubic-bezier(.45,.05,.2,1)}
+}
+
+/* ══════ Text comes in from a soft blur (like Eagle Arta) — opacity/transform/filter only, once per element ══════ */
+.bl{opacity:0;filter:blur(8px);transform:translate3d(0,10px,0)}
+.bl.bl-in{opacity:1;filter:blur(0);transform:none;
+  transition:opacity .6s ease var(--bl-d,0ms),filter .9s cubic-bezier(.22,1,.36,1) var(--bl-d,0ms),transform .9s cubic-bezier(.22,1,.36,1) var(--bl-d,0ms)}
+@media (prefers-reduced-motion:reduce){ .bl{opacity:1;filter:none;transform:none} }
+
+/* Safari: nothing invisible may sit at the bottom edge (Safari tints its toolbar / under-page area from what is there) */
+.m-shade{visibility:hidden;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility 0s linear .5s}
+html.menu-open .m-shade{visibility:visible;transition:opacity .5s cubic-bezier(.22,1,.36,1),visibility 0s}
+.m-drawer{visibility:hidden;transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s,visibility 0s linear .55s}
+html.menu-open .m-drawer{visibility:visible;transition:transform .55s cubic-bezier(.22,1,.36,1),box-shadow .55s,visibility 0s}
+
+.adm-out{background:#fff;padding:0 20px;height:44px;box-shadow:0 1px 2px rgba(17,44,19,.04),0 10px 28px -14px rgba(17,44,19,.22)}
+.pg-back{cursor:pointer}
+#receiptView .pg-back,#payView .pg-back{display:flex;width:fit-content;margin-inline-start:max(0px,calc((100% - 420px) / 2))}
+@media print{ .pg-back{display:none!important} }
+@media (max-width:1023px){ #catalogView nav[aria-label="مسیر صفحه"]{display:none} }
+
+/* each thing in its own place: name, level, bell and shop button only on the dashboard / admin home */
+#dashBody:not([data-tab="overview"]) .db-top,#admBody:not([data-tab="stats"]) .db-top{display:none}
+.adm-sec{display:none;margin-top:6px;font-size:24px}
+#admBody:not([data-tab="stats"]) .adm-sec{display:block}
+#dashBody:not([data-tab="overview"]) [data-pane] {margin-top:6px}
+#admBody:not([data-tab="stats"]) [data-pane]{margin-top:14px}
+
+/* footer: floating rounded card */
+#footer{margin:1.5rem 12px 12px;border-radius:28px}
+@media (min-width:640px){#footer{margin:1.5rem 24px 20px;border-radius:44px}}
+
+
+/* wavy green bands */
+.band{position:relative;isolation:isolate}
+.band::before{content:"";position:absolute;inset:0 calc(50% - 50vw);z-index:-1;pointer-events:none;background:var(--band)}
+.band::after{content:"";position:absolute;z-index:-1;pointer-events:none;left:calc(50% - 50vw);right:calc(50% - 50vw);height:72px;background-repeat:repeat-x;background-size:1440px 72px}
+.band-a::before{top:60%;bottom:-2px;background:#28622D}
+.band-a::after{top:calc(60% - 71px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath d='M0 35.6 L15 36.7 L30 37.6 L45 38.4 L60 39.0 L75 39.5 L90 39.8 L105 40.0 L120 40.0 L135 39.8 L150 39.4 L165 38.9 L180 38.3 L195 37.4 L210 36.5 L225 35.5 L240 34.3 L255 33.1 L270 31.8 L285 30.5 L300 29.2 L315 27.9 L330 26.7 L345 25.5 L360 24.4 L375 23.3 L390 22.4 L405 21.6 L420 21.0 L435 20.5 L450 20.2 L465 20.0 L480 20.0 L495 20.2 L510 20.6 L525 21.1 L540 21.7 L555 22.6 L570 23.5 L585 24.5 L600 25.7 L615 26.9 L630 28.2 L645 29.5 L660 30.8 L675 32.1 L690 33.3 L705 34.5 L720 35.6 L735 36.7 L750 37.6 L765 38.4 L780 39.0 L795 39.5 L810 39.8 L825 40.0 L840 40.0 L855 39.8 L870 39.4 L885 38.9 L900 38.3 L915 37.4 L930 36.5 L945 35.5 L960 34.3 L975 33.1 L990 31.8 L1005 30.5 L1020 29.2 L1035 27.9 L1050 26.7 L1065 25.5 L1080 24.4 L1095 23.3 L1110 22.4 L1125 21.6 L1140 21.0 L1155 20.5 L1170 20.2 L1185 20.0 L1200 20.0 L1215 20.2 L1230 20.6 L1245 21.1 L1260 21.7 L1275 22.6 L1290 23.5 L1305 24.5 L1320 25.7 L1335 26.9 L1350 28.2 L1365 29.5 L1380 30.8 L1395 32.1 L1410 33.3 L1425 34.5 L1440 35.6 L1440 72 L0 72Z' fill='%23377B3D' fill-opacity='.45'/%3E%3Cpath d='M0 40.0 L15 42.3 L30 44.6 L45 46.7 L60 48.5 L75 50.0 L90 51.1 L105 51.8 L120 52.0 L135 51.8 L150 51.1 L165 50.0 L180 48.5 L195 46.7 L210 44.6 L225 42.3 L240 40.0 L255 37.7 L270 35.4 L285 33.3 L300 31.5 L315 30.0 L330 28.9 L345 28.2 L360 28.0 L375 28.2 L390 28.9 L405 30.0 L420 31.5 L435 33.3 L450 35.4 L465 37.7 L480 40.0 L495 42.3 L510 44.6 L525 46.7 L540 48.5 L555 50.0 L570 51.1 L585 51.8 L600 52.0 L615 51.8 L630 51.1 L645 50.0 L660 48.5 L675 46.7 L690 44.6 L705 42.3 L720 40.0 L735 37.7 L750 35.4 L765 33.3 L780 31.5 L795 30.0 L810 28.9 L825 28.2 L840 28.0 L855 28.2 L870 28.9 L885 30.0 L900 31.5 L915 33.3 L930 35.4 L945 37.7 L960 40.0 L975 42.3 L990 44.6 L1005 46.7 L1020 48.5 L1035 50.0 L1050 51.1 L1065 51.8 L1080 52.0 L1095 51.8 L1110 51.1 L1125 50.0 L1140 48.5 L1155 46.7 L1170 44.6 L1185 42.3 L1200 40.0 L1215 37.7 L1230 35.4 L1245 33.3 L1260 31.5 L1275 30.0 L1290 28.9 L1305 28.2 L1320 28.0 L1335 28.2 L1350 28.9 L1365 30.0 L1380 31.5 L1395 33.3 L1410 35.4 L1425 37.7 L1440 40.0 L1440 72 L0 72Z' fill='%2328622D'/%3E%3C/svg%3E");background-position:center bottom}
+.band-b::before{top:-2px;bottom:46%;background:#28622D}          /* -2px: no hairline seam where the two bands meet */
+.band-b::after{top:calc(54% - 1px);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 72' preserveAspectRatio='none'%3E%3Cpath d='M0 50.1 L15 49.2 L30 48.3 L45 47.2 L60 46.1 L75 44.8 L90 43.6 L105 42.3 L120 40.9 L135 39.7 L150 38.4 L165 37.2 L180 36.1 L195 35.1 L210 34.2 L225 33.5 L240 32.9 L255 32.4 L270 32.1 L285 32.0 L300 32.1 L315 32.3 L330 32.7 L345 33.2 L360 33.9 L375 34.8 L390 35.7 L405 36.8 L420 37.9 L435 39.2 L450 40.4 L465 41.7 L480 43.1 L495 44.3 L510 45.6 L525 46.8 L540 47.9 L555 48.9 L570 49.8 L585 50.5 L600 51.1 L615 51.6 L630 51.9 L645 52.0 L660 51.9 L675 51.7 L690 51.3 L705 50.8 L720 50.1 L735 49.2 L750 48.3 L765 47.2 L780 46.1 L795 44.8 L810 43.6 L825 42.3 L840 40.9 L855 39.7 L870 38.4 L885 37.2 L900 36.1 L915 35.1 L930 34.2 L945 33.5 L960 32.9 L975 32.4 L990 32.1 L1005 32.0 L1020 32.1 L1035 32.3 L1050 32.7 L1065 33.2 L1080 33.9 L1095 34.8 L1110 35.7 L1125 36.8 L1140 37.9 L1155 39.2 L1170 40.4 L1185 41.7 L1200 43.1 L1215 44.3 L1230 45.6 L1245 46.8 L1260 47.9 L1275 48.9 L1290 49.8 L1305 50.5 L1320 51.1 L1335 51.6 L1350 51.9 L1365 52.0 L1380 51.9 L1395 51.7 L1410 51.3 L1425 50.8 L1440 50.1 L1440 0 L0 0Z' fill='%23377B3D' fill-opacity='.45'/%3E%3Cpath d='M0 43.8 L15 44.0 L30 43.7 L45 43.0 L60 41.8 L75 40.3 L90 38.4 L105 36.3 L120 34.0 L135 31.7 L150 29.4 L165 27.1 L180 25.1 L195 23.3 L210 21.9 L225 20.8 L240 20.2 L255 20.0 L270 20.3 L285 21.0 L300 22.2 L315 23.7 L330 25.6 L345 27.7 L360 30.0 L375 32.3 L390 34.6 L405 36.9 L420 38.9 L435 40.7 L450 42.1 L465 43.2 L480 43.8 L495 44.0 L510 43.7 L525 43.0 L540 41.8 L555 40.3 L570 38.4 L585 36.3 L600 34.0 L615 31.7 L630 29.4 L645 27.1 L660 25.1 L675 23.3 L690 21.9 L705 20.8 L720 20.2 L735 20.0 L750 20.3 L765 21.0 L780 22.2 L795 23.7 L810 25.6 L825 27.7 L840 30.0 L855 32.3 L870 34.6 L885 36.9 L900 38.9 L915 40.7 L930 42.1 L945 43.2 L960 43.8 L975 44.0 L990 43.7 L1005 43.0 L1020 41.8 L1035 40.3 L1050 38.4 L1065 36.3 L1080 34.0 L1095 31.7 L1110 29.4 L1125 27.1 L1140 25.1 L1155 23.3 L1170 21.9 L1185 20.8 L1200 20.2 L1215 20.0 L1230 20.3 L1245 21.0 L1260 22.2 L1275 23.7 L1290 25.6 L1305 27.7 L1320 30.0 L1335 32.3 L1350 34.6 L1365 36.9 L1380 38.9 L1395 40.7 L1410 42.1 L1425 43.2 L1440 43.8 L1440 0 L0 0Z' fill='%2328622D'/%3E%3C/svg%3E");background-position:center top}
+.pop,.band-b .p-card{box-shadow:0 1px 2px rgba(17,44,19,.06),0 10px 24px -10px rgba(17,44,19,.22),0 28px 52px -20px rgba(17,44,19,.42)}
+@media (hover:hover){ .pop:hover,.band-b .p-card:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 34px 60px -18px rgba(17,44,19,.5)}}
+
+/* product photos on white: multiply blends the white backdrop into any light surface */
+img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
+
+/* flying product photo (white backdrop blends away) */
+.fly.im{width:64px;height:64px;border-radius:0;background:none;box-shadow:none;object-fit:contain}
+/* product card: equal description height so unit pills line up; pill never overflows */
+.p-card .min-h-12{min-height:3rem}
+.p-card .unit-pill{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-card h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-search[hidden],#storage[hidden],#grid[hidden]{display:none!important}
+.p-card .p-img img.ph{padding:2px}
+
+/* ── Hero: text-only slides with big type + motion ── */
+#hero .hx h1,#hero .hx h2{font-size:clamp(30px,6.2vw,84px);line-height:1.22;letter-spacing:-.01em}
+#hero .hx h1 .block,#hero .hx h2 .block{background:linear-gradient(100deg,#CFE6D1 0%,#FFFFFF 35%,#87C28C 55%,#CFE6D1 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hxShine 7s linear infinite}
+#hero .hx p{font-size:clamp(15px,1.35vw,19px);max-width:42rem}
+#hero .hx > *{opacity:0;transform:translateY(26px);filter:blur(6px)}
+#hero .slide:not([aria-hidden="true"]) .hx > *{animation:hxIn .9s cubic-bezier(.16,1,.3,1) both}
+#hero .slide:not([aria-hidden="true"]) .hx > :nth-child(2){animation-delay:.12s}
+#hero .slide:not([aria-hidden="true"]) .hx > :nth-child(3){animation-delay:.24s}
+#hero .slide:not([aria-hidden="true"]) .hx > :nth-child(4){animation-delay:.36s}
+@keyframes hxIn{to{opacity:1;transform:none;filter:none}}
+@keyframes hxShine{to{background-position:-250% 0}}
+.hx-slide::before,.hx-slide::after{content:"";position:absolute;border-radius:50%;pointer-events:none;filter:blur(40px);will-change:transform}
+.hx-slide::before{width:46%;aspect-ratio:1;right:-8%;top:-30%;background:rgba(135,194,140,.35);animation:hxBlobA 14s ease-in-out infinite alternate}
+.hx-slide::after{width:38%;aspect-ratio:1;left:-6%;bottom:-34%;background:rgba(240,247,241,.16);animation:hxBlobB 17s ease-in-out infinite alternate}
+@keyframes hxBlobA{to{transform:translate(-38%,28%) scale(1.15)}}
+@keyframes hxBlobB{to{transform:translate(42%,-22%) scale(1.2)}}
+#hero .hx .flex.w-full{justify-content:center}
+@media (prefers-reduced-motion:reduce){#hero .hx > *{opacity:1;transform:none;filter:none;animation:none!important}#hero .hx h1 .block,#hero .hx h2 .block,.hx-slide::before,.hx-slide::after{animation:none}}
+/* footer: cart capsule steps aside so the copyright sits on the very bottom */
+html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
+
+/* ── Footer: compact mobile layout ── */
+.ft-mob{display:block}
+.ft-desk{display:none!important}
+@media (min-width:640px){.ft-mob{display:none}.ft-desk{display:grid!important}}
+.ft-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ft-soc{display:flex;gap:8px}
+.ft-soc a{width:38px;height:38px}
+.ft-line{margin-top:14px;font-size:13px;line-height:1.9;color:rgba(255,255,255,.72)}
+.ft-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.ft-chips a{display:inline-flex;align-items:center;height:36px;padding:0 14px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-weight:700;font-size:12.5px;color:rgba(255,255,255,.85);transition:background .25s,color .25s}
+.ft-chips a:hover,.ft-chips a:active{background:#fff;color:#1D3B20}
+.ft-trust{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.ft-trust[hidden]{display:none}
+.ft-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 16px}
+.ft-copy p{font-size:11px;font-weight:700;color:rgba(255,255,255,.45)}
+.ft-top{display:grid;place-items:center;width:36px;height:36px;flex:none;border-radius:999px;background:rgba(255,255,255,.08);color:#fff;transition:background .25s,transform .25s}
+.ft-top:hover{background:rgba(255,255,255,.16)}.ft-top:active{transform:scale(.9)}
+@media (min-width:640px){.ft-copy{padding:22px 0}.ft-copy p{font-size:12px}}
+#footer{padding-top:1.75rem}
+@media (min-width:640px){#footer{padding-top:3.5rem}}
+/* paint the footer colour below the page end too (iOS Safari shows that area under its floating toolbar) */
+/* footer: a little larger overall */
+#footer{padding-top:2.5rem;font-size:14px}
+@media (min-width:640px){#footer{padding-top:4.25rem;font-size:15px}}
+#footer > div:first-child{padding-bottom:1.75rem}
+@media (min-width:640px){#footer > div:first-child{padding-bottom:3rem}}
+#footer h4{font-size:17px}
+@media (min-width:640px){#footer h4{font-size:19px}}
+#footer .font-display.text-xl{font-size:24px}
+#footer a[href="#top"] > span:first-child{width:52px;height:52px}
+#footer a[href="#top"] > span:first-child img{width:42px;height:42px}
+#footer a[aria-label^="اینستاگرام"],#footer a[aria-label^="تلگرام"],#footer a[aria-label="تماس تلفنی"]{width:46px;height:46px}
+#footer ul{row-gap:14px}
+#footer > div:last-child p{font-size:12.5px;padding-top:1.25rem}
+@media (min-width:640px){#footer > div:last-child p{font-size:13.5px;padding-top:1.75rem;padding-bottom:1.75rem}}
+
+/* ── Quick inquiry (cold storage / bulk): numbered steps, inline errors, confirmation ticket ── */
+.inq-badge{flex:none;border-radius:999px;background:#E8F3E9;color:#28622D;font-size:11px;font-weight:800;padding:6px 12px;white-space:nowrap}
+.inq-n{display:inline-grid;place-items:center;width:20px;height:20px;margin-inline-end:6px;border-radius:999px;background:#28622D;color:#fff;font-size:11px;font-weight:800;vertical-align:-4px}
+.inq-n-w{background:#fff;color:#28622D;margin-inline-end:8px}
+.inq-err{min-height:0;font-size:12px;font-weight:700;color:#B42318}
+.inq-err:empty{display:none}
+.inq-hp{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);border:0!important;opacity:0}
+.inq-done{display:flex;flex-direction:column;gap:18px;outline:none}
+.inq-done[hidden]{display:none}
+.inq-done.in{animation:inqIn .55s cubic-bezier(.16,1,.3,1) both}
+@keyframes inqIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.inq-ok{display:grid;place-items:center;width:56px;height:56px;flex:none;border-radius:999px;background:#28622D;color:#fff;box-shadow:0 0 0 8px rgba(40,98,45,.12)}
+.inq-done.in .inq-ok{animation:inqPop .6s .1s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes inqPop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.inq-msg{position:relative;border-radius:20px 20px 20px 6px;background:#F0F7F1;padding:14px 16px 10px;border:1px solid rgba(40,98,45,.1)}
+.inq-msg p{font-size:14px;line-height:2;color:#1E2B20}
+.inq-msg em{display:block;margin-top:4px;font-style:normal;font-size:11px;color:#6B8A6F}
+.inq-from{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-family:Peyda,Vazirmatn,sans-serif;font-size:12px;font-weight:800;color:#28622D}
+.inq-from img{width:18px;height:18px}
+.inq-steps{display:grid;grid-template-columns:repeat(3,1fr);position:relative}
+.inq-steps::before{content:"";position:absolute;top:7px;right:16.6%;left:16.6%;height:2px;background:rgba(40,98,45,.12)}
+.inq-steps::after{content:"";position:absolute;top:7px;right:16.6%;width:33.3%;height:2px;background:#28622D}
+.inq-steps li{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:11px;font-weight:700;color:#6B8A6F}
+.inq-steps i{display:block;width:16px;height:16px;border-radius:999px;background:#fff;border:2px solid rgba(40,98,45,.2)}
+.inq-steps li.on i{background:#28622D;border-color:#28622D}
+.inq-steps li.cur i{border-color:#28622D;box-shadow:0 0 0 5px rgba(40,98,45,.14);animation:inqPulse 1.8s ease-in-out infinite}
+.inq-steps li.on,.inq-steps li.cur{color:#28622D}
+@keyframes inqPulse{50%{box-shadow:0 0 0 9px rgba(40,98,45,.06)}}
+.inq-sum{display:grid;gap:8px;border-radius:18px;background:#fff;border:1px dashed rgba(40,98,45,.2);padding:12px 14px;font-size:13px}
+.inq-sum > div{display:flex;justify-content:space-between;gap:12px}
+.inq-sum dt{color:#6B8A6F}
+.inq-sum dd{font-weight:700;color:#1E2B20;text-align:left;overflow-wrap:anywhere}
+@media (prefers-reduced-motion:reduce){.inq-done.in,.inq-done.in .inq-ok,.inq-steps li.cur i{animation:none}}
+#footer .bale-w{filter:brightness(0) invert(1);opacity:.8}
+.inq-done .flex > a,.inq-done .flex > button{flex:none}
+@media (min-width:640px){.inq-done .flex > a,.inq-done .flex > button{flex:1 1 0}}

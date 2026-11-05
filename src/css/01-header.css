@@ -1,0 +1,27 @@
+/* 01-header.css — Header pills (login / cart): shine sweep and icon motion. */
+
+/* ── Header pills (login / cart): light sweep + icon motion on hover, intro shimmer, live badge ── */
+.shine-green::after{background:linear-gradient(100deg,transparent 30%,rgba(135,194,140,.38) 50%,transparent 70%)}
+.hdr-pill::after{animation:pillIntro 1.4s .9s cubic-bezier(.16,1,.3,1) backwards}          /* one shimmer when the page opens */
+#cartPill::after{animation-delay:1.15s}
+@keyframes pillIntro{from{transform:translateX(-110%)}to{transform:translateX(110%)}}
+@media (hover:hover){
+  .hdr-pill:hover::after{animation:none}
+  #userBtn:hover .hp-ic{animation:icNod .6s cubic-bezier(.16,1,.3,1)}
+  #cartPill:hover .hp-ic{animation:icSwing .7s cubic-bezier(.16,1,.3,1)}}
+.hdr-pill:active{transform:scale(.95)}
+@keyframes icNod{40%{transform:translateY(-3px) scale(1.12)}}
+@keyframes icSwing{25%{transform:rotate(-14deg) translateY(-1px)}55%{transform:rotate(10deg)}80%{transform:rotate(-4deg)}}
+#cartCount{position:relative}
+#cartPill.has-items #cartCount::after{content:"";position:absolute;inset:-1px;border-radius:inherit;border:2px solid #87C28C;animation:ping 2.2s cubic-bezier(.16,1,.3,1) infinite;pointer-events:none}
+@keyframes ping{0%{transform:scale(1);opacity:.9}70%,100%{transform:scale(1.9);opacity:0}}
+
+/* ── Desktop nav: a single sliding underline ──
+   It sits under the current page; while the mouse is over another link it glides there (and that link turns white),
+   then glides back when the mouse leaves the menu. The per-link underline from tailwind is switched off. */
+.main-nav{position:relative}
+.main-nav .nav-link::after{display:none}
+.main-nav.inking .nav-link[aria-current=page]:not(.ink-on){color:rgba(255,255,255,.7)}
+.main-nav .nav-link.ink-on{color:#fff}
+.nav-ink{position:absolute;bottom:.3rem;left:0;height:2px;width:var(--w,0);border-radius:999px;background:#fff;
+  transform:translateX(var(--x,0));opacity:var(--o,0);transition:transform .38s cubic-bezier(.22,1,.36,1),width .38s cubic-bezier(.22,1,.36,1),opacity .2s;pointer-events:none}

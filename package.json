@@ -1,0 +1,10 @@
+{
+  "name": "nakhl-o-mah",
+  "private": true,
+  "description": "فروشگاه نخل و ماه — خرما و خشکبار ارگانیک جنوب (static site, no dependencies)",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "dev": "node tools/serve.mjs"
+  },
+  "engines": { "node": ">=18" }
+}

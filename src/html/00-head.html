@@ -1,0 +1,40 @@
+<!-- ▸ 00-head.html — Document head (meta, fonts, styles) and the start of <body>. -->
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="img/logo.svg">
+<meta name="theme-color" content="#28622D">
+<!-- Security: the page may only load its own files; scripts only from js/app.js (no inline scripts), no plugins, forms post only here.
+     When the payment / inquiry server is live, add its address to connect-src (e.g. https://your-domain.ir). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://gateway.zibal.ir; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<!-- link previews (Telegram, WhatsApp, Instagram DM…) -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:site_name" content="نخل و ماه">
+<meta property="og:title" content="فروشگاه نخل و ماه | خرما و خشکبار ارگانیک جنوب">
+<meta property="og:description" content="خرید خرمای ارگانیک جنوب و خشکبار ممتاز، مستقیم از نخلستان‌ها با زنجیره‌ی سرد ۲ تا ۴ درجه.">
+<meta property="og:url" content="https://aidinraisi1388.github.io/nakhl-jiroft/">
+<meta property="og:image" content="https://aidinraisi1388.github.io/nakhl-jiroft/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://aidinraisi1388.github.io/nakhl-jiroft/">
+<title>فروشگاه نخل و ماه | خرما و خشکبار ارگانیک جنوب</title>
+<meta name="description" content="خرید آنلاین خرمای ارگانیک جنوب و خشکبار ممتاز، مستقیم از نخلستان‌ها با نگهداری در سردخانه‌ی هوشمند.">
+
+<!-- Fonts: Peyda & Yekan Bakh are served from ./fonts (no external font request, for speed) -->
+<link rel="preload" href="fonts/YekanBakhFaNum-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/PeydaWeb-Black.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="css/tailwind.css?v={{V}}">
+<link rel="stylesheet" href="css/style.css?v={{V}}">
+
+
+</head>
+
+<body data-view="home" class="bg-sand font-body text-ink antialiased">
+<a href="#" id="skipLink" class="skip-link">رفتن به محتوای اصلی</a>

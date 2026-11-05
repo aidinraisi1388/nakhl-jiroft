@@ -1,0 +1,26 @@
+/* 00-base.css — Base: fonts, colour tokens, buttons, cards, fields, view switching. */
+
+/* ═══ Nakhl o Mah — custom styles ═══
+   Palette: logo greens #87C28C · #377B3D · #28622D · White #FFFFFF
+   Utility classes come from tailwind.css; everything hand-written lives here. */
+
+@font-face{font-family:"Peyda";src:local("Peyda Bold"),local("Peyda-Bold"),url("../fonts/PeydaWeb-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Peyda";src:local("Peyda Extra Bold"),local("Peyda-ExtraBold"),url("../fonts/PeydaWeb-ExtraBold.woff2") format("woff2");font-weight:800;font-display:swap}
+@font-face{font-family:"Peyda";src:local("Peyda Black"),local("Peyda-Black"),url("../fonts/PeydaWeb-Black.woff2") format("woff2");font-weight:900;font-display:swap}
+@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum Regular"),local("YekanBakhFaNum-Regular"),url("../fonts/YekanBakhFaNum-Regular.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum SemiBold"),local("YekanBakhFaNum-SemiBold"),url("../fonts/YekanBakhFaNum-SemiBold.woff2") format("woff2");font-weight:500 600;font-display:swap}
+@font-face{font-family:"Yekan Bakh EN";src:local("Yekan Bakh Bold"),local("YekanBakh-Bold"),url("../fonts/YekanBakh-Bold.woff2") format("woff2");font-weight:700;font-display:swap}   /* Latin digits: IDs, codes */
+@font-face{font-family:"Yekan Bakh FaNum";src:local("Yekan Bakh FaNum Bold"),local("YekanBakhFaNum-Bold"),url("../fonts/YekanBakhFaNum-Bold.woff2") format("woff2");font-weight:700;font-display:swap}
+
+:root{--ease:cubic-bezier(0.16,1,0.3,1)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html.lock{overflow:hidden}
+[hidden]{display:none!important}   /* beat Tailwind display utilities */
+body{font-synthesis-weight:none;-webkit-font-smoothing:antialiased}
+h1,h2,h3{text-wrap:balance}
+::selection{background:#28622D;color:#FFFFFF}
+.no-scrollbar::-webkit-scrollbar{display:none}.no-scrollbar{scrollbar-width:none}
+
+/* ── Views (home / catalog) ── */
+.view-in{animation:viewIn .35s var(--ease) both}
+@keyframes viewIn{from{opacity:0;transform:translateY(12px)}}
