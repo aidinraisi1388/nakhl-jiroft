@@ -65,7 +65,9 @@ img.ph{mix-blend-mode:multiply;filter:none!important;background:none}
 .p-card .p-img img.ph{padding:2px}
 
 /* ── Hero: text-only slides with big type + motion ── */
-#hero .hx h1,#hero .hx h2{font-size:clamp(30px,6.2vw,84px);line-height:1.22;letter-spacing:-.01em}
+#hero .hx h1,#hero .hx h2{font-size:clamp(24px,4.4vw,58px);line-height:1.3;letter-spacing:-.01em}
+/* second line (the gradient one) is the big one; padding keeps tall letters (گ ک) from being cut by the gradient clip */
+#hero .hx h1 .block,#hero .hx h2 .block{font-size:1.38em;line-height:1.5;padding:.12em .06em .1em;margin-top:.05em}
 #hero .hx h1 .block,#hero .hx h2 .block{background:linear-gradient(100deg,#CFE6D1 0%,#FFFFFF 35%,#87C28C 55%,#CFE6D1 80%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hxShine 7s linear infinite}
 #hero .hx p{font-size:clamp(15px,1.35vw,19px);max-width:42rem}
 #hero .hx > *{opacity:0;transform:translateY(26px);filter:blur(6px)}
@@ -154,6 +156,8 @@ html.at-foot #cartBar{transform:translate(-50%,180%);visibility:hidden}
 .inq-sum dt{color:#6B8A6F}
 .inq-sum dd{font-weight:700;color:#1E2B20;text-align:left;overflow-wrap:anywhere}
 @media (prefers-reduced-motion:reduce){.inq-done.in,.inq-done.in .inq-ok,.inq-steps li.cur i{animation:none}}
-#footer .bale-w{filter:brightness(0) invert(1);opacity:.8}
+/* Bale logo: painted with the current text colour (so it turns white on hover / in the footer) */
+.bale-ic{display:inline-block;flex:none;background:currentColor;-webkit-mask:url(../img/icons/bale.svg) center/contain no-repeat;mask:url(../img/icons/bale.svg) center/contain no-repeat}
 .inq-done .flex > a,.inq-done .flex > button{flex:none}
 @media (min-width:640px){.inq-done .flex > a,.inq-done .flex > button{flex:1 1 0}}
+#footer .bale-f{width:21px;height:21px}

@@ -5,7 +5,7 @@
      node tools/build.mjs           build once
      node tools/build.mjs --watch   rebuild whenever a file in /src changes
 
-   src/html/*.html  → index.html          (joined in file-name order)
+   src/html/**.html → index.html          (4 folders: 1-layout · 2-home · 3-shop · 4-account; joined by the number in each file name)
    src/js/*.js      → js/app.js           (joined in order, wrapped in one private scope)
    src/css/*.css    → css/style.css       (joined in order, minified)
    src/css/vendor/tailwind.css → css/tailwind.css
@@ -23,6 +23,11 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const src = (...p) => path.join(ROOT, 'src', ...p);
 const out = (...p) => path.join(ROOT, ...p);
 const list = dir => fs.readdirSync(dir).filter(f => /\.(html|js|css)$/.test(f)).sort();
+/* all files under a folder (sub-folders too), ordered by their file name's number: 00-…, 10-…, 25-… */
+const listDeep = dir => fs.readdirSync(dir, { recursive: true }).map(String).filter(f => /\.html$/.test(f))
+  .sort((a, b) => path.basename(a).localeCompare(path.basename(b), 'en', { numeric: true }));
+/* lighter HTML for the browser: comments and indentation removed (line breaks kept, so spacing between words never changes) */
+const minHtml = h => h.replace(/<!--(?!\[if)[\s\S]*?-->/g, '').replace(/\n[ \t]+/g, '\n').replace(/\n{2,}/g, '\n');
 const read = f => fs.readFileSync(f, 'utf8');
 
 /* ── optional: strip comments from the JS with TypeScript, if it is installed (npm i -g typescript) ── */
@@ -91,7 +96,7 @@ function build() {
   js = '/* built from src/js — edit the sources, then run: node tools/build.mjs */\n' + js;
 
   const v = crypto.createHash('sha1').update(style + tw + js).digest('hex').slice(0, 8);   // cache-busting: changes whenever the code changes
-  const html = list(htmlDir).map((f, i) => { let h = read(path.join(htmlDir, f)); if (i === 0) h = h.replace(/^<!-- ▸[^\n]*\n/, ''); return h; }).join('\n').replace(/\{\{V\}\}/g, v);
+  const html = '<!DOCTYPE html>\n<!-- built from src/html — edit the sources, then run: npm run build -->' + minHtml(listDeep(htmlDir).map(f => read(path.join(htmlDir, f))).join('\n').replace(/^[\s\S]*?<!DOCTYPE html>/i, '')).replace(/\{\{V\}\}/g, v);
 
   fs.writeFileSync(out('css', 'style.css'), style);
   fs.writeFileSync(out('css', 'tailwind.css'), tw);

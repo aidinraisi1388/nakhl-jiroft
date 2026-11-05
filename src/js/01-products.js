@@ -10,10 +10,10 @@ const products = [
   { id:'piac',  cat:'piarom', img:'img/p/pia-carton.webp',   name:'کارتن مادر پیارم',   unit:'کارتن مادر ۱۲ کیلویی', price:7740000, badge:'', tag:'پیارم' },
   { id:'kal20', cat:'kaluteh', img:'img/p/kal-box.webp',  name:'خرمای کلوته',      unit:'جعبه‌ی ۲ کیلویی',      price:430000,  badge:'۱۰۰٪ ارگانیک', tag:'کلوته', featured:true },
   { id:'kalc',  cat:'kaluteh', img:'img/p/kal-carton.webp',  name:'کارتن مادر کلوته',   unit:'کارتن مادر ۱۲ کیلویی', price:2580000, badge:'', tag:'کلوته' },
-  { id:'khk20', cat:'khoshk', name:'خرمای خشک',              unit:'جعبه‌ی ۲ کیلویی',      price:380000,  badge:'', tag:'خرمای خشک' },
-  { id:'khkc',  cat:'khoshk', name:'کارتن مادر خرمای خشک',   unit:'کارتن مادر ۱۲ کیلویی', price:2280000, badge:'', tag:'خرمای خشک' },
-  { id:'mrd20', cat:'mordasang', name:'خرمای مرداسنگ',        unit:'جعبه‌ی ۲ کیلویی',      price:460000,  badge:'', tag:'مرداسنگ' },
-  { id:'mrdc',  cat:'mordasang', name:'کارتن مادر مرداسنگ',  unit:'کارتن مادر ۱۲ کیلویی', price:2760000, badge:'', tag:'مرداسنگ' },
+  { id:'khk20', cat:'khoshk', img:'img/p/khk-box.webp', name:'خرمای خشک',              unit:'جعبه‌ی ۲ کیلویی',      price:380000,  badge:'', tag:'خرمای خشک' },
+  { id:'khkc',  cat:'khoshk', img:'img/p/khk-carton.webp', name:'کارتن مادر خرمای خشک',   unit:'کارتن مادر ۱۲ کیلویی', price:2280000, badge:'', tag:'خرمای خشک' },
+  { id:'mrd20', cat:'mordasang', img:'img/p/mrd-box.webp', name:'خرمای مرداسنگ',        unit:'جعبه‌ی ۲ کیلویی',      price:460000,  badge:'', tag:'مرداسنگ' },
+  { id:'mrdc',  cat:'mordasang', img:'img/p/mrd-carton.webp', name:'کارتن مادر مرداسنگ',  unit:'کارتن مادر ۱۲ کیلویی', price:2760000, badge:'', tag:'مرداسنگ' },
   { id:'pis',   cat:'dried', img:'img/p/pis.webp',    name:'پسته‌ی اکبری',            unit:'بسته‌بندی ۵۰۰ گرمی',   price:975000,  badge:'صادراتی',     tag:'پسته', featured:true },
   { id:'fig',   cat:'dried', img:'img/p/fig.webp',    name:'انجیر خشک استهبان',       unit:'بسته‌بندی ۵۰۰ گرمی',   price:490000,  badge:'۱۰۰٪ ارگانیک', tag:'انجیر' },
   { id:'alm',   cat:'dried', img:'img/p/alm.webp',    name:'بادام درختی',             unit:'بسته‌بندی ۵۰۰ گرمی',   price:620000,  badge:'صادراتی',     tag:'بادام' },
@@ -22,7 +22,7 @@ const products = [
   { id:'apr',   cat:'dried', img:'img/p/apr.webp',    name:'برگه‌ی زردآلو',           unit:'بسته‌بندی ۵۰۰ گرمی',   price:380000,  badge:'۱۰۰٪ ارگانیک', tag:'زردآلو' },
   { id:'rai',   cat:'dried', img:'img/p/rai.webp',    name:'کشمش سبز',                unit:'بسته‌بندی ۵۰۰ گرمی',   price:210000,  badge:'صادراتی',     tag:'کشمش' }
 ];
-const IMG_V = '10';                // bump when product photos change, so phones don't keep old cached copies
+const IMG_V = '11';                // bump when product photos change, so phones don't keep old cached copies
 products.forEach(p => { if (p.img) p.img += '?v=' + IMG_V; });
 const byId = Object.fromEntries(products.map(p => [p.id, p]));
 /* weight in kg (for the customer's "purchased weight") + sample stock; the admin panel overrides price/stock */

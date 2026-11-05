@@ -48,6 +48,12 @@ function renderProduct(id) {
   $('#pdAbout').textContent = info.about;
   $('#pdUse').textContent = info.use;
   $('#pdSpec').innerHTML = info.spec.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+  $('#pdGood').innerHTML = goodOf(p).map(g => `<li>${g}</li>`).join('');
+  const n = nutriOf(p), g1 = v => fa1(v) + ' گرم';
+  $('#pdNutri').innerHTML = n ? `
+    <div class="pd-kcal"><b>${fa(n.kcal)}</b><span>کیلوکالری</span></div>
+    <dl class="pd-spec">${[['کربوهیدرات', g1(n.carb)], ['قند', g1(n.sugar)], ['فیبر', g1(n.fiber)], ['پروتئین', g1(n.protein)], ['چربی', g1(n.fat)], ...n.extra].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : '';
+
 
   renderReviews();
 

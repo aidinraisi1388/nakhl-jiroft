@@ -102,3 +102,18 @@
 .pd-stars-in label:hover,.pd-stars-in label:hover ~ label{color:#F0C25C}
 .pd-stars-in input:focus-visible + label{outline:2px solid #28622D;outline-offset:2px;border-radius:6px}
 .pd-stars-in label:active{transform:scale(.9)}
+
+/* benefits list + nutrition box */
+.pd-good{display:flex;flex-direction:column;gap:8px}
+.pd-good li{position:relative;padding-inline-start:22px;font-size:14px;line-height:2;color:#4A5D4C}
+.pd-good li::before{content:"";position:absolute;inset-inline-start:2px;top:.75em;width:10px;height:10px;border-radius:999px;background:#87C28C;box-shadow:0 0 0 3px #E8F3E9}
+.pd-h-gap{margin-top:24px}
+.pd-h small{font-family:inherit;font-size:12px;font-weight:700;color:#6B8A6F}
+.pd-nutri{display:grid;gap:10px}
+.pd-kcal{display:flex;align-items:baseline;gap:8px;border-radius:18px;background:#F0F7F1;padding:12px 16px}
+.pd-kcal b{font-family:Peyda,Vazirmatn,sans-serif;font-size:28px;font-weight:900;color:#28622D}
+.pd-kcal span{font-size:13px;font-weight:700;color:#377B3D}
+.pd-nut{display:grid;gap:22px}
+@media (min-width:1024px){.pd-nut{grid-template-columns:1.2fr 1fr;gap:40px}}
+.pd-nutri .pd-spec{grid-template-columns:1fr}
+@media (min-width:640px){.pd-nutri .pd-spec{grid-template-columns:1fr 1fr;column-gap:24px}}

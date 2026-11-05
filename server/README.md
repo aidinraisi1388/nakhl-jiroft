@@ -50,6 +50,6 @@
 
 1. در `config.php` مقدارهای `sms_url` و `sms_key` را از پنل سامانه‌ی پیامکی خودتان بگذارید.
 2. در `src/js/11-inquiry.js` مقدار `INQUIRY.api` را آدرس کامل این فایل بگذارید (مثلاً `https://your-domain.ir/server/inquiry.php`) و `npm run build` بزنید.
-3. همان دامنه را به `connect-src` در تگ CSP فایل `src/html/00-head.html` اضافه کنید.
+3. همان دامنه را به `connect-src` در تگ CSP فایل `src/html/1-layout/00-head.html` اضافه کنید.
 
 درخواست‌ها در `data/inquiries` ذخیره می‌شوند و هر شماره در ساعت حداکثر ۵ درخواست می‌تواند بفرستد.

@@ -13,10 +13,10 @@
         { id: 'piac', cat: 'piarom', img: 'img/p/pia-carton.webp', name: 'کارتن مادر پیارم', unit: 'کارتن مادر ۱۲ کیلویی', price: 7740000, badge: '', tag: 'پیارم' },
         { id: 'kal20', cat: 'kaluteh', img: 'img/p/kal-box.webp', name: 'خرمای کلوته', unit: 'جعبه‌ی ۲ کیلویی', price: 430000, badge: '۱۰۰٪ ارگانیک', tag: 'کلوته', featured: true },
         { id: 'kalc', cat: 'kaluteh', img: 'img/p/kal-carton.webp', name: 'کارتن مادر کلوته', unit: 'کارتن مادر ۱۲ کیلویی', price: 2580000, badge: '', tag: 'کلوته' },
-        { id: 'khk20', cat: 'khoshk', name: 'خرمای خشک', unit: 'جعبه‌ی ۲ کیلویی', price: 380000, badge: '', tag: 'خرمای خشک' },
-        { id: 'khkc', cat: 'khoshk', name: 'کارتن مادر خرمای خشک', unit: 'کارتن مادر ۱۲ کیلویی', price: 2280000, badge: '', tag: 'خرمای خشک' },
-        { id: 'mrd20', cat: 'mordasang', name: 'خرمای مرداسنگ', unit: 'جعبه‌ی ۲ کیلویی', price: 460000, badge: '', tag: 'مرداسنگ' },
-        { id: 'mrdc', cat: 'mordasang', name: 'کارتن مادر مرداسنگ', unit: 'کارتن مادر ۱۲ کیلویی', price: 2760000, badge: '', tag: 'مرداسنگ' },
+        { id: 'khk20', cat: 'khoshk', img: 'img/p/khk-box.webp', name: 'خرمای خشک', unit: 'جعبه‌ی ۲ کیلویی', price: 380000, badge: '', tag: 'خرمای خشک' },
+        { id: 'khkc', cat: 'khoshk', img: 'img/p/khk-carton.webp', name: 'کارتن مادر خرمای خشک', unit: 'کارتن مادر ۱۲ کیلویی', price: 2280000, badge: '', tag: 'خرمای خشک' },
+        { id: 'mrd20', cat: 'mordasang', img: 'img/p/mrd-box.webp', name: 'خرمای مرداسنگ', unit: 'جعبه‌ی ۲ کیلویی', price: 460000, badge: '', tag: 'مرداسنگ' },
+        { id: 'mrdc', cat: 'mordasang', img: 'img/p/mrd-carton.webp', name: 'کارتن مادر مرداسنگ', unit: 'کارتن مادر ۱۲ کیلویی', price: 2760000, badge: '', tag: 'مرداسنگ' },
         { id: 'pis', cat: 'dried', img: 'img/p/pis.webp', name: 'پسته‌ی اکبری', unit: 'بسته‌بندی ۵۰۰ گرمی', price: 975000, badge: 'صادراتی', tag: 'پسته', featured: true },
         { id: 'fig', cat: 'dried', img: 'img/p/fig.webp', name: 'انجیر خشک استهبان', unit: 'بسته‌بندی ۵۰۰ گرمی', price: 490000, badge: '۱۰۰٪ ارگانیک', tag: 'انجیر' },
         { id: 'alm', cat: 'dried', img: 'img/p/alm.webp', name: 'بادام درختی', unit: 'بسته‌بندی ۵۰۰ گرمی', price: 620000, badge: 'صادراتی', tag: 'بادام' },
@@ -25,7 +25,7 @@
         { id: 'apr', cat: 'dried', img: 'img/p/apr.webp', name: 'برگه‌ی زردآلو', unit: 'بسته‌بندی ۵۰۰ گرمی', price: 380000, badge: '۱۰۰٪ ارگانیک', tag: 'زردآلو' },
         { id: 'rai', cat: 'dried', img: 'img/p/rai.webp', name: 'کشمش سبز', unit: 'بسته‌بندی ۵۰۰ گرمی', price: 210000, badge: 'صادراتی', tag: 'کشمش' }
     ];
-    const IMG_V = '10';
+    const IMG_V = '11';
     products.forEach(p => { if (p.img)
         p.img += '?v=' + IMG_V; });
     const byId = Object.fromEntries(products.map(p => [p.id, p]));
@@ -121,6 +121,28 @@
         ].filter(Boolean);
         return { about: own.about || k.about, use: own.use || k.use, spec };
     };
+    const NUTRI = {
+        date: { kcal: 280, carb: 75, sugar: 64, fiber: 7, protein: 2.2, fat: 0.3, extra: [['پتاسیم', '۶۵۰ میلی‌گرم'], ['منیزیم', '۵۰ میلی‌گرم']] },
+        pis: { kcal: 560, carb: 28, sugar: 8, fiber: 10.6, protein: 20, fat: 45, extra: [['پتاسیم', '۱٬۰۰۰ میلی‌گرم'], ['ویتامین B6', '۱٫۷ میلی‌گرم']] },
+        alm: { kcal: 579, carb: 22, sugar: 4.4, fiber: 12.5, protein: 21, fat: 50, extra: [['ویتامین E', '۲۵ میلی‌گرم'], ['منیزیم', '۲۷۰ میلی‌گرم']] },
+        wal: { kcal: 654, carb: 14, sugar: 2.6, fiber: 6.7, protein: 15, fat: 65, extra: [['امگا ۳ گیاهی', '۹ گرم'], ['منیزیم', '۱۶۰ میلی‌گرم']] },
+        hzl: { kcal: 628, carb: 17, sugar: 4.3, fiber: 9.7, protein: 15, fat: 61, extra: [['ویتامین E', '۱۵ میلی‌گرم'], ['منگنز', '۶ میلی‌گرم']] },
+        fig: { kcal: 249, carb: 64, sugar: 48, fiber: 9.8, protein: 3.3, fat: 0.9, extra: [['کلسیم', '۱۶۰ میلی‌گرم'], ['پتاسیم', '۶۸۰ میلی‌گرم']] },
+        apr: { kcal: 241, carb: 63, sugar: 53, fiber: 7.3, protein: 3.4, fat: 0.5, extra: [['پتاسیم', '۱٬۱۶۰ میلی‌گرم'], ['ویتامین A', 'سرشار']] },
+        rai: { kcal: 299, carb: 79, sugar: 59, fiber: 3.7, protein: 3.1, fat: 0.5, extra: [['پتاسیم', '۷۵۰ میلی‌گرم'], ['آهن', '۱٫۹ میلی‌گرم']] }
+    };
+    const GOOD = {
+        date: ['منبع طبیعی انرژی؛ قند طبیعی آن جایگزین خوبی برای شکر و شیرینی است.', 'فیبر بالا (حدود ۷ گرم در ۱۰۰ گرم) به گوارش کمک می‌کند.', 'سرشار از پتاسیم و منیزیم؛ بدون چربی و بدون کلسترول.', 'به‌خاطر قند طبیعی بالا، افراد دیابتی با نظر پزشک مصرف کنند.'],
+        pis: ['منبع خوب پروتئین گیاهی (حدود ۲۰ گرم در ۱۰۰ گرم).', 'چربی‌های مفید غیراشباع و فیبر بالا؛ میان‌وعده‌ای سیرکننده.', 'از منابع خوب پتاسیم و ویتامین B6.'],
+        alm: ['از غنی‌ترین منابع ویتامین E در میان مغزها.', 'پروتئین گیاهی و منیزیم بالا.', 'فیبر زیاد و چربی‌های مفید.'],
+        wal: ['از بهترین منابع گیاهی امگا ۳.', 'پروتئین و منیزیم خوب؛ مناسب برای میان‌وعده‌ی سالم.', 'به‌خاطر کالری بالا، یک مشت در روز کافی است.'],
+        hzl: ['سرشار از ویتامین E و چربی‌های مفید.', 'پروتئین و فیبر خوب.', 'منبع منگنز.'],
+        fig: ['فیبر بالا؛ کمک‌کننده به کار روده.', 'منبع خوب کلسیم و پتاسیم.', 'شیرینی طبیعی، بدون شکر افزوده.'],
+        apr: ['سرشار از ویتامین A (بتاکاروتن) و پتاسیم.', 'فیبر خوب؛ بدون شکر افزوده.', 'میان‌وعده‌ی سبک و ترش و شیرین.'],
+        rai: ['منبع سریع انرژی و پتاسیم.', 'دارای آهن و آنتی‌اکسیدان‌های طبیعی انگور.', 'بدون شکر افزوده.']
+    };
+    const nutriOf = p => NUTRI[p.cat === 'dried' ? p.id : 'date'];
+    const goodOf = p => GOOD[p.cat === 'dried' ? p.id : 'date'] || [];
     const store = {
         get: (k, d) => { try {
             const v = JSON.parse(localStorage.getItem(k));
@@ -843,6 +865,11 @@
         $('#pdAbout').textContent = info.about;
         $('#pdUse').textContent = info.use;
         $('#pdSpec').innerHTML = info.spec.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+        $('#pdGood').innerHTML = goodOf(p).map(g => `<li>${g}</li>`).join('');
+        const n = nutriOf(p), g1 = v => fa1(v) + ' گرم';
+        $('#pdNutri').innerHTML = n ? `
+    <div class="pd-kcal"><b>${fa(n.kcal)}</b><span>کیلوکالری</span></div>
+    <dl class="pd-spec">${[['کربوهیدرات', g1(n.carb)], ['قند', g1(n.sugar)], ['فیبر', g1(n.fiber)], ['پروتئین', g1(n.protein)], ['چربی', g1(n.fat)], ...n.extra].map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>` : '';
         renderReviews();
         const group = c => DATE_CATS.includes(c) ? 'dates' : c;
         const sim = products.filter(x => x.id !== p.id && !(x.cat !== 'dried' && x.cat === p.cat))

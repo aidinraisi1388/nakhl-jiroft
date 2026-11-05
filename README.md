@@ -18,7 +18,7 @@
 
 ```
 src/                 ← کد خوانا؛ همیشه اینجا را ویرایش کنید
-  html/              بخش‌های صفحه به ترتیب نمایش (هدر، خانه، محصولات، صفحه‌ی محصول، داشبورد، …)
+  html/              صفحه در ۴ پوشه: 1-layout (هد، هدر، فوتر، پنجره‌ها) · 2-home (صفحه‌ی اول) · 3-shop (محصولات، صفحه‌ی محصول، خرید و رسید) · 4-account (داشبورد، پنل مدیر، ورود)
   js/                منطق سایت، هر فایل یک بخش (محصولات، سبد، روتر، صفحه‌ی محصول، حساب، …)
   css/               استایل‌ها، هر فایل یک بخش + vendor/tailwind.css
 tools/
@@ -51,8 +51,8 @@ npm run build    # ساخت index.html و js/app.js و css/*.css از روی src
 | توضیحات و مشخصات صفحه‌ی محصول | `src/js/01b-product-info.js` |
 | متن کوتاه زیر نام محصول | `src/js/03-product-card.js` (DESC) |
 | کد تخفیف | `src/js/02-state.js` (PROMOS) |
-| آیدی بله، اینستاگرام، تلفن | `src/html/15-home-contact.html` و `src/html/70-footer.html` |
-| آیکون بله | فایل `img/icons/bale.svg` را با لوگوی رسمی جایگزین کنید |
+| آیدی بله، اینستاگرام، تلفن | `src/html/2-home/15-home-contact.html` و `src/html/1-layout/70-footer.html` |
+| ارزش غذایی و خواص هر محصول | `src/js/01b-product-info.js` (NUTRI و GOOD) |
 | سرور پرداخت / استعلام | `src/js/13-checkout-pay.js` (PAY.api) و `src/js/11-inquiry.js` (INQUIRY.api) |
 
 ## امنیت
